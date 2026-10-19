@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}SPK Rekomendasi Karier{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800">
+<div class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-slate-900 text-slate-200 flex flex-col shrink-0">
+    <div class="px-6 py-5 border-b border-slate-700">
+      <p class="text-lg font-bold text-white">SPK Karier</p>
+      <p class="text-xs text-slate-400">Rekomendasi Karier Informatika</p>
+    </div>
+    <nav class="flex-1 px-4 py-4 space-y-1 text-sm">
+      {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <a href="{{ url_for('admin.dashboard') }}" class="block px-3 py-2 rounded hover:bg-slate-700">Dasbor Admin</a>
+        <a href="{{ url_for('admin.careers') }}" class="block px-3 py-2 rounded hover:bg-slate-700">Data Karier</a>
+        <a href="{{ url_for('admin.criteria') }}" class="block px-3 py-2 rounded hover:bg-slate-700">Kriteria dan Bobot</a>
+      {% elif current_user.is_authenticated %}
+        <a href="{{ url_for('spk.index') }}" class="block px-3 py-2 rounded hover:bg-slate-700">Dasbor</a>
+        <a href="{{ url_for('spk.profil') }}" class="block px-3 py-2 rounded hover:bg-slate-700">Isi Profil</a>
+        <a href="{{ url_for('spk.hasil') }}" class="block px-3 py-2 rounded hover:bg-slate-700">Hasil Rekomendasi</a>
+      {% endif %}
+    </nav>
+    <div class="px-6 py-4 border-t border-slate-700 text-xs">
+      {% if current_user.is_authenticated %}
+        <p class="text-slate-300 font-semibold">{{ current_user.nama or current_user.username }}</p>
+        <p class="text-slate-400 capitalize">{{ current_user.role }}</p>
+        <a href="{{ url_for('auth.logout') }}" class="inline-block mt-2 text-indigo-300 hover:text-indigo-200">Keluar</a>
+      {% endif %}
+    </div>
+  </aside>
+
+  <!-- Konten -->
+  <main class="flex-1 p-8">
+    <h1 class="text-2xl font-bold text-slate-900 mb-1">{% block heading %}{% endblock %}</h1>
+    <p class="text-sm text-slate-500 mb-6">{% block subheading %}{% endblock %}</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-2 mb-6">
+          {% for category, message in messages %}
+            <div class="px-4 py-3 rounded text-sm
+              {% if category == 'danger' %}bg-red-100 text-red-800
+              {% elif category == 'success' %}bg-green-100 text-green-800
+              {% elif category == 'warning' %}bg-yellow-100 text-yellow-800
+              {% else %}bg-indigo-100 text-indigo-800{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>
