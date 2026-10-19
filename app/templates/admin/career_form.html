@@ -7,23 +7,29 @@
   <form method="post">
     {{ form.hidden_tag() }}
     <label class="block text-sm font-medium mb-1">{{ form.nama.label.text }}</label>
-    {{ form.nama(class="w-full border rounded px-3 py-2 mb-4") }}
+    {{ form.nama(class="w-full border rounded px-3 py-2 mb-1") }}
+    {% if form.nama.errors %}<p class="text-sm text-red-600 mb-3">{{ form.nama.errors[0] }}</p>{% else %}<div class="mb-3"></div>{% endif %}
     <label class="block text-sm font-medium mb-1">{{ form.deskripsi.label.text }}</label>
-    {{ form.deskripsi(class="w-full border rounded px-3 py-2 mb-4", rows=3) }}
+    {{ form.deskripsi(class="w-full border rounded px-3 py-2 mb-1", rows=3) }}
+    {% if form.deskripsi.errors %}<p class="text-sm text-red-600 mb-3">{{ form.deskripsi.errors[0] }}</p>{% else %}<div class="mb-3"></div>{% endif %}
     <label class="block text-sm font-medium mb-1">{{ form.skills.label.text }}</label>
-    {{ form.skills(class="w-full border rounded px-3 py-2 mb-4", rows=2) }}
+    {{ form.skills(class="w-full border rounded px-3 py-2 mb-1", rows=2) }}
+    {% if form.skills.errors %}<p class="text-sm text-red-600 mb-3">{{ form.skills.errors[0] }}</p>{% else %}<div class="mb-3"></div>{% endif %}
     <div class="grid grid-cols-3 gap-4 mb-6">
       <div>
         <label class="block text-sm font-medium mb-1">{{ form.gaji_min.label.text }}</label>
         {{ form.gaji_min(class="w-full border rounded px-3 py-2") }}
+        {% if form.gaji_min.errors %}<p class="text-xs text-red-600 mt-1">{{ form.gaji_min.errors[0] }}</p>{% endif %}
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">{{ form.gaji_max.label.text }}</label>
         {{ form.gaji_max(class="w-full border rounded px-3 py-2") }}
+        {% if form.gaji_max.errors %}<p class="text-xs text-red-600 mt-1">{{ form.gaji_max.errors[0] }}</p>{% endif %}
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">{{ form.demand.label.text }}</label>
         {{ form.demand(class="w-full border rounded px-3 py-2") }}
+        {% if form.demand.errors %}<p class="text-xs text-red-600 mt-1">{{ form.demand.errors[0] }}</p>{% endif %}
       </div>
     </div>
     {{ form.submit(class="bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
