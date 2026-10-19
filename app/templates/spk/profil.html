@@ -6,21 +6,11 @@
 <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
   <form method="post">
     {{ form.hidden_tag() }}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="mb-6 max-w-md">
       <div>
         <label class="block text-sm font-medium mb-1">{{ form.nama.label.text }}</label>
         {{ form.nama(class="w-full border rounded px-3 py-2") }}
         {% if form.nama.errors %}<p class="text-xs text-red-600 mt-1">{{ form.nama.errors[0] }}</p>{% endif %}
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">{{ form.nim.label.text }}</label>
-        {{ form.nim(class="w-full border rounded px-3 py-2") }}
-        {% if form.nim.errors %}<p class="text-xs text-red-600 mt-1">{{ form.nim.errors[0] }}</p>{% endif %}
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">{{ form.ipk.label.text }}</label>
-        {{ form.ipk(class="w-full border rounded px-3 py-2", step="0.01") }}
-        {% if form.ipk.errors %}<p class="text-xs text-red-600 mt-1">{{ form.ipk.errors[0] }}</p>{% endif %}
       </div>
     </div>
 
