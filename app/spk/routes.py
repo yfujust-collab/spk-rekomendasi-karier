@@ -1,5 +1,9 @@
 """Alur utama mahasiswa: profil, hitung rekomendasi, hasil."""
-from flask import flash, redirect, render_template, url_for
+import csv
+import io
+from datetime import datetime
+
+from flask import Response, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
 from app import db
@@ -11,6 +15,30 @@ from app.spk.forms import ProfileForm
 
 def _vocabulary():
     return cbf.build_vocabulary(Career.query.all())
+
+
+def _batch_terakhir(profile_id):
+    """Kembalikan batch_id perhitungan terbaru untuk profil ini, atau None."""
+    baris = (
+        RecommendationResult.query.filter_by(profile_id=profile_id)
+        .order_by(RecommendationResult.created_at.desc())
+        .first()
+    )
+    return baris.batch_id if baris else None
+
+
+def _hasil_batch_terakhir(profile_id):
+    """Kembalikan baris-baris hasil dari batch perhitungan terbaru."""
+    batch_id = _batch_terakhir(profile_id)
+    if batch_id is None:
+        return []
+    return (
+        RecommendationResult.query.filter_by(
+            profile_id=profile_id, batch_id=batch_id
+        )
+        .order_by(RecommendationResult.peringkat)
+        .all()
+    )
 
 
 def _compute(profile):
@@ -68,12 +96,7 @@ def index():
     profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
     hasil = []
     if profile:
-        hasil = (
-            RecommendationResult.query.filter_by(profile_id=profile.id)
-            .order_by(RecommendationResult.peringkat)
-            .limit(3)
-            .all()
-        )
+        hasil = _hasil_batch_terakhir(profile.id)[:3]
     return render_template("spk/index.html", profile=profile, hasil=hasil)
 
 
@@ -99,8 +122,8 @@ def profil():
         profile.skills = ", ".join(form.skills.data)
         profile.minat = ", ".join(str(i) for i in form.minat.data)
         profile.ipk = form.ipk.data or 0.0
-        # hasil lama tidak berlaku lagi bila profil berubah
-        RecommendationResult.query.filter_by(profile_id=profile.id).delete()
+        # batch lama tidak dihapus; batch baru akan dibuat saat hitung ulang
+        # sehingga halaman Riwayat tetap menyimpan hasil-hasil terdahulu
         db.session.commit()
         flash("Profil tersimpan. Sistem menghitung rekomendasi.", "success")
         return redirect(url_for("spk.hitung"))
@@ -117,7 +140,7 @@ def profil():
 @bp.route("/rekomendasi")
 @login_required
 def hitung():
-    """Hitung CBF lalu SAW, simpan hasilnya."""
+    """Hitung CBF lalu SAW, simpan hasilnya dalam satu batch baru."""
     profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
     if not profile:
         flash("Isi profil terlebih dahulu.", "warning")
@@ -128,7 +151,9 @@ def hitung():
         flash(str(e), "danger")
         return redirect(url_for("spk.index"))
 
-    RecommendationResult.query.filter_by(profile_id=profile.id).delete()
+    # satu id batch untuk seluruh baris perhitungan ini (unik per waktu,
+    # termasuk mikrodetik agar dua perhitungan beruntun tetap berbeda)
+    batch_id = datetime.now().strftime("%Y%m%d%H%M%S%f")
     for peringkat, idx in enumerate(detail["saw"]["ranking"], start=1):
         db.session.add(
             RecommendationResult(
@@ -137,6 +162,7 @@ def hitung():
                 skor_cbf=round(detail["skor_cbf"][idx], 4),
                 skor_saw=round(detail["saw"]["skor"][idx], 4),
                 peringkat=peringkat,
+                batch_id=batch_id,
             )
         )
     db.session.commit()
@@ -149,11 +175,7 @@ def hasil():
     profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
     if not profile:
         return redirect(url_for("spk.profil"))
-    rows = (
-        RecommendationResult.query.filter_by(profile_id=profile.id)
-        .order_by(RecommendationResult.peringkat)
-        .all()
-    )
+    rows = _hasil_batch_terakhir(profile.id)
     if not rows:
         return redirect(url_for("spk.hitung"))
     try:
@@ -162,3 +184,63 @@ def hasil():
         flash(str(e), "danger")
         return redirect(url_for("spk.index"))
     return render_template("spk/hasil.html", profile=profile, rows=rows, detail=detail)
+
+
+@bp.route("/riwayat")
+@login_required
+def riwayat():
+    """Daftar batch perhitungan terdahulu untuk mahasiswa yang login."""
+    profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
+    if not profile:
+        return redirect(url_for("spk.profil"))
+
+    batch_ids = [
+        b[0]
+        for b in db.session.query(RecommendationResult.batch_id)
+        .filter_by(profile_id=profile.id)
+        .distinct()
+        .all()
+        if b[0]
+    ]
+    riwayat = []
+    for bid in batch_ids:
+        baris = (
+            RecommendationResult.query.filter_by(
+                profile_id=profile.id, batch_id=bid
+            )
+            .order_by(RecommendationResult.peringkat)
+            .all()
+        )
+        if baris:
+            riwayat.append(
+                {
+                    "batch_id": bid,
+                    "waktu": baris[0].created_at,
+                    "teratas": baris[:3],
+                }
+            )
+    # batch terbaru paling atas
+    riwayat.sort(key=lambda b: b["waktu"] or datetime.min, reverse=True)
+    return render_template("spk/riwayat.html", riwayat=riwayat)
+
+
+@bp.route("/export-csv")
+@login_required
+def export_csv():
+    """Unduh hasil rekomendasi batch terbaru sebagai CSV."""
+    profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
+    if not profile:
+        return redirect(url_for("spk.profil"))
+    rows = _hasil_batch_terakhir(profile.id)
+    buffer = io.StringIO()
+    penulis = csv.writer(buffer)
+    penulis.writerow(["peringkat", "karier", "skor_cbf", "skor_saw"])
+    for r in rows:
+        penulis.writerow([r.peringkat, r.career.nama, r.skor_cbf, r.skor_saw])
+    return Response(
+        buffer.getvalue(),
+        mimetype="text/csv",
+        headers={
+            "Content-Disposition": "attachment; filename=hasil-rekomendasi.csv"
+        },
+    )
