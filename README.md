@@ -61,6 +61,10 @@ app/
 └── templates/   Jinja2 + Tailwind + Chart.js
 ```
 
+## Diagram Perancangan
+
+Diagram use case, flowchart, activity, sequence, class, DFD, dan ERD tersedia sebagai gambar. Khusus ERD: **digenerate dari skema database aktual** (SQLite hasil seed, via refleksi SQLAlchemy) memakai script `gen_erd_real.py` — bukan digambar manual — sehingga dijamin 1:1 dengan tabel yang dipakai aplikasi, setara dengan fitur Designer di phpMyAdmin.
+
 ## Dataset
 
 Data karier (14 profesi IT beserta skill, estimasi gaji, dan demand) diadaptasi dari **O*NET Database 31.0** milik U.S. Department of Labor, Employment and Training Administration (USDOL/ETA), lisensi **CC BY 4.0**. Ganti atau tambah data lewat panel admin sesuai kebutuhan penelitian, atau lewat `seed.py` (membaca langsung file CSV dataset).
