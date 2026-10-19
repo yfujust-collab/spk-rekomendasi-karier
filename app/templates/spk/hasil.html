@@ -37,6 +37,9 @@
 <div class="bg-white rounded-lg shadow p-6 mb-6">
   <p class="font-semibold mb-2">Detail Perhitungan SAW</p>
   <p class="text-sm text-slate-500 mb-4">Matriks keputusan, matriks ternormalisasi (r = x / max), dan skor preferensi (jumlah dari bobot dikali nilai ternormalisasi).</p>
+  {% if detail.bobot_dinormalisasi %}
+  <p class="text-sm text-yellow-800 bg-yellow-100 rounded px-4 py-2 mb-4">Catatan: total bobot bukan 1, sehingga bobot dinormalisasi otomatis sebelum perhitungan.</p>
+  {% endif %}
   <div class="overflow-x-auto mb-4">
     <table class="w-full text-sm">
       <thead class="bg-slate-50 text-left">
@@ -60,7 +63,7 @@
       <thead class="bg-slate-50 text-left">
         <tr>
           <th class="px-4 py-3">Karier</th>
-          {% for c in detail.criteria %}<th class="px-4 py-3">{{ c.kode }} (bobot {{ c.bobot }})</th>{% endfor %}
+          {% for j in range(detail.criteria|length) %}<th class="px-4 py-3">{{ detail.criteria[j].kode }}<br><span class="font-normal text-slate-500">{{ detail.criteria[j].nama }} (bobot {{ '%.2f'|format(detail.bobot_n[j]) }})</span></th>{% endfor %}
           <th class="px-4 py-3">Skor</th>
         </tr>
       </thead>
