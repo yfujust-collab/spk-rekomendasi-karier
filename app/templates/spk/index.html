@@ -7,7 +7,7 @@
 <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
   <p class="font-semibold mb-2">Langkah penggunaan</p>
   <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1 mb-4">
-    <li>Isi profil: skill yang dikuasai, karier yang diminati, dan IPK.</li>
+    <li>Isi profil: nama, skill yang dikuasai, dan karier yang diminati.</li>
     <li>Sistem menghitung kecocokan dengan Content-Based Filtering.</li>
     <li>Sistem memberi peringkat dengan metode SAW.</li>
     <li>Lihat rekomendasi beserta detail perhitungannya.</li>
@@ -19,8 +19,6 @@
   <div class="bg-white rounded-lg shadow p-6">
     <p class="font-semibold mb-2">Profil Anda</p>
     <p class="text-sm text-slate-600">Nama: {{ profile.nama }}</p>
-    <p class="text-sm text-slate-600">NIM: {{ profile.nim or '-' }}</p>
-    <p class="text-sm text-slate-600">IPK: {{ profile.ipk }}</p>
     <a href="{{ url_for('spk.profil') }}" class="inline-block mt-3 text-sm text-indigo-600">Perbarui profil</a>
   </div>
   <div class="bg-white rounded-lg shadow p-6">
