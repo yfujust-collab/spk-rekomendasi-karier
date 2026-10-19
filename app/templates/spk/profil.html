@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Isi Profil{% endblock %}
+{% block heading %}Isi Profil{% endblock %}
+{% block subheading %}Data ini menjadi dasar perhitungan rekomendasi karier.{% endblock %}
+{% block content %}
+<div class="bg-white rounded-lg shadow p-6 max-w-3xl">
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ form.nama.label.text }}</label>
+        {{ form.nama(class="w-full border rounded px-3 py-2") }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ form.nim.label.text }}</label>
+        {{ form.nim(class="w-full border rounded px-3 py-2") }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ form.ipk.label.text }}</label>
+        {{ form.ipk(class="w-full border rounded px-3 py-2", step="0.01") }}
+      </div>
+    </div>
+
+    <p class="text-sm font-medium mb-2">{{ form.skills.label.text }}</p>
+    {% if form.skills.errors %}<p class="text-sm text-red-600 mb-2">{{ form.skills.errors[0] }}</p>{% endif %}
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
+      {% for subfield in form.skills %}
+      <label class="flex items-center gap-2 text-sm border rounded px-3 py-2 hover:bg-slate-50">
+        {{ subfield }} <span>{{ subfield.label.text }}</span>
+      </label>
+      {% endfor %}
+    </div>
+
+    <p class="text-sm font-medium mb-2">{{ form.minat.label.text }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+      {% for subfield in form.minat %}
+      <label class="flex items-center gap-2 text-sm border rounded px-3 py-2 hover:bg-slate-50">
+        {{ subfield }} <span>{{ subfield.label.text }}</span>
+      </label>
+      {% endfor %}
+    </div>
+
+    {{ form.submit(class="bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
+  </form>
+</div>
+{% endblock %}
