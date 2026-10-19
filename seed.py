@@ -1,7 +1,7 @@
 """Seed database dari dataset karier adaptasi O*NET (bukan data hardcode).
 
 Skrip ini membaca langsung dua file CSV dari folder dataset:
-  - karier.csv       : 14 karier IT (kode O*NET-SOC, judul EN/ID,
+  - karier.csv       : 19 karier IT (kode O*NET-SOC, judul EN/ID,
                        deskripsi ID, jml_hot_tech)
   - skill_karier.csv : 35 skill O*NET per karier (skill_en, skill_id,
                        importance 1-5); disaring ke 12 skill Informatika
@@ -17,10 +17,13 @@ Training Administration (USDOL/ETA). Lisensi CC BY 4.0. Atribusi wajib:
     mendukung, atau menguji modifikasi ini.
 
 Langkah adaptasi:
-  1. Subset: 14 okupasi bidang Informatika dari 1.016 okupasi O*NET.
-  2. Penerjemahan: judul, deskripsi, dan nama skill diterjemahkan ke
-     Bahasa Indonesia. Istilah teknologi yang merupakan nama proper
-     (Python, SQL, Git, Docker, dsb.) dipertahankan karena universal.
+  1. Subset: 19 okupasi bidang Informatika dari 1.016 okupasi O*NET
+     (14 awal + 5 tambahan populer di loker Indonesia: IT Support,
+     Data Analyst, AI Engineer, DevOps Engineer, Network Support).
+  2. Nama tampil: kolom judul_id memakai nama Inggris gaya job loker
+     (mis. "Software Developer", "Data Analyst") karena itu sebutan
+     yang dikenal mahasiswa; kolom judul_en menyimpan nama resmi
+     O*NET sebagai referensi. Deskripsi tetap Bahasa Indonesia.
   3. Kurasi skill Informatika untuk CBF: dari 35 skill O*NET, dipilih
      12 skill yang relevan dengan Jurusan Informatika (lihat
      SKILL_INFORMATIKA di bawah). Skill teknisi/non-IT (Pemilihan
@@ -35,9 +38,13 @@ Langkah adaptasi:
      dengan importance >= 3.0 (kategori "penting" ke atas) dicantumkan
      sebagai ciri khas karier; yang di bawahnya tidak. Ambang ini
      dipilih empiris: ambang 2.0 membuat 11 dari 14 karier bervektor
-     identik, sedangkan 3.0 menghasilkan 14 vektor unik dengan sebaran
-     cosine 0.62-0.95 antar-karier. Idealnya kolom bobot importance
-     ditambahkan ke model (pengembangan lanjutan).
+     identik, sedangkan 3.0 menghasilkan 18 vektor unik dari 19 karier
+     (sebaran cosine 0.62-1.00). Satu-satunya pasangan identik adalah
+     Programmer vs DevOps Engineer: nilai importance aslinya berbeda
+     (mis. Pemrograman 4.75 vs 3.50) tetapi ambang biner menyamakan
+     keduanya — keterbatasan model biner yang jujur dicatat di sini.
+     Idealnya kolom bobot importance ditambahkan ke model
+     (pengembangan lanjutan).
   5. Demand (C3): jumlah hot technology (jml_hot_tech) dinormalisasi
      min-max ke skala 1-10 lalu dibulatkan.
   6. Gaji (C2): ESTIMASI pasar kerja Indonesia, dalam juta rupiah/bulan.
@@ -63,27 +70,32 @@ import csv
 import os
 import sys
 
-DEFAULT_DATASET_DIR = os.path.expanduser(
-    "~/workspace/spk-karier/onet-adaptasi"
+DEFAULT_DATASET_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "data"
 )
 
 # ESTIMASI gaji pasar Indonesia (juta Rp/bulan), key = kode O*NET-SOC.
 # BUKAN data O*NET: O*NET tidak menyediakan data gaji.
 GAJI = {
-    "15-1252.00": (5, 12),   # Pengembang Perangkat Lunak
-    "15-1251.00": (4, 10),   # Programmer Komputer
-    "15-1254.00": (4, 10),   # Pengembang Web
-    "15-1255.00": (4, 10),   # Desainer Antarmuka Web & Digital
-    "15-1253.00": (4, 10),   # Analis & Penguji QA Perangkat Lunak
-    "15-2051.00": (6, 14),   # Ilmuwan Data
-    "15-1243.01": (5, 12),   # Spesialis Data Warehouse
-    "15-1242.00": (5, 10),   # Administrator Database
-    "15-1212.00": (5, 13),   # Analis Keamanan Informasi
-    "15-1299.05": (6, 15),   # Insinyur Keamanan Informasi
-    "15-1241.00": (5, 13),   # Arsitek Jaringan Komputer
-    "15-1244.00": (4, 10),   # Administrator Sistem Jaringan & Komputer
-    "15-1211.00": (4, 10),   # Analis Sistem Komputer
-    "15-1299.09": (6, 16),   # Manajer Proyek TI
+    "15-1252.00": (5, 12),   # Software Developer
+    "15-1251.00": (4, 10),   # Programmer
+    "15-1254.00": (4, 10),   # Web Developer
+    "15-1255.00": (4, 10),   # UI/UX Designer
+    "15-1253.00": (4, 10),   # QA Engineer
+    "15-2051.00": (6, 14),   # Data Scientist
+    "15-1243.01": (5, 12),   # Data Engineer
+    "15-1242.00": (5, 10),   # Database Administrator
+    "15-1212.00": (5, 13),   # Cybersecurity Analyst
+    "15-1299.05": (6, 15),   # Security Engineer
+    "15-1241.00": (5, 13),   # Network Architect
+    "15-1244.00": (4, 10),   # System Administrator
+    "15-1211.00": (4, 10),   # System Analyst
+    "15-1299.09": (6, 16),   # IT Project Manager
+    "15-1232.00": (4, 8),    # IT Support
+    "15-2051.01": (5, 12),   # Data Analyst
+    "15-1221.00": (7, 18),   # AI Engineer
+    "15-1299.08": (6, 16),   # DevOps Engineer
+    "15-1231.00": (4, 10),   # Network Support
 }
 GAJI_DEFAULT = (5, 12)
 
@@ -107,8 +119,9 @@ SKILL_INFORMATIKA = [
 # Ambang importance O*NET (skala 1-5): 3 = "penting". Hanya skill yang
 # penting ke atas yang menjadi ciri khas karier. Diukur empiris:
 # ambang 2.0 membuat 11 dari 14 karier bervektor identik (semua skill
-# lolos), sedangkan ambang 3.0 memberi 14 vektor unik dengan sebaran
-# cosine 0.62-0.95 antar-karier.
+# lolos), sedangkan ambang 3.0 memberi 18 vektor unik dari 19 karier
+# dengan sebaran cosine 0.62-1.00 antar-karier (satu-satunya pasangan
+# identik: Programmer vs DevOps Engineer — lihat docstring).
 AMBANG_IMPORTANCE = 3.0
 
 KRITERIA = [
@@ -151,7 +164,7 @@ def main():
     parser.add_argument(
         "--karier-csv",
         default=os.path.join(DEFAULT_DATASET_DIR, "karier.csv"),
-        help="Path ke karier.csv (default: folder dataset onet-adaptasi).",
+        help="Path ke karier.csv (default: folder data/ di repo ini).",
     )
     parser.add_argument(
         "--skill-csv",
