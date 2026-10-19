@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk - SPK Rekomendasi Karier</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white rounded-lg shadow p-8 w-full max-w-md">
+    <h1 class="text-xl font-bold text-slate-900">SPK Rekomendasi Karier</h1>
+    <p class="text-sm text-slate-500 mb-6">Masuk untuk menggunakan sistem pendukung keputusan.</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="px-4 py-2 rounded text-sm mb-3 bg-red-100 text-red-800">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <label class="block text-sm font-medium mb-1">{{ form.username.label.text }}</label>
+      {{ form.username(class="w-full border rounded px-3 py-2 mb-4") }}
+      <label class="block text-sm font-medium mb-1">{{ form.password.label.text }}</label>
+      {{ form.password(class="w-full border rounded px-3 py-2 mb-6") }}
+      {{ form.submit(class="w-full bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
+    </form>
+    <p class="text-sm text-slate-500 mt-4">Belum punya akun? <a class="text-indigo-600" href="{{ url_for('auth.register') }}">Daftar di sini</a>.</p>
+  </div>
+</body>
+</html>
