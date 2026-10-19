@@ -4,7 +4,10 @@
 {% block subheading %}Data ini menjadi dasar perhitungan rekomendasi karier.{% endblock %}
 {% block content %}
 <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
-  <form method="post">
+  {# novalidate: validasi HTML5 browser dimatikan karena WTForms me-render
+     atribut "required" di tiap checkbox (browser menuntut semua dicentang).
+     Validasi tetap jalan di server dengan pesan Bahasa Indonesia. #}
+  <form method="post" novalidate>
     {{ form.hidden_tag() }}
     <div class="mb-6 max-w-md">
       <div>
