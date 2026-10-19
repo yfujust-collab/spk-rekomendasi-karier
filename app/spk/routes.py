@@ -118,10 +118,8 @@ def profil():
             profile = StudentProfile(user_id=current_user.id)
             db.session.add(profile)
         profile.nama = form.nama.data.strip()
-        profile.nim = (form.nim.data or "").strip()
         profile.skills = ", ".join(form.skills.data)
         profile.minat = ", ".join(str(i) for i in form.minat.data)
-        profile.ipk = form.ipk.data or 0.0
         # batch lama tidak dihapus; batch baru akan dibuat saat hitung ulang
         # sehingga halaman Riwayat tetap menyimpan hasil-hasil terdahulu
         db.session.commit()
@@ -130,10 +128,8 @@ def profil():
 
     if profile and not form.is_submitted():
         form.nama.data = profile.nama
-        form.nim.data = profile.nim
         form.skills.data = profile.skill_list()
         form.minat.data = profile.minat_ids()
-        form.ipk.data = profile.ipk
     return render_template("spk/profil.html", form=form)
 
 
