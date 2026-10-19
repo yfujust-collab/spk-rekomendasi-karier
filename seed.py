@@ -1,10 +1,10 @@
 """Seed database dari dataset karier adaptasi O*NET (bukan data hardcode).
 
 Skrip ini membaca langsung dua file CSV dari folder dataset:
-  - karier.csv         : 14 karier IT (kode O*NET-SOC, judul EN/ID,
-                         deskripsi ID, jml_hot_tech)
-  - skill_pembeda.csv  : 12 skill paling membeda antar-karier
-                         (skill_en, skill_id, importance 1-5)
+  - karier.csv       : 14 karier IT (kode O*NET-SOC, judul EN/ID,
+                       deskripsi ID, jml_hot_tech)
+  - skill_karier.csv : 35 skill O*NET per karier (skill_en, skill_id,
+                       importance 1-5); disaring ke 12 skill Informatika
 
 ADAPTASI DATASET O*NET (bahan Bab Metodologi)
 --------------------------------------------
@@ -21,17 +21,23 @@ Langkah adaptasi:
   2. Penerjemahan: judul, deskripsi, dan nama skill diterjemahkan ke
      Bahasa Indonesia. Istilah teknologi yang merupakan nama proper
      (Python, SQL, Git, Docker, dsb.) dipertahankan karena universal.
-  3. Seleksi fitur untuk CBF: memakai 35 skill sekaligus memberi cosine
-     similarity 0.97-0.99 antar-karier IT (hampir identik, tidak bisa
-     membedakan). Dipakai 12 skill dengan variansi importance tertinggi
-     antar-karier: "seleksi fitur berbasis variansi".
+  3. Kurasi skill Informatika untuk CBF: dari 35 skill O*NET, dipilih
+     12 skill yang relevan dengan Jurusan Informatika (lihat
+     SKILL_INFORMATIKA di bawah). Skill teknisi/non-IT (Pemilihan
+     Peralatan, Instalasi, Perawatan Peralatan, Perbaikan, dsb.)
+     sengaja dikecualikan agar vektor CBF mencerminkan kompetensi
+     Informatika. Memakai 35 skill sekaligus memberi cosine similarity
+     0.97-0.99 antar-karier IT (hampir identik, tidak bisa membedakan),
+     sehingga kurasi ini juga berfungsi sebagai seleksi fitur.
   4. Threshold biner: kolom Career.skills di aplikasi ini berupa teks
      dipisah koma (vektor biner di layanan CBF), sehingga bobot
      importance O*NET (skala 1-5) tidak bisa disimpan langsung. Skill
-     dengan importance >= 2.0 dicantumkan sebagai ciri khas karier;
-     yang di bawahnya tidak. Tanpa langkah ini semua karier punya vektor
-     identik dan skor CBF tidak bervariasi antar-karier. Idealnya kolom
-     bobot importance ditambahkan ke model (pengembangan lanjutan).
+     dengan importance >= 3.0 (kategori "penting" ke atas) dicantumkan
+     sebagai ciri khas karier; yang di bawahnya tidak. Ambang ini
+     dipilih empiris: ambang 2.0 membuat 11 dari 14 karier bervektor
+     identik, sedangkan 3.0 menghasilkan 14 vektor unik dengan sebaran
+     cosine 0.62-0.95 antar-karier. Idealnya kolom bobot importance
+     ditambahkan ke model (pengembangan lanjutan).
   5. Demand (C3): jumlah hot technology (jml_hot_tech) dinormalisasi
      min-max ke skala 1-10 lalu dibulatkan.
   6. Gaji (C2): ESTIMASI pasar kerja Indonesia, dalam juta rupiah/bulan.
@@ -81,9 +87,29 @@ GAJI = {
 }
 GAJI_DEFAULT = (5, 12)
 
-# Skill dengan importance di bawah ambang ini tidak dicantumkan pada
-# kolom skills (lihat langkah 4 pada docstring).
-AMBANG_IMPORTANCE = 2.0
+# 12 skill Informatika hasil kurasi dari 35 skill O*NET (nama persis
+# seperti kolom skill_id di skill_karier.csv).
+SKILL_INFORMATIKA = [
+    "Pemrograman",
+    "Analisis Sistem",
+    "Evaluasi Sistem",
+    "Perancangan Teknologi",
+    "Pemecahan Masalah Kompleks",
+    "Berpikir Kritis",
+    "Matematika",
+    "Pemecahan Masalah Teknis",
+    "Analisis Operasional",
+    "Analisis Kendali Mutu",
+    "Pembelajaran Aktif",
+    "Penilaian & Pengambilan Keputusan",
+]
+
+# Ambang importance O*NET (skala 1-5): 3 = "penting". Hanya skill yang
+# penting ke atas yang menjadi ciri khas karier. Diukur empiris:
+# ambang 2.0 membuat 11 dari 14 karier bervektor identik (semua skill
+# lolos), sedangkan ambang 3.0 memberi 14 vektor unik dengan sebaran
+# cosine 0.62-0.95 antar-karier.
+AMBANG_IMPORTANCE = 3.0
 
 KRITERIA = [
     ("C1", "Kecocokan skill (CBF)", 0.35),
@@ -130,24 +156,29 @@ def main():
     parser.add_argument(
         "--skill-csv",
         default=None,
-        help="Path ke skill_pembeda.csv "
+        help="Path ke skill_karier.csv "
         "(default: satu folder dengan karier.csv).",
     )
     args = parser.parse_args()
 
     karier_csv = os.path.expanduser(args.karier_csv)
     skill_csv = os.path.expanduser(args.skill_csv) if args.skill_csv else os.path.join(
-        os.path.dirname(karier_csv), "skill_pembeda.csv"
+        os.path.dirname(karier_csv), "skill_karier.csv"
     )
 
     daftar_karier = baca_csv(karier_csv, KOLOM_WAJIB_KARIER)
     daftar_skill = baca_csv(skill_csv, KOLOM_WAJIB_SKILL)
 
-    # Urutan 12 skill pembeda mengikuti kemunculan pertama di CSV.
-    urutan_skill = []
-    for baris in daftar_skill:
-        if baris["skill_id"] not in urutan_skill:
-            urutan_skill.append(baris["skill_id"])
+    # Saring hanya 12 skill Informatika hasil kurasi; validasi bahwa
+    # semuanya benar-benar ada di CSV.
+    ada_di_csv = {baris["skill_id"] for baris in daftar_skill}
+    hilang = [s for s in SKILL_INFORMATIKA if s not in ada_di_csv]
+    if hilang:
+        raise SystemExit(
+            f"Skill kurasi tidak ditemukan di {skill_csv}: {hilang}"
+        )
+    urutan_skill = list(SKILL_INFORMATIKA)
+    daftar_skill = [b for b in daftar_skill if b["skill_id"] in set(urutan_skill)]
     skill_per_kode = {}
     for baris in daftar_skill:
         try:
@@ -222,7 +253,7 @@ def main():
     print(f"Data lama dihapus: {n_karier_lama} karier, {n_kriteria_lama} "
           f"kriteria, {n_hasil} hasil rekomendasi.")
     print(f"{len(daftar_karier)} karier dari {karier_csv} berhasil di-seed.")
-    print(f"Urutan 12 skill pembeda: {', '.join(urutan_skill)}")
+    print(f"Urutan 12 skill Informatika: {', '.join(urutan_skill)}")
     print("Seed selesai.")
 
 
