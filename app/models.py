@@ -54,10 +54,8 @@ class StudentProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     nama = db.Column(db.String(120), nullable=False)
-    nim = db.Column(db.String(30))
     skills = db.Column(db.Text, default="")  # skill dikuasai, dipisah koma
     minat = db.Column(db.Text, default="")  # id karier diminati, dipisah koma
-    ipk = db.Column(db.Float, default=0.0)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def skill_list(self):
