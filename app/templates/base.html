@@ -8,10 +8,24 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800">
+
+<!-- Bar atas khusus ponsel -->
+<div class="md:hidden bg-slate-900 text-white flex items-center justify-between px-4 py-3 sticky top-0 z-30">
+  <p class="font-bold">SPK Karier</p>
+  <button id="btnMenu" class="p-2 rounded hover:bg-slate-700" aria-label="Buka menu">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+</div>
+
 <div class="flex min-h-screen">
 
+  <!-- Lapisan gelap saat menu ponsel terbuka -->
+  <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
+
   <!-- Sidebar -->
-  <aside class="w-64 bg-slate-900 text-slate-200 flex flex-col shrink-0">
+  <aside id="sidebar" class="fixed md:static z-40 inset-y-0 left-0 w-64 -translate-x-full md:translate-x-0 transition-transform bg-slate-900 text-slate-200 flex flex-col shrink-0">
     <div class="px-6 py-5 border-b border-slate-700">
       <p class="text-lg font-bold text-white">SPK Karier</p>
       <p class="text-xs text-slate-400">Rekomendasi Karier Informatika</p>
@@ -37,7 +51,7 @@
   </aside>
 
   <!-- Konten -->
-  <main class="flex-1 p-8">
+  <main class="flex-1 p-4 md:p-8 min-w-0">
     <h1 class="text-2xl font-bold text-slate-900 mb-1">{% block heading %}{% endblock %}</h1>
     <p class="text-sm text-slate-500 mb-6">{% block subheading %}{% endblock %}</p>
 
@@ -60,6 +74,22 @@
     {% block content %}{% endblock %}
   </main>
 </div>
+<script>
+// Menu geser untuk layar ponsel
+const sb = document.getElementById('sidebar');
+const ov = document.getElementById('overlay');
+const btn = document.getElementById('btnMenu');
+if (btn) {
+  btn.addEventListener('click', () => {
+    sb.classList.toggle('-translate-x-full');
+    ov.classList.toggle('hidden');
+  });
+  ov.addEventListener('click', () => {
+    sb.classList.add('-translate-x-full');
+    ov.classList.add('hidden');
+  });
+}
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
