@@ -68,7 +68,13 @@ class StudentProfile(db.Model):
 
 
 class RecommendationResult(db.Model):
-    """Hasil perhitungan per profil."""
+    """Hasil perhitungan per profil.
+
+    Kolom batch_id menandai satu kali perhitungan: semua baris dari
+    perhitungan yang sama memakai batch_id yang sama. Batch lama tidak
+    dihapus agar halaman Riwayat bisa menampilkan hasil-hasil terdahulu;
+    tampilan Hasil dan Dasbor selalu memakai batch terbaru.
+    """
 
     id = db.Column(db.Integer, primary_key=True)
     profile_id = db.Column(
@@ -78,6 +84,7 @@ class RecommendationResult(db.Model):
     skor_cbf = db.Column(db.Float, default=0.0)
     skor_saw = db.Column(db.Float, default=0.0)
     peringkat = db.Column(db.Integer, default=0)
+    batch_id = db.Column(db.String(32), default="")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     career = db.relationship("Career")
