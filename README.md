@@ -15,7 +15,7 @@ Sistem pendukung keputusan berbasis web untuk merekomendasikan karier mahasiswa 
 | Content-Based Filtering | Mengukur kecocokan skill (cosine similarity) |
 | Simple Additive Weighting | Memberi peringkat akhir dari 4 kriteria berbobot |
 
-[Fitur](#fitur) · [Cara Jalan](#cara-jalan) · [Struktur](#struktur) · [Dataset](#dataset)
+[Fitur](#fitur) · [Cara Jalan](#cara-jalan) · [Deploy](#deploy) · [Struktur](#struktur) · [Dataset](#dataset)
 
 </div>
 
@@ -25,6 +25,8 @@ Sistem pendukung keputusan berbasis web untuk merekomendasikan karier mahasiswa 
 - **Form profil mahasiswa**: skill yang dikuasai, karier yang diminati, IPK.
 - **Perhitungan dua tahap**: CBF untuk skor kecocokan skill, SAW untuk peringkat akhir.
 - **Transparansi penuh**: halaman hasil menampilkan matriks keputusan, matriks ternormalisasi, dan skor preferensi tiap karier, plus grafik Chart.js.
+- **Riwayat perhitungan**: setiap perhitungan disimpan sebagai batch tersendiri; hasil lama bisa dibuka ulang tanpa tertimpa.
+- **Export CSV**: unduh hasil rekomendasi batch terbaru sebagai berkas CSV.
 - **Panel admin**: kelola data karier (skill, gaji, demand) serta kriteria dan bobot SAW.
 
 ## Cara Jalan
@@ -38,6 +40,14 @@ python run.py
 ```
 
 Buka `http://127.0.0.1:5000`, masuk sebagai admin (`admin` / `admin123`, segera ganti) atau daftar sebagai mahasiswa.
+
+## Deploy
+
+Panduan lengkap di [DEPLOY.md](DEPLOY.md): deploy ke VPS dengan Docker
+(`docker build` + `docker run`, volume untuk SQLite atau `DATABASE_URL`
+untuk Postgres) dan opsi PythonAnywhere (virtualenv, konfigurasi WSGI,
+seed). Wajib ganti kredensial admin default dan set `SECRET_KEY` lewat
+environment sebelum aplikasi dibuka ke publik.
 
 ## Struktur
 
