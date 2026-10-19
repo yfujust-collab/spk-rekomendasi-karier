@@ -14,9 +14,16 @@ def _vocabulary():
 
 
 def _compute(profile):
-    """Hitung CBF lalu SAW. Kembalikan detail lengkap untuk transparansi."""
+    """Hitung CBF lalu SAW. Kembalikan detail lengkap untuk transparansi.
+
+    Melempar ValueError bila data master belum sah untuk dihitung.
+    """
     careers = Career.query.order_by(Career.id).all()
     criteria = Criterion.query.order_by(Criterion.kode).all()
+    if not careers or not criteria:
+        raise ValueError("Data karier atau kriteria belum lengkap.")
+    if len(criteria) != 4:
+        raise ValueError("Jumlah kriteria harus tepat 4 agar perhitungan SAW sah.")
     vocab = _vocabulary()
     vec_mhs = cbf.vectorize(profile.skill_list(), vocab)
 
@@ -33,16 +40,22 @@ def _compute(profile):
         minat = 1.0 if career.id in profile.minat_ids() else 0.2
         matrix.append([skor_cbf[i], float(career.gaji_max), float(career.demand), minat])
 
-    n_kriteria = len(matrix[0])
-    criteria = criteria[:n_kriteria]
+    # Kaidah SAW: total bobot harus 1. Bila admin mengisi total yang
+    # berbeda, bobot dinormalisasi otomatis agar hasil tetap sah.
     bobot = [c.bobot for c in criteria]
-    hasil_saw = saw.hitung(matrix, bobot)
+    total_bobot = sum(bobot)
+    dinormalisasi = abs(total_bobot - 1.0) > 1e-9 and total_bobot > 0
+    bobot_n = [b / total_bobot for b in bobot] if dinormalisasi else list(bobot)
+    hasil_saw = saw.hitung(matrix, bobot_n)
     return {
         "careers": careers,
         "criteria": criteria,
         "matrix": matrix,
         "skor_cbf": skor_cbf,
         "saw": hasil_saw,
+        "bobot": bobot,
+        "bobot_n": bobot_n,
+        "bobot_dinormalisasi": dinormalisasi,
     }
 
 
@@ -109,9 +122,10 @@ def hitung():
     if not profile:
         flash("Isi profil terlebih dahulu.", "warning")
         return redirect(url_for("spk.profil"))
-    detail = _compute(profile)
-    if not detail["careers"]:
-        flash("Data karier atau kriteria belum lengkap.", "warning")
+    try:
+        detail = _compute(profile)
+    except ValueError as e:
+        flash(str(e), "danger")
         return redirect(url_for("spk.index"))
 
     RecommendationResult.query.filter_by(profile_id=profile.id).delete()
@@ -142,5 +156,9 @@ def hasil():
     )
     if not rows:
         return redirect(url_for("spk.hitung"))
-    detail = _compute(profile)
+    try:
+        detail = _compute(profile)
+    except ValueError as e:
+        flash(str(e), "danger")
+        return redirect(url_for("spk.index"))
     return render_template("spk/hasil.html", profile=profile, rows=rows, detail=detail)
