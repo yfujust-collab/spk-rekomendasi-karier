@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ judul }}{% endblock %}
+{% block heading %}{{ judul }}{% endblock %}
+{% block subheading %}Lengkapi seluruh kolom, lalu simpan.{% endblock %}
+{% block content %}
+<div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <label class="block text-sm font-medium mb-1">{{ form.nama.label.text }}</label>
+    {{ form.nama(class="w-full border rounded px-3 py-2 mb-4") }}
+    <label class="block text-sm font-medium mb-1">{{ form.deskripsi.label.text }}</label>
+    {{ form.deskripsi(class="w-full border rounded px-3 py-2 mb-4", rows=3) }}
+    <label class="block text-sm font-medium mb-1">{{ form.skills.label.text }}</label>
+    {{ form.skills(class="w-full border rounded px-3 py-2 mb-4", rows=2) }}
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ form.gaji_min.label.text }}</label>
+        {{ form.gaji_min(class="w-full border rounded px-3 py-2") }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ form.gaji_max.label.text }}</label>
+        {{ form.gaji_max(class="w-full border rounded px-3 py-2") }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ form.demand.label.text }}</label>
+        {{ form.demand(class="w-full border rounded px-3 py-2") }}
+      </div>
+    </div>
+    {{ form.submit(class="bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
+    <a href="{{ url_for('admin.careers') }}" class="ml-3 text-sm text-slate-500">Batal</a>
+  </form>
+</div>
+{% endblock %}
