@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Riwayat Rekomendasi{% endblock %}
+{% block heading %}Riwayat Rekomendasi{% endblock %}
+{% block subheading %}Setiap perhitungan yang pernah dijalankan disimpan di sini, dari yang terbaru.{% endblock %}
+{% block content %}
+{% if riwayat %}
+<div class="space-y-4 max-w-3xl">
+  {% for b in riwayat %}
+  <div class="bg-white rounded-lg shadow p-6">
+    <div class="flex items-center justify-between mb-3">
+      <p class="font-semibold">Perhitungan {{ b.waktu.strftime('%d-%m-%Y %H:%M') }}</p>
+      <span class="text-xs text-slate-400">id {{ b.batch_id }}</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left">
+          <tr>
+            <th class="px-4 py-2">Peringkat</th>
+            <th class="px-4 py-2">Karier</th>
+            <th class="px-4 py-2">Skor SAW</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in b.teratas %}
+          <tr class="border-t">
+            <td class="px-4 py-2 font-bold">{{ r.peringkat }}</td>
+            <td class="px-4 py-2 font-medium">{{ r.career.nama }}</td>
+            <td class="px-4 py-2">{{ '%.4f'|format(r.skor_saw) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow p-8 max-w-2xl text-center">
+  <p class="font-semibold text-slate-700 mb-1">Belum ada riwayat</p>
+  <p class="text-sm text-slate-500 mb-4">Anda belum pernah menjalankan perhitungan rekomendasi.</p>
+  <a href="{{ url_for('spk.hitung') }}" class="inline-block bg-indigo-600 text-white rounded px-4 py-2 text-sm hover:bg-indigo-700">Hitung Rekomendasi</a>
+</div>
+{% endif %}
+{% endblock %}
