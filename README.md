@@ -2,7 +2,7 @@
 
 # **Rancang Bangun Sistem Pendukung Keputusan Rekomendasi Karier Mahasiswa Informatika Berbasis Web Menggunakan Metode Content-Based Filtering dan Simple Additive Weighting (SAW)**
 
-*SPK Karier — sistem pendukung keputusan berbasis web untuk merekomendasikan karier mahasiswa Informatika.*
+*SPK Karier: sistem pendukung keputusan berbasis web untuk merekomendasikan karier mahasiswa Informatika.*
 
 *Content-Based Filtering bertemu Simple Additive Weighting dalam satu alur yang transparan.*
 
@@ -63,7 +63,7 @@ app/
 
 ## Diagram Perancangan
 
-Diagram use case, flowchart, activity, sequence, class, DFD, dan ERD tersedia sebagai gambar. Khusus ERD: **digenerate dari skema database aktual** (SQLite hasil seed, via refleksi SQLAlchemy) memakai script `gen_erd_real.py` — bukan digambar manual — sehingga dijamin 1:1 dengan tabel yang dipakai aplikasi, setara dengan fitur Designer di phpMyAdmin.
+Diagram use case, flowchart, activity, sequence, class, DFD, dan ERD tersedia sebagai gambar. Khusus ERD: digenerate dari skema database aktual (SQLite hasil seed, via refleksi SQLAlchemy) memakai script `gen_erd_real.py`, bukan digambar manual, sehingga dijamin 1:1 dengan tabel yang dipakai aplikasi (setara fitur Designer di phpMyAdmin).
 
 ## Dataset
 
