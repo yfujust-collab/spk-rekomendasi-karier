@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Dasbor Admin{% endblock %}
+{% block heading %}Dasbor Admin{% endblock %}
+{% block subheading %}Ringkasan data utama sistem pendukung keputusan.{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="bg-white rounded-lg shadow p-6">
+    <p class="text-sm text-slate-500">Jumlah Karier</p>
+    <p class="text-3xl font-bold text-indigo-600">{{ n_karier }}</p>
+  </div>
+  <div class="bg-white rounded-lg shadow p-6">
+    <p class="text-sm text-slate-500">Jumlah Kriteria</p>
+    <p class="text-3xl font-bold text-indigo-600">{{ n_kriteria }}</p>
+  </div>
+  <div class="bg-white rounded-lg shadow p-6">
+    <p class="text-sm text-slate-500">Profil Mahasiswa</p>
+    <p class="text-3xl font-bold text-indigo-600">{{ n_profil }}</p>
+  </div>
+</div>
+<div class="mt-6 bg-white rounded-lg shadow p-6">
+  <p class="font-semibold mb-2">Panduan singkat</p>
+  <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1">
+    <li>Kelola <a class="text-indigo-600" href="{{ url_for('admin.careers') }}">data karier</a>: nama, deskripsi, skill, estimasi gaji, dan demand pasar.</li>
+    <li>Atur <a class="text-indigo-600" href="{{ url_for('admin.criteria') }}">kriteria dan bobot</a> SAW. Pastikan total bobot sama dengan 1.</li>
+    <li>Mahasiswa mengisi profil, lalu sistem menghitung rekomendasi otomatis.</li>
+  </ol>
+</div>
+{% endblock %}
