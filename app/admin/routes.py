@@ -4,7 +4,7 @@ from app import db
 from app.admin import bp
 from app.admin.forms import CareerForm, CriterionForm
 from app.decorators import admin_required
-from app.models import Career, Criterion, StudentProfile
+from app.models import Career, Criterion, RecommendationResult, StudentProfile
 
 
 @bp.route("/")
@@ -62,6 +62,8 @@ def career_edit(cid):
 @admin_required
 def career_delete(cid):
     career = Career.query.get_or_404(cid)
+    # hapus hasil rekomendasi terkait agar tidak menjadi data yatim
+    RecommendationResult.query.filter_by(career_id=career.id).delete()
     db.session.delete(career)
     db.session.commit()
     flash("Data karier dihapus.", "info")
@@ -74,7 +76,13 @@ def criteria():
     criteria = Criterion.query.order_by(Criterion.kode).all()
     form = CriterionForm()
     if form.validate_on_submit():
-        kode = f"C{len(criteria) + 1}"
+        # kode dari nomor terbesar yang ada + 1, agar tidak duplikat
+        # bila kriteria pernah dihapus
+        nomor = 0
+        for c in Criterion.query.all():
+            if c.kode and c.kode.startswith("C") and c.kode[1:].isdigit():
+                nomor = max(nomor, int(c.kode[1:]))
+        kode = f"C{nomor + 1}"
         db.session.add(
             Criterion(nama=form.nama.data.strip(), bobot=form.bobot.data, kode=kode)
         )
