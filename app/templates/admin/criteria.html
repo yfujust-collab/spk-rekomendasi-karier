@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Kriteria dan Bobot{% endblock %}
 {% block heading %}Kriteria dan Bobot{% endblock %}
-{% block subheading %}Kriteria penilaian SAW. Pastikan total bobot sama dengan 1. Saat ini: {{ total_bobot }}.{% endblock %}
+{% block subheading %}Kriteria penilaian SAW. Total bobot harus sama dengan 1. Saat ini: {{ total_bobot }}.{% endblock %}
 {% block content %}
+{% if total_bobot != 1 %}
+<div class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded text-sm mb-6 max-w-2xl">
+  Peringatan: total bobot saat ini {{ total_bobot }}, bukan 1. Sistem akan menormalisasi bobot secara otomatis saat menghitung, tetapi sebaiknya perbaiki agar sesuai kaidah SAW.
+</div>
+{% endif %}
 <div class="bg-white rounded-lg shadow p-6 max-w-2xl mb-6">
   <p class="font-semibold mb-3">Tambah kriteria</p>
   <form method="post" class="flex gap-3 items-end">
