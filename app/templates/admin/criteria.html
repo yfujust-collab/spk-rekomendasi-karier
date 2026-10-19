@@ -22,6 +22,12 @@
     </div>
     {{ form.submit(class="bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
   </form>
+  {% if form.nama.errors or form.bobot.errors %}
+  <div class="mt-3 text-sm text-red-600">
+    {% for e in form.nama.errors %}<p>{{ e }}</p>{% endfor %}
+    {% for e in form.bobot.errors %}<p>{{ e }}</p>{% endfor %}
+  </div>
+  {% endif %}
 </div>
 <div class="bg-white rounded-lg shadow overflow-x-auto max-w-2xl">
   <table class="w-full text-sm">
@@ -41,6 +47,8 @@
           </form>
         </td>
       </tr>
+      {% else %}
+      <tr><td colspan="4" class="px-4 py-6 text-center text-slate-400">Belum ada data kriteria.</td></tr>
       {% endfor %}
     </tbody>
   </table>
