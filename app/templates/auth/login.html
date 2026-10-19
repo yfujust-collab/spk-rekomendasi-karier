@@ -18,9 +18,11 @@
     <form method="post">
       {{ form.hidden_tag() }}
       <label class="block text-sm font-medium mb-1">{{ form.username.label.text }}</label>
-      {{ form.username(class="w-full border rounded px-3 py-2 mb-4") }}
+      {{ form.username(class="w-full border rounded px-3 py-2 mb-1") }}
+      {% if form.username.errors %}<p class="text-sm text-red-600 mb-3">{{ form.username.errors[0] }}</p>{% else %}<div class="mb-3"></div>{% endif %}
       <label class="block text-sm font-medium mb-1">{{ form.password.label.text }}</label>
-      {{ form.password(class="w-full border rounded px-3 py-2 mb-6") }}
+      {{ form.password(class="w-full border rounded px-3 py-2 mb-1") }}
+      {% if form.password.errors %}<p class="text-sm text-red-600 mb-3">{{ form.password.errors[0] }}</p>{% else %}<div class="mb-5"></div>{% endif %}
       {{ form.submit(class="w-full bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
     </form>
     <p class="text-sm text-slate-500 mt-4">Belum punya akun? <a class="text-indigo-600" href="{{ url_for('auth.register') }}">Daftar di sini</a>.</p>
