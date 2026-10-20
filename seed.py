@@ -1,128 +1,77 @@
-"""Seed database dari dataset karier adaptasi O*NET (bukan data hardcode).
+"""Seed database dari Dataset Lowongan IT Indonesia (bukan data hardcode).
 
-Skrip ini membaca langsung dua file CSV dari folder dataset:
-  - karier.csv       : 19 karier IT (kode O*NET-SOC, judul EN/ID,
-                       deskripsi ID, jml_hot_tech)
-  - skill_karier.csv : 35 skill O*NET per karier (skill_en, skill_id,
-                       importance 1-5); disaring ke 12 skill Informatika
+Skrip ini membaca dua file CSV dari folder dataset:
+  - skill_matrix.csv : 19 jabatan IT x 30 hard skill, skor 1-5
+                       (kolom: kode_jabatan, nama_jabatan, skill, skor)
+  - demand_gaji.csv  : demand & gaji per jabatan
+                       (kolom: kode_jabatan, nama_jabatan, n_lowongan,
+                       n_gaji, gaji_min_rp, gaji_max_rp, gaji_median_rp)
 
-ADAPTASI DATASET O*NET (bahan Bab Metodologi)
---------------------------------------------
-Sumber: O*NET Database 31.0, U.S. Department of Labor, Employment and
-Training Administration (USDOL/ETA). Lisensi CC BY 4.0. Atribusi wajib:
+DATASET LOWONGAN IT INDONESIA (bahan Bab Metodologi)
+---------------------------------------------------
+Dataset primer yang dibangun khusus untuk penelitian ini melalui text
+mining 479 lowongan IT unik dari id.indeed.com (19-20 Oktober 2026,
+18-31 lowongan per jabatan). Metode: ekstraksi keyword hard skill dari
+bagian Requirements/deskripsi tiap lowongan, lalu frekuensi kemunculan
+per jabatan dinormalisasi ke skor 1-5 dengan rumus:
 
-    Data karier diadaptasi dari O*NET 31.0 Database oleh U.S. Department
-    of Labor, Employment and Training Administration (USDOL/ETA),
-    digunakan di bawah lisensi CC BY 4.0. USDOL/ETA tidak menyetujui,
-    mendukung, atau menguji modifikasi ini.
+    skor(o, s) = 1 + 4 * (pct(o, s) / max_pct(o))
 
-Langkah adaptasi:
-  1. Subset: 19 okupasi bidang Informatika dari 1.016 okupasi O*NET
-     (14 awal + 5 tambahan populer di loker Indonesia: IT Support,
-     Data Analyst, AI Engineer, DevOps Engineer, Network Support).
-  2. Nama tampil: kolom judul_id memakai nama Inggris gaya job loker
-     (mis. "Software Developer", "Data Analyst") karena itu sebutan
-     yang dikenal mahasiswa; kolom judul_en menyimpan nama resmi
-     O*NET sebagai referensi. Deskripsi tetap Bahasa Indonesia.
-  3. Kurasi skill Informatika untuk CBF: dari 35 skill O*NET, dipilih
-     12 skill yang relevan dengan Jurusan Informatika (lihat
-     SKILL_INFORMATIKA di bawah). Skill teknisi/non-IT (Pemilihan
-     Peralatan, Instalasi, Perawatan Peralatan, Perbaikan, dsb.)
-     sengaja dikecualikan agar vektor CBF mencerminkan kompetensi
-     Informatika. Memakai 35 skill sekaligus memberi cosine similarity
-     0.97-0.99 antar-karier IT (hampir identik, tidak bisa membedakan),
-     sehingga kurasi ini juga berfungsi sebagai seleksi fitur.
-  4. Threshold biner: kolom Career.skills di aplikasi ini berupa teks
-     dipisah koma (vektor biner di layanan CBF), sehingga bobot
-     importance O*NET (skala 1-5) tidak bisa disimpan langsung. Skill
-     dengan importance >= 3.0 (kategori "penting" ke atas) dicantumkan
-     sebagai ciri khas karier; yang di bawahnya tidak. Ambang ini
-     dipilih empiris: ambang 2.0 membuat 11 dari 14 karier bervektor
-     identik, sedangkan 3.0 menghasilkan 18 vektor unik dari 19 karier
-     (sebaran cosine 0.62-1.00). Satu-satunya pasangan identik adalah
-     Programmer vs DevOps Engineer: nilai importance aslinya berbeda
-     (mis. Pemrograman 4.75 vs 3.50) tetapi ambang biner menyamakan
-     keduanya — keterbatasan model biner yang jujur dicatat di sini.
-     Idealnya kolom bobot importance ditambahkan ke model
-     (pengembangan lanjutan).
-  5. Demand (C3): jumlah hot technology (jml_hot_tech) dinormalisasi
-     min-max ke skala 1-10 lalu dibulatkan.
-  6. Gaji (C2): ESTIMASI pasar kerja Indonesia, dalam juta rupiah/bulan.
-     O*NET TIDAK menyediakan data gaji; kolom estimasi gaji di
-     karier.csv memang sengaja dikosongkan. Angka pada tabel GAJI di
-     bawah adalah perkiraan wajar mengikuti pola entry 4-7, mid 7-12,
-     senior/spesialis 10-18, disesuaikan per peran. Ganti dengan data
-     survei gaji bila tersedia (mis. dataset Kaggle AI-Powered Job
-     Recommendations).
+pct(o, s) = % lowongan jabatan o yang menyebut skill s (satu desimal).
+Demand (C3) = jumlah lowongan per jabatan (dinormalisasi min-max ke
+1-10 di bawah). Gaji (C2) = dari info gaji yang tercantum di lowongan
+(median per jabatan; hanya +-12% lowongan yang mencantumkan gaji).
+
+Dataset ini MENGGANTIKAN PENUH dataset adaptasi O*NET yang dipakai
+sebelumnya. O*NET tidak lagi menjadi sumber data sistem ini.
+
+Keterbatasan yang dicatat jujur:
+  - Satu sumber (Indeed); sampel 18-31 per jabatan (kecil).
+  - Ekstraksi = keyword matching, bukan NLP.
+  - Data gaji tipis: n_gaji 0-8 per jabatan. IT Support (ITSUP)
+    tidak punya satu pun data gaji observasi (n_gaji=0), sehingga
+    gaji_min/med/max-nya DIIMPITASI dari median 18 jabatan lain.
+    Imputasi ini ditandai eksplisit di bawah dan di README —
+    bukan data observasi.
+
+Deskripsi tiap jabatan (Bahasa Indonesia) ada di
+data-loker-id/deskripsi.csv (dipetakan via nama jabatan yang sama
+persis); bila tidak ditemukan, seed GAGAL dengan pesan jelas
+(fail loudly, bukan karangan diam-diam).
+
+Format kolom Career.skills: "Skill:skor" dipisah koma, mis.
+"Python:4.6, SQL:3.8". Skor 1-5 dipakai langsung sebagai vektor
+BERBOBOT di layanan CBF (lihat app/services/cbf.py) — tidak ada
+lagi threshold biner.
 
 IDEMPOTEN: skrip ini menghapus seluruh data master lama (karier,
-kriteria, dan hasil rekomendasi yang merujuk karier) lalu mengisi ulang
-dari CSV. Akun pengguna dan profil mahasiswa dipertahankan, tetapi
-daftar minat pada profil perlu diisi ulang karena id karier berubah.
+kriteria, dan hasil rekomendasi yang merujuk karier) lalu mengisi
+ulang dari CSV. Akun pengguna dan profil mahasiswa dipertahankan,
+tetapi daftar minat pada profil perlu diisi ulang karena id karier
+berubah.
 
 Contoh:
     python seed.py
-    python seed.py --karier-csv /path/ke/karier.csv
+    python seed.py --matrix-csv /path/ke/skill_matrix.csv
     DATABASE_URL=sqlite:////tmp/uji.db python seed.py
 """
 import argparse
 import csv
 import os
+import statistics
 import sys
 
 DEFAULT_DATASET_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "data"
+    os.path.dirname(os.path.abspath(__file__)), "data-loker-id"
 )
+# Deskripsi tiap jabatan (Bahasa Indonesia), satu file dengan dataset.
+ARSIP_DESKRIPSI = os.path.join(DEFAULT_DATASET_DIR, "deskripsi.csv")
 
-# ESTIMASI gaji pasar Indonesia (juta Rp/bulan), key = kode O*NET-SOC.
-# BUKAN data O*NET: O*NET tidak menyediakan data gaji.
-GAJI = {
-    "15-1252.00": (5, 12),   # Software Developer
-    "15-1251.00": (4, 10),   # Programmer
-    "15-1254.00": (4, 10),   # Web Developer
-    "15-1255.00": (4, 10),   # UI/UX Designer
-    "15-1253.00": (4, 10),   # QA Engineer
-    "15-2051.00": (6, 14),   # Data Scientist
-    "15-1243.01": (5, 12),   # Data Engineer
-    "15-1242.00": (5, 10),   # Database Administrator
-    "15-1212.00": (5, 13),   # Cybersecurity Analyst
-    "15-1299.05": (6, 15),   # Security Engineer
-    "15-1241.00": (5, 13),   # Network Architect
-    "15-1244.00": (4, 10),   # System Administrator
-    "15-1211.00": (4, 10),   # System Analyst
-    "15-1299.09": (6, 16),   # IT Project Manager
-    "15-1232.00": (4, 8),    # IT Support
-    "15-2051.01": (5, 12),   # Data Analyst
-    "15-1221.00": (7, 18),   # AI Engineer
-    "15-1299.08": (6, 16),   # DevOps Engineer
-    "15-1231.00": (4, 10),   # Network Support
-}
-GAJI_DEFAULT = (5, 12)
-
-# 12 skill Informatika hasil kurasi dari 35 skill O*NET (nama persis
-# seperti kolom skill_id di skill_karier.csv).
-SKILL_INFORMATIKA = [
-    "Pemrograman",
-    "Analisis Sistem",
-    "Evaluasi Sistem",
-    "Perancangan Teknologi",
-    "Pemecahan Masalah Kompleks",
-    "Berpikir Kritis",
-    "Matematika",
-    "Pemecahan Masalah Teknis",
-    "Analisis Operasional",
-    "Analisis Kendali Mutu",
-    "Pembelajaran Aktif",
-    "Penilaian & Pengambilan Keputusan",
-]
-
-# Ambang importance O*NET (skala 1-5): 3 = "penting". Hanya skill yang
-# penting ke atas yang menjadi ciri khas karier. Diukur empiris:
-# ambang 2.0 membuat 11 dari 14 karier bervektor identik (semua skill
-# lolos), sedangkan ambang 3.0 memberi 18 vektor unik dari 19 karier
-# dengan sebaran cosine 0.62-1.00 antar-karier (satu-satunya pasangan
-# identik: Programmer vs DevOps Engineer — lihat docstring).
-AMBANG_IMPORTANCE = 3.0
+# IMPUTASI (bukan observasi): IT Support tidak punya data gaji sama
+# sekali di dataset (n_gaji=0). Nilai min/med/max di bawah dihitung
+# sebagai median dari 18 jabatan lain yang punya data — lihat kode.
+# Ditandai eksplisit di README sebagai keterbatasan.
+KODE_IMPUTASI_GAJI = {"ITSUP"}
 
 KRITERIA = [
     ("C1", "Kecocokan skill (CBF)", 0.35),
@@ -131,8 +80,16 @@ KRITERIA = [
     ("C4", "Kesesuaian minat", 0.20),
 ]
 
-KOLOM_WAJIB_KARIER = {"kode_onetsoc", "judul_id", "deskripsi_id", "jml_hot_tech"}
-KOLOM_WAJIB_SKILL = {"kode_onetsoc", "skill_id", "importance"}
+KOLOM_WAJIB_MATRIX = {"kode_jabatan", "nama_jabatan", "skill", "skor"}
+KOLOM_WAJIB_DEMAND = {
+    "kode_jabatan",
+    "nama_jabatan",
+    "n_lowongan",
+    "n_gaji",
+    "gaji_min_rp",
+    "gaji_max_rp",
+    "gaji_median_rp",
+}
 
 
 def baca_csv(path, kolom_wajib):
@@ -157,57 +114,84 @@ def normalisasi_demand(nilai, minimum, maksimum):
     return max(1, min(10, round(skor)))
 
 
+def rp_ke_juta(nilai_rp):
+    """Konversi rupiah -> juta rupiah, dibulatkan (untuk kolom model)."""
+    return int(round(nilai_rp / 1_000_000))
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Seed database SPK dari dataset O*NET adaptasi."
+        description="Seed database SPK dari Dataset Lowongan IT Indonesia."
     )
     parser.add_argument(
-        "--karier-csv",
-        default=os.path.join(DEFAULT_DATASET_DIR, "karier.csv"),
-        help="Path ke karier.csv (default: folder data/ di repo ini).",
+        "--matrix-csv",
+        default=os.path.join(DEFAULT_DATASET_DIR, "skill_matrix.csv"),
+        help="Path ke skill_matrix.csv (default: folder data-loker-id/).",
     )
     parser.add_argument(
-        "--skill-csv",
-        default=None,
-        help="Path ke skill_karier.csv "
-        "(default: satu folder dengan karier.csv).",
+        "--demand-csv",
+        default=os.path.join(DEFAULT_DATASET_DIR, "demand_gaji.csv"),
+        help="Path ke demand_gaji.csv (default: folder data-loker-id/).",
     )
     args = parser.parse_args()
 
-    karier_csv = os.path.expanduser(args.karier_csv)
-    skill_csv = os.path.expanduser(args.skill_csv) if args.skill_csv else os.path.join(
-        os.path.dirname(karier_csv), "skill_karier.csv"
-    )
+    matrix_csv = os.path.expanduser(args.matrix_csv)
+    demand_csv = os.path.expanduser(args.demand_csv)
+    daftar_matrix = baca_csv(matrix_csv, KOLOM_WAJIB_MATRIX)
+    daftar_demand = baca_csv(demand_csv, KOLOM_WAJIB_DEMAND)
 
-    daftar_karier = baca_csv(karier_csv, KOLOM_WAJIB_KARIER)
-    daftar_skill = baca_csv(skill_csv, KOLOM_WAJIB_SKILL)
+    # Deskripsi dari file dataset; gagal keras bila ada jabatan
+    # tanpa deskripsi.
+    deskripsi = {}
+    with open(ARSIP_DESKRIPSI, newline="", encoding="utf-8") as f:
+        for baris in csv.DictReader(f):
+            deskripsi[baris["nama_jabatan"].strip()] = baris[
+                "deskripsi_id"
+            ].strip()
 
-    # Saring hanya 12 skill Informatika hasil kurasi; validasi bahwa
-    # semuanya benar-benar ada di CSV.
-    ada_di_csv = {baris["skill_id"] for baris in daftar_skill}
-    hilang = [s for s in SKILL_INFORMATIKA if s not in ada_di_csv]
-    if hilang:
-        raise SystemExit(
-            f"Skill kurasi tidak ditemukan di {skill_csv}: {hilang}"
-        )
-    urutan_skill = list(SKILL_INFORMATIKA)
-    daftar_skill = [b for b in daftar_skill if b["skill_id"] in set(urutan_skill)]
     skill_per_kode = {}
-    for baris in daftar_skill:
+    for baris in daftar_matrix:
         try:
-            importance = float(baris["importance"])
+            skor = float(baris["skor"])
         except (TypeError, ValueError):
             continue
-        if importance >= AMBANG_IMPORTANCE:
-            skill_per_kode.setdefault(baris["kode_onetsoc"], []).append(
-                baris["skill_id"]
+        if not 1.0 <= skor <= 5.0:
+            raise SystemExit(
+                f"Skor di luar 1-5 pada {matrix_csv}: {baris}"
             )
-    # Samakan urutan skill tiap karier dengan urutan kanonis 12 skill.
-    for kode, skills in skill_per_kode.items():
-        skill_per_kode[kode] = [s for s in urutan_skill if s in skills]
+        skill_per_kode.setdefault(baris["kode_jabatan"], []).append(
+            (baris["skill"].strip(), skor)
+        )
+    # Urutkan skill tiap jabatan dari skor tertinggi (untuk tampilan).
+    for kode in skill_per_kode:
+        skill_per_kode[kode].sort(key=lambda x: -x[1])
 
-    hot_tech = [int(b["jml_hot_tech"]) for b in daftar_karier]
-    hmin, hmax = min(hot_tech), max(hot_tech)
+    # Gaji: pakai min/max observasi; imputasi untuk n_gaji=0.
+    # (Median tiap jabatan tersedia di demand_gaji.csv bila diperlukan
+    # analisis lanjutan; model hanya menyimpan min & max.)
+    def ambil_gaji(baris):
+        if int(baris["n_gaji"] or 0) > 0:
+            return (float(baris["gaji_min_rp"]), float(baris["gaji_max_rp"]))
+        return None
+
+    gaji_obs = {
+        b["kode_jabatan"]: ambil_gaji(b)
+        for b in daftar_demand
+        if ambil_gaji(b) is not None
+    }
+    imput_min = statistics.median(g[0] for g in gaji_obs.values())
+    imput_max = statistics.median(g[1] for g in gaji_obs.values())
+    for kode in KODE_IMPUTASI_GAJI:
+        if kode not in gaji_obs:
+            gaji_obs[kode] = (imput_min, imput_max)
+            print(
+                f"IMPUTASI (bukan observasi): gaji {kode} = "
+                f"median 18 jabatan lain "
+                f"({rp_ke_juta(imput_min)}-{rp_ke_juta(imput_max)} jt)."
+            )
+
+    n_lowongan = [int(b["n_lowongan"]) for b in daftar_demand]
+    nmin, nmax = min(n_lowongan), max(n_lowongan)
 
     def buat_app_dan_model():
         # Impor di sini agar DATABASE_URL dari env terbaca create_app().
@@ -232,22 +216,25 @@ def main():
         n_karier_lama = Career.query.delete()
         n_kriteria_lama = Criterion.query.delete()
 
-        for baris in daftar_karier:
-            kode = baris["kode_onetsoc"]
-            nama = baris["judul_id"].strip()
-            skills = ", ".join(skill_per_kode.get(kode, []))
-            demand = normalisasi_demand(int(baris["jml_hot_tech"]), hmin, hmax)
-            gaji_min, gaji_max = GAJI.get(kode, GAJI_DEFAULT)
-            if kode not in GAJI:
-                print(f"Peringatan: kode {kode} tidak ada di tabel GAJI, "
-                      f"pakai default {GAJI_DEFAULT}.")
+        for baris in daftar_demand:
+            kode = baris["kode_jabatan"]
+            nama = baris["nama_jabatan"].strip()
+            if nama not in deskripsi:
+                raise SystemExit(
+                    f"Jabatan '{nama}' tidak punya deskripsi di "
+                    f"{ARSIP_DESKRIPSI}; tambahkan manual, jangan dikarang."
+                )
+            pasangan = skill_per_kode.get(kode, [])
+            skills = ", ".join(f"{s}:{g}" for s, g in pasangan)
+            demand = normalisasi_demand(int(baris["n_lowongan"]), nmin, nmax)
+            gmin, gmax = gaji_obs[kode]
             db.session.add(
                 Career(
                     nama=nama,
-                    deskripsi=baris["deskripsi_id"].strip(),
+                    deskripsi=deskripsi[nama],
                     skills=skills,
-                    gaji_min=gaji_min,
-                    gaji_max=gaji_max,
+                    gaji_min=rp_ke_juta(gmin),
+                    gaji_max=rp_ke_juta(gmax),
                     demand=demand,
                 )
             )
@@ -265,8 +252,9 @@ def main():
 
     print(f"Data lama dihapus: {n_karier_lama} karier, {n_kriteria_lama} "
           f"kriteria, {n_hasil} hasil rekomendasi.")
-    print(f"{len(daftar_karier)} karier dari {karier_csv} berhasil di-seed.")
-    print(f"Urutan 12 skill Informatika: {', '.join(urutan_skill)}")
+    print(f"{len(daftar_demand)} karier dari {demand_csv} berhasil di-seed.")
+    n_skill = len({s for v in skill_per_kode.values() for s, _ in v})
+    print(f"Total {n_skill} skill unik dengan skor berbobot 1-5.")
     print("Seed selesai.")
 
 
