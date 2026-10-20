@@ -4,35 +4,51 @@
 {% block subheading %}Selamat datang di sistem rekomendasi karier.{% endblock %}
 {% block content %}
 {% if not profile %}
-<div class="bg-white rounded-lg shadow p-6 max-w-2xl">
-  <p class="font-semibold mb-2">Langkah penggunaan</p>
-  <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1 mb-4">
-    <li>Isi profil: nama, skill yang dikuasai, dan karier yang diminati.</li>
-    <li>Sistem menghitung kecocokan dengan Content-Based Filtering.</li>
-    <li>Sistem memberi peringkat dengan metode SAW.</li>
-    <li>Lihat rekomendasi beserta detail perhitungannya.</li>
+<div class="card p-6 md:p-8 max-w-2xl">
+  <p class="font-display text-base font-semibold text-slate-900 mb-4">Langkah penggunaan</p>
+  <ol class="space-y-3 mb-6">
+    <li class="flex gap-3 text-sm text-slate-600">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-mono text-xs font-semibold text-indigo-700">1</span>
+      <span>Isi profil: nama, tingkat penguasaan skill, dan karier yang diminati.</span>
+    </li>
+    <li class="flex gap-3 text-sm text-slate-600">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-mono text-xs font-semibold text-indigo-700">2</span>
+      <span>Sistem menghitung kecocokan skill dengan Content-Based Filtering.</span>
+    </li>
+    <li class="flex gap-3 text-sm text-slate-600">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-mono text-xs font-semibold text-indigo-700">3</span>
+      <span>Sistem memberi peringkat akhir dengan metode SAW dari empat kriteria.</span>
+    </li>
+    <li class="flex gap-3 text-sm text-slate-600">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-mono text-xs font-semibold text-indigo-700">4</span>
+      <span>Lihat rekomendasi beserta matriks dan detail perhitungannya.</span>
+    </li>
   </ol>
-  <a href="{{ url_for('spk.profil') }}" class="inline-block bg-indigo-600 text-white rounded px-4 py-2 text-sm hover:bg-indigo-700">Isi Profil Sekarang</a>
+  <a href="{{ url_for('spk.profil') }}" class="btn-primary">Isi Profil Sekarang</a>
 </div>
 {% else %}
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-  <div class="bg-white rounded-lg shadow p-6">
-    <p class="font-semibold mb-2">Profil Anda</p>
-    <p class="text-sm text-slate-600">Nama: {{ profile.nama }}</p>
-    <a href="{{ url_for('spk.profil') }}" class="inline-block mt-3 text-sm text-indigo-600">Perbarui profil</a>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-start">
+  <div class="card p-6">
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Profil Anda</p>
+    <p class="font-display text-lg font-semibold text-slate-900">{{ profile.nama }}</p>
+    <p class="text-sm text-slate-500 mt-1">Profil skill tersimpan dan siap dihitung ulang kapan saja.</p>
+    <a href="{{ url_for('spk.profil') }}" class="btn-outline mt-4">Perbarui Profil</a>
   </div>
-  <div class="bg-white rounded-lg shadow p-6">
-    <p class="font-semibold mb-2">Rekomendasi Teratas</p>
+  <div class="card p-6">
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Rekomendasi Teratas</p>
     {% if hasil %}
-    <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1">
+    <ol class="space-y-2.5">
       {% for r in hasil %}
-      <li>{{ r.career.nama }} <span class="text-slate-400">(skor {{ '%.3f'|format(r.skor_saw) }})</span></li>
+      <li class="flex items-baseline justify-between gap-3 text-sm">
+        <span class="text-slate-700"><span class="font-mono font-semibold text-indigo-600 mr-2">{{ r.peringkat }}</span>{{ r.career.nama }}</span>
+        <span class="font-mono text-slate-500">{{ '%.4f'|format(r.skor_saw) }}</span>
+      </li>
       {% endfor %}
     </ol>
     {% else %}
     <p class="text-sm text-slate-400">Belum ada hasil perhitungan.</p>
     {% endif %}
-    <a href="{{ url_for('spk.hitung') }}" class="inline-block mt-3 bg-indigo-600 text-white rounded px-4 py-2 text-sm hover:bg-indigo-700">Hitung Rekomendasi</a>
+    <a href="{{ url_for('spk.hitung') }}" class="btn-primary mt-4">Hitung Rekomendasi</a>
   </div>
 </div>
 {% endif %}
