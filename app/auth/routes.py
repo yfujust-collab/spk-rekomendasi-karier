@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from app import db
@@ -48,6 +48,8 @@ def register():
 @bp.route("/logout")
 @login_required
 def logout():
+    # bobot kustom bersifat per sesi per pengguna: bersihkan saat keluar
+    session.pop("bobot_custom", None)
     logout_user()
     flash("Anda sudah keluar.", "info")
     return redirect(url_for("auth.login"))
