@@ -105,8 +105,8 @@ def _normalisasi_bobot(bobot):
     return list(bobot), False
 
 
-def _bobot_master():
-    """Bobot master milik admin (urutan kode C1..C4)."""
+def _bobot_default():
+    """Bobot default (urutan kode C1..C4)."""
     return [
         c.bobot for c in Criterion.query.order_by(Criterion.kode).all()
     ]
@@ -116,7 +116,7 @@ def _bobot_aktif():
     """Bobot yang sedang berlaku di sesi user.
 
     Bobot kustom hasil panel "Atur Bobot" (session) didahulukan;
-    bila belum pernah diatur, pakai bobot master milik admin.
+    bila belum pernah diatur, pakai bobot default.
     Bobot kustom TIDAK PERNAH ditulis ke tabel Criterion.
     """
     kustom = session.get("bobot_custom")
@@ -125,7 +125,7 @@ def _bobot_aktif():
             return [float(x) for x in kustom]
         except (TypeError, ValueError):
             session.pop("bobot_custom", None)
-    return _bobot_master()
+    return _bobot_default()
 
 
 def _bobot_dari_batch(rows):
@@ -178,7 +178,7 @@ def _compute(profile, bobot=None):
     """Hitung CBF lalu SAW. Kembalikan detail lengkap untuk transparansi.
 
     bobot: daftar 4 bobot mentah (urutan C1..C4); None berarti pakai
-    bobot master milik admin. Bobot selalu dinormalisasi ke total 1
+    bobot default. Bobot selalu dinormalisasi ke total 1
     sebelum dipakai (perilaku lama dipertahankan).
 
     Melempar ValueError bila data master belum sah untuk dihitung.
@@ -306,7 +306,7 @@ def hitung():
 
     Bobot yang dipakai = bobot sesi aktif: kustom bila mahasiswa
     pernah mengaturnya lewat panel "Atur Bobot", selain itu bobot
-    master admin. Bobot yang benar-benar dipakai (sudah
+    default. Bobot yang benar-benar dipakai (sudah
     dinormalisasi) disimpan pada setiap baris batch.
     """
     profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
@@ -340,7 +340,7 @@ def hitung():
     if kustom:
         flash(
             "Hasil dihitung dengan bobot kustom sesi Anda "
-            "(bobot master admin tidak berubah).",
+            "(bobot default tidak berubah).",
             "info",
         )
     return redirect(url_for("spk.hasil"))
@@ -374,9 +374,9 @@ def atur_bobot():
 @bp.route("/hasil/bobot/reset", methods=["POST"])
 @login_required
 def reset_bobot():
-    """Hapus bobot kustom sesi, kembali ke bobot master admin."""
+    """Hapus bobot kustom sesi, kembali ke bobot default."""
     session.pop("bobot_custom", None)
-    flash("Bobot dikembalikan ke bobot default admin.", "info")
+    flash("Bobot dikembalikan ke bobot default.", "info")
     return redirect(url_for("spk.hitung"))
 
 
@@ -391,16 +391,16 @@ def hasil():
         return redirect(url_for("spk.hitung"))
     # Detail harus cocok dengan baris batch yang ditampilkan, jadi
     # bobot yang dipakai adalah bobot TERSIMPAN pada batch ini
-    # (bukan bobot sesi saat ini). Batch lama (tanpa bobot): master.
+    # (bukan bobot sesi saat ini). Batch lama (tanpa bobot): default.
     bobot_batch = _bobot_dari_batch(rows)
     if bobot_batch is None:
-        bobot_batch = _bobot_master()
+        bobot_batch = _bobot_default()
     try:
         detail = _compute(profile, bobot=bobot_batch)
     except ValueError as e:
         flash(str(e), "danger")
         return redirect(url_for("spk.index"))
-    master_n, _ = _normalisasi_bobot(_bobot_master())
+    default_n, _ = _normalisasi_bobot(_bobot_default())
     return render_template(
         "spk/hasil.html",
         profile=profile,
@@ -408,7 +408,7 @@ def hasil():
         detail=detail,
         bobot_batch=bobot_batch,
         bobot_sesi=_bobot_aktif(),
-        batch_kustom=not _sama_bobot(bobot_batch, master_n),
+        batch_kustom=not _sama_bobot(bobot_batch, default_n),
         kustom_aktif="bobot_custom" in session,
     )
 
@@ -429,7 +429,7 @@ def riwayat():
         .all()
         if b[0]
     ]
-    master_n, _ = _normalisasi_bobot(_bobot_master())
+    default_n, _ = _normalisasi_bobot(_bobot_default())
     riwayat = []
     for bid in batch_ids:
         baris = (
@@ -440,14 +440,14 @@ def riwayat():
             .all()
         )
         if baris:
-            bobot_batch = _bobot_dari_batch(baris) or master_n
+            bobot_batch = _bobot_dari_batch(baris) or default_n
             riwayat.append(
                 {
                     "batch_id": bid,
                     "waktu": baris[0].created_at,
                     "teratas": baris[:3],
                     "bobot": bobot_batch,
-                    "kustom": not _sama_bobot(bobot_batch, master_n),
+                    "kustom": not _sama_bobot(bobot_batch, default_n),
                 }
             )
     # batch terbaru paling atas
@@ -465,8 +465,8 @@ def export_csv():
     rows = _hasil_batch_terakhir(profile.id)
     bobot_batch = _bobot_dari_batch(rows)
     if bobot_batch is None:
-        bobot_batch, _ = _normalisasi_bobot(_bobot_master())
-    master_n, _ = _normalisasi_bobot(_bobot_master())
+        bobot_batch, _ = _normalisasi_bobot(_bobot_default())
+    default_n, _ = _normalisasi_bobot(_bobot_default())
     buffer = io.StringIO()
     penulis = csv.writer(buffer)
     # Baris metadata (diawali #) mencatat bobot yang dipakai batch ini
@@ -482,8 +482,8 @@ def export_csv():
             "# Sumber bobot: "
             + (
                 "kustom (diatur mahasiswa)"
-                if not _sama_bobot(bobot_batch, master_n)
-                else "default (admin)"
+                if not _sama_bobot(bobot_batch, default_n)
+                else "default"
             )
         ]
     )
