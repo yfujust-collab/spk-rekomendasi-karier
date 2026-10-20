@@ -22,7 +22,7 @@
 ## Fitur
 
 - **Autentikasi berbasis peran**: admin mengelola data, mahasiswa menerima rekomendasi.
-- **Form profil mahasiswa**: nama, skill yang dikuasai, dan karier yang diminati.
+- **Form profil mahasiswa**: nama, tingkat penguasaan tiap skill (skala 0 sampai 5), dan karier yang diminati.
 - **Perhitungan dua tahap**: CBF untuk skor kecocokan skill, SAW untuk peringkat akhir.
 - **Transparansi penuh**: halaman hasil menampilkan matriks keputusan, matriks ternormalisasi, dan skor preferensi tiap karier, plus grafik Chart.js.
 - **Riwayat perhitungan**: setiap perhitungan disimpan sebagai batch tersendiri; hasil lama bisa dibuka ulang tanpa tertimpa.
@@ -78,7 +78,7 @@ Sistem ini memakai satu dataset primer, yaitu Dataset Lowongan IT Indonesia: mat
 3. **Skor 1–5**: untuk tiap jabatan *o* dan skill *s*, `skor(o,s) = 1 + 4 × (pct(o,s) / max_pct(o))` dengan `pct` = % lowongan jabatan *o* yang menyebut skill *s* (satu desimal, relatif per jabatan).
 4. **Demand (C3)**: jumlah lowongan per jabatan, dinormalisasi min-max ke skala 1–10.
 5. **Gaji (C2)**: dari info gaji yang tercantum di lowongan (median/min/max per jabatan, dalam juta Rp/bulan).
-6. **Vektor CBF berbobot**: skor 1–5 dipakai langsung sebagai entri vektor karier (tanpa threshold biner), sehingga nuansa tingkat kepentingan lestari. Ini perbaikan atas model biner sebelumnya yang menyamakan skill berskor 4.75 dan 3.50.
+6. **Vektor CBF berbobot di kedua sisi**: skor 1–5 dipakai langsung sebagai entri vektor karier (tanpa threshold biner), sehingga nuansa tingkat kepentingan lestari. Vektor mahasiswa juga berbobot: tiap skill dinilai sendiri oleh mahasiswa dengan skala penguasaan 0 sampai 5 (0 = tidak menguasai, 5 = ahli) pada form profil, sehingga kedua vektor simetris. Simetri ini perbaikan bertahap atas model awal yang biner di kedua sisi (skill berskor 4.75 dan 3.50 disamakan 1.0, dan kedalaman penguasaan mahasiswa tidak tertangkap sama sekali).
 
 ### Tabel demand & gaji per jabatan (dari dataset)
 
@@ -126,4 +126,4 @@ Untuk menguji seberapa stabil ranking terhadap perubahan bobot, jalankan:
 python analysis/sensitivitas.py
 ```
 
-Skrip ini mengevaluasi tiga profil contoh (Backend/Data, Jaringan, Frontend) pada 6 skenario deterministik (dominasi tunggal tiap kriteria dan perturbasi C1 sebesar ±0,10) serta 200 sampel acak Dirichlet di sekitar bobot default (seed 42), memakai fungsi CBF dan SAW yang sama persis dengan aplikasi. Hasil ditulis ke `analysis/hasil_sensitivitas.md` (tabel dan kesimpulan, siap dikutip untuk Bab 4) dan `analysis/hasil_sensitivitas.csv`. Ringkasan hasil: peringkat pertama bertahan pada 91,1% skenario dan himpunan 3 besar utuh pada 81,7% skenario; perubahan terbesar terjadi pada skenario dominasi tunggal.
+Skrip ini mengevaluasi tiga profil contoh (Backend/Data, Jaringan, Frontend; tiap skill diberi rating penguasaan realistis 0 sampai 5) pada 6 skenario deterministik (dominasi tunggal tiap kriteria dan perturbasi C1 sebesar ±0,10) serta 200 sampel acak Dirichlet di sekitar bobot default (seed 42), memakai fungsi CBF dan SAW yang sama persis dengan aplikasi. Hasil ditulis ke `analysis/hasil_sensitivitas.md` (tabel dan kesimpulan, siap dikutip untuk Bab 4) dan `analysis/hasil_sensitivitas.csv`. Ringkasan hasil: peringkat pertama bertahan pada 91,6% skenario dan himpunan 3 besar utuh pada 74,6% skenario; perubahan terbesar terjadi pada skenario dominasi tunggal.
