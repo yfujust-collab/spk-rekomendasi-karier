@@ -4,23 +4,23 @@
 {% block subheading %}Kriteria penilaian SAW. Total bobot harus sama dengan 1. Saat ini: {{ total_bobot }}.{% endblock %}
 {% block content %}
 {% if total_bobot != 1 %}
-<div class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded text-sm mb-6 max-w-2xl">
+<div class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg text-sm mb-6 max-w-2xl">
   Peringatan: total bobot saat ini {{ total_bobot }}, bukan 1. Sistem akan menormalisasi bobot secara otomatis saat menghitung, tetapi sebaiknya perbaiki agar sesuai kaidah SAW.
 </div>
 {% endif %}
-<div class="bg-white rounded-lg shadow p-6 max-w-2xl mb-6">
-  <p class="font-semibold mb-3">Tambah kriteria</p>
-  <form method="post" class="flex gap-3 items-end">
+<div class="card p-6 max-w-2xl mb-6">
+  <p class="font-display text-base font-semibold text-slate-900 mb-4">Tambah kriteria</p>
+  <form method="post" class="flex flex-wrap gap-3 items-end">
     {{ form.hidden_tag() }}
-    <div class="flex-1">
-      <label class="block text-sm font-medium mb-1">{{ form.nama.label.text }}</label>
-      {{ form.nama(class="w-full border rounded px-3 py-2") }}
+    <div class="flex-1 min-w-48">
+      <label class="label" for="nama">{{ form.nama.label.text }}</label>
+      {{ form.nama(class="input") }}
     </div>
     <div class="w-32">
-      <label class="block text-sm font-medium mb-1">{{ form.bobot.label.text }}</label>
-      {{ form.bobot(class="w-full border rounded px-3 py-2", step="0.01") }}
+      <label class="label" for="bobot">{{ form.bobot.label.text }}</label>
+      {{ form.bobot(class="input", step="0.01") }}
     </div>
-    {{ form.submit(class="bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
+    {{ form.submit(class="btn-primary") }}
   </form>
   {% if form.nama.errors or form.bobot.errors %}
   <div class="mt-3 text-sm text-red-600">
@@ -29,26 +29,31 @@
   </div>
   {% endif %}
 </div>
-<div class="bg-white rounded-lg shadow overflow-x-auto max-w-2xl">
+<div class="card overflow-x-auto max-w-2xl">
   <table class="w-full text-sm">
-    <thead class="bg-slate-50 text-left">
-      <tr><th class="px-4 py-3">Kode</th><th class="px-4 py-3">Nama</th><th class="px-4 py-3">Bobot</th><th class="px-4 py-3">Aksi</th></tr>
+    <thead>
+      <tr class="border-b border-slate-200 bg-slate-50/60">
+        <th class="th">Kode</th>
+        <th class="th">Nama</th>
+        <th class="th">Bobot</th>
+        <th class="th">Aksi</th>
+      </tr>
     </thead>
     <tbody>
       {% for c in criteria %}
-      <tr class="border-t">
-        <td class="px-4 py-3 font-medium">{{ c.kode }}</td>
-        <td class="px-4 py-3">{{ c.nama }}</td>
-        <td class="px-4 py-3">{{ c.bobot }}</td>
-        <td class="px-4 py-3 whitespace-nowrap">
-          <a class="text-indigo-600 mr-3" href="{{ url_for('admin.criterion_edit', cid=c.id) }}">Ubah</a>
+      <tr class="border-b border-slate-100 last:border-0 transition-colors hover:bg-slate-50">
+        <td class="td font-mono font-semibold text-slate-700">{{ c.kode }}</td>
+        <td class="td text-slate-800">{{ c.nama }}</td>
+        <td class="td font-mono text-slate-600">{{ c.bobot }}</td>
+        <td class="td whitespace-nowrap">
+          <a class="font-medium text-indigo-600 hover:text-indigo-800 mr-3" href="{{ url_for('admin.criterion_edit', cid=c.id) }}">Ubah</a>
           <form class="inline" method="post" action="{{ url_for('admin.criterion_delete', cid=c.id) }}" onsubmit="return confirm('Hapus kriteria ini?')">
-            <button class="text-red-600" type="submit">Hapus</button>
+            <button class="font-medium text-red-600 hover:text-red-800" type="submit">Hapus</button>
           </form>
         </td>
       </tr>
       {% else %}
-      <tr><td colspan="4" class="px-4 py-6 text-center text-slate-400">Belum ada data kriteria.</td></tr>
+      <tr><td colspan="4" class="td py-8 text-center text-slate-400">Belum ada data kriteria.</td></tr>
       {% endfor %}
     </tbody>
   </table>
