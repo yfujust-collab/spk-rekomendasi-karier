@@ -55,10 +55,11 @@ def _compute(profile):
     vocab = _vocabulary()
     vec_mhs = cbf.vectorize(profile.skill_list(), vocab)
 
-    # Tahap 1: Content-Based Filtering -> skor kecocokan skill (C1)
+    # Tahap 1: Content-Based Filtering -> skor kecocokan skill (C1).
+    # Vektor karier BERBOBOT (skor 1-5), vektor mahasiswa biner.
     skor_cbf = []
     for career in careers:
-        vec_karier = cbf.vectorize(career.skill_list(), vocab)
+        vec_karier = cbf.career_vector(career, vocab)
         skor_cbf.append(cbf.cosine_sim(vec_mhs, vec_karier))
 
     # Tahap 2: matriks keputusan SAW
@@ -108,8 +109,10 @@ def profil():
         flash("Data karier belum tersedia. Hubungi admin.", "warning")
         return redirect(url_for("spk.index"))
     vocab = _vocabulary()
+    label = cbf.skill_labels(Career.query.all())
     form = ProfileForm()
-    form.skills.choices = [(s, s.title()) for s in vocab]
+    # Label tampil memakai huruf asli ("CI/CD", bukan "Ci/Cd").
+    form.skills.choices = [(s, label.get(s, s)) for s in vocab]
     form.minat.choices = [(c.id, c.nama) for c in careers]
 
     profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
