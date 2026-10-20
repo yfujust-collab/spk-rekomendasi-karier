@@ -4,6 +4,19 @@
 {% block subheading %}Peringkat dihitung dengan Content-Based Filtering dan Simple Additive Weighting.{% endblock %}
 {% block content %}
 
+<div class="rounded-lg px-4 py-3 mb-6 text-sm {% if batch_kustom %}bg-indigo-100 text-indigo-900{% else %}bg-slate-200 text-slate-700{% endif %}">
+  <span class="font-semibold">Bobot yang dipakai pada perhitungan ini:</span>
+  {% for c in detail.criteria %}{{ c.kode }} = {{ '%.2f'|format(bobot_batch[loop.index0]) }}{% if not loop.last %} &middot; {% endif %}{% endfor %}
+  {% if batch_kustom %}
+  <span class="inline-block ml-2 bg-indigo-600 text-white text-xs rounded px-2 py-0.5">bobot kustom</span>
+  {% else %}
+  <span class="inline-block ml-2 bg-slate-500 text-white text-xs rounded px-2 py-0.5">bobot default admin</span>
+  {% endif %}
+  {% if detail.bobot_dinormalisasi %}
+  <span class="block mt-1">Total bobot bukan 1, sehingga bobot dinormalisasi otomatis sebelum perhitungan.</span>
+  {% endif %}
+</div>
+
 <div class="bg-white rounded-lg shadow p-6 mb-6">
   <p class="font-semibold mb-4">Peringkat Rekomendasi</p>
   <div class="overflow-x-auto mb-6">
@@ -35,11 +48,29 @@
 </div>
 
 <div class="bg-white rounded-lg shadow p-6 mb-6">
+  <p class="font-semibold mb-2">Atur Bobot Kriteria</p>
+  <p class="text-sm text-slate-500 mb-4">Sesuaikan bobot tiap kriteria (0 sampai 1) lalu hitung ulang. Bobot ini hanya berlaku untuk sesi Anda dan tidak mengubah bobot master milik admin. Bila total bukan 1, bobot dinormalisasi otomatis.</p>
+  <form method="post" action="{{ url_for('spk.atur_bobot') }}">
+    <div class="flex flex-wrap items-end gap-4 mb-4">
+      {% for c in detail.criteria %}
+      <label class="block">
+        <span class="text-xs text-slate-500">{{ c.kode }} &mdash; {{ c.nama }}</span>
+        <input type="number" name="b{{ loop.index }}" min="0" max="1" step="0.05" value="{{ '%.2f'|format(bobot_sesi[loop.index0]) }}" class="mt-1 block w-28 border rounded px-3 py-2 text-sm">
+      </label>
+      {% endfor %}
+      <button type="submit" class="bg-indigo-600 text-white rounded px-4 py-2 text-sm hover:bg-indigo-700">Hitung Ulang</button>
+    </div>
+  </form>
+  {% if kustom_aktif %}
+  <form method="post" action="{{ url_for('spk.reset_bobot') }}">
+    <button type="submit" class="border rounded px-4 py-2 text-sm hover:bg-slate-50">Kembalikan ke Bobot Default</button>
+  </form>
+  {% endif %}
+</div>
+
+<div class="bg-white rounded-lg shadow p-6 mb-6">
   <p class="font-semibold mb-2">Detail Perhitungan SAW</p>
   <p class="text-sm text-slate-500 mb-4">Matriks keputusan, matriks ternormalisasi (r = x / max), dan skor preferensi (jumlah dari bobot dikali nilai ternormalisasi).</p>
-  {% if detail.bobot_dinormalisasi %}
-  <p class="text-sm text-yellow-800 bg-yellow-100 rounded px-4 py-2 mb-4">Catatan: total bobot bukan 1, sehingga bobot dinormalisasi otomatis sebelum perhitungan.</p>
-  {% endif %}
   <div class="overflow-x-auto mb-4">
     <table class="w-full text-sm">
       <thead class="bg-slate-50 text-left">
