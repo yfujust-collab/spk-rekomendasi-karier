@@ -569,3 +569,93 @@ WEBDEV,Web Developer,TCP/IP,1.0
 WEBDEV,Web Developer,DNS,1.0
 WEBDEV,Web Developer,Laravel,3.3
 WEBDEV,Web Developer,Routing & Switching,1.0
+BEDEV,Backend Developer,SQL,2.8
+BEDEV,Backend Developer,Python,2.1
+BEDEV,Backend Developer,JavaScript,3.2
+BEDEV,Backend Developer,Git,4.5
+BEDEV,Backend Developer,Linux,1.2
+BEDEV,Backend Developer,MySQL,2.8
+BEDEV,Backend Developer,AWS,2.4
+BEDEV,Backend Developer,Agile,2.4
+BEDEV,Backend Developer,Excel,1.0
+BEDEV,Backend Developer,PostgreSQL,4.7
+BEDEV,Backend Developer,CI/CD,2.9
+BEDEV,Backend Developer,Artificial Intelligence,2.1
+BEDEV,Backend Developer,GCP,1.6
+BEDEV,Backend Developer,PHP,2.1
+BEDEV,Backend Developer,Azure,1.2
+BEDEV,Backend Developer,Docker,3.2
+BEDEV,Backend Developer,Firewall,1.0
+BEDEV,Backend Developer,HTML,1.3
+BEDEV,Backend Developer,Java,3.2
+BEDEV,Backend Developer,REST API,5.0
+BEDEV,Backend Developer,Go,4.5
+BEDEV,Backend Developer,SQL Server,1.3
+BEDEV,Backend Developer,CSS,1.3
+BEDEV,Backend Developer,Kubernetes,2.8
+BEDEV,Backend Developer,Machine Learning,1.3
+BEDEV,Backend Developer,React,1.6
+BEDEV,Backend Developer,TCP/IP,1.0
+BEDEV,Backend Developer,DNS,1.0
+BEDEV,Backend Developer,Laravel,1.6
+BEDEV,Backend Developer,Routing & Switching,1.3
+FEDEV,Frontend Developer,SQL,1.5
+FEDEV,Frontend Developer,Python,1.5
+FEDEV,Frontend Developer,JavaScript,4.8
+FEDEV,Frontend Developer,Git,2.7
+FEDEV,Frontend Developer,Linux,1.1
+FEDEV,Frontend Developer,MySQL,1.3
+FEDEV,Frontend Developer,AWS,1.1
+FEDEV,Frontend Developer,Agile,2.7
+FEDEV,Frontend Developer,Excel,1.0
+FEDEV,Frontend Developer,PostgreSQL,1.3
+FEDEV,Frontend Developer,CI/CD,1.6
+FEDEV,Frontend Developer,Artificial Intelligence,1.3
+FEDEV,Frontend Developer,GCP,1.0
+FEDEV,Frontend Developer,PHP,1.6
+FEDEV,Frontend Developer,Azure,1.0
+FEDEV,Frontend Developer,Docker,1.5
+FEDEV,Frontend Developer,Firewall,1.0
+FEDEV,Frontend Developer,HTML,3.5
+FEDEV,Frontend Developer,Java,1.8
+FEDEV,Frontend Developer,REST API,3.2
+FEDEV,Frontend Developer,Go,1.5
+FEDEV,Frontend Developer,SQL Server,1.1
+FEDEV,Frontend Developer,CSS,3.7
+FEDEV,Frontend Developer,Kubernetes,1.3
+FEDEV,Frontend Developer,Machine Learning,1.2
+FEDEV,Frontend Developer,React,5.0
+FEDEV,Frontend Developer,TCP/IP,1.0
+FEDEV,Frontend Developer,DNS,1.0
+FEDEV,Frontend Developer,Laravel,1.3
+FEDEV,Frontend Developer,Routing & Switching,1.1
+MOBDEV,Mobile Developer,SQL,1.9
+MOBDEV,Mobile Developer,Python,1.3
+MOBDEV,Mobile Developer,JavaScript,2.6
+MOBDEV,Mobile Developer,Git,4.5
+MOBDEV,Mobile Developer,Linux,1.0
+MOBDEV,Mobile Developer,MySQL,1.3
+MOBDEV,Mobile Developer,AWS,1.3
+MOBDEV,Mobile Developer,Agile,2.4
+MOBDEV,Mobile Developer,Excel,1.0
+MOBDEV,Mobile Developer,PostgreSQL,1.2
+MOBDEV,Mobile Developer,CI/CD,2.2
+MOBDEV,Mobile Developer,Artificial Intelligence,1.5
+MOBDEV,Mobile Developer,GCP,1.2
+MOBDEV,Mobile Developer,PHP,1.5
+MOBDEV,Mobile Developer,Azure,1.0
+MOBDEV,Mobile Developer,Docker,1.2
+MOBDEV,Mobile Developer,Firewall,1.0
+MOBDEV,Mobile Developer,HTML,1.7
+MOBDEV,Mobile Developer,Java,4.0
+MOBDEV,Mobile Developer,REST API,5.0
+MOBDEV,Mobile Developer,Go,1.9
+MOBDEV,Mobile Developer,SQL Server,1.2
+MOBDEV,Mobile Developer,CSS,1.5
+MOBDEV,Mobile Developer,Kubernetes,1.0
+MOBDEV,Mobile Developer,Machine Learning,1.2
+MOBDEV,Mobile Developer,React,3.8
+MOBDEV,Mobile Developer,TCP/IP,1.0
+MOBDEV,Mobile Developer,DNS,1.0
+MOBDEV,Mobile Developer,Laravel,1.2
+MOBDEV,Mobile Developer,Routing & Switching,1.0
