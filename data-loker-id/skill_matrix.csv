@@ -1,0 +1,571 @@
+kode_jabatan,nama_jabatan,skill,skor
+AIENG,AI Engineer,SQL,3.8
+AIENG,AI Engineer,Python,4.6
+AIENG,AI Engineer,JavaScript,2.6
+AIENG,AI Engineer,Git,2.6
+AIENG,AI Engineer,AWS,1.4
+AIENG,AI Engineer,Agile,1.8
+AIENG,AI Engineer,Linux,1.0
+AIENG,AI Engineer,Artificial Intelligence,5.0
+AIENG,AI Engineer,HTML,1.0
+AIENG,AI Engineer,PHP,1.0
+AIENG,AI Engineer,Excel,1.4
+AIENG,AI Engineer,Azure,1.8
+AIENG,AI Engineer,Java,1.4
+AIENG,AI Engineer,MySQL,1.0
+AIENG,AI Engineer,Firewall,1.0
+AIENG,AI Engineer,CSS,1.0
+AIENG,AI Engineer,CI/CD,1.4
+AIENG,AI Engineer,GCP,1.8
+AIENG,AI Engineer,Go,3.4
+AIENG,AI Engineer,REST API,2.2
+AIENG,AI Engineer,React,2.2
+AIENG,AI Engineer,Docker,1.8
+AIENG,AI Engineer,Machine Learning,3.0
+AIENG,AI Engineer,PostgreSQL,2.2
+AIENG,AI Engineer,Kubernetes,1.0
+AIENG,AI Engineer,VPN,1.0
+AIENG,AI Engineer,SQL Server,1.4
+AIENG,AI Engineer,Routing & Switching,1.8
+AIENG,AI Engineer,TypeScript,2.6
+AIENG,AI Engineer,DNS,1.0
+CYBER,Cybersecurity Analyst,SQL,1.0
+CYBER,Cybersecurity Analyst,Python,1.6
+CYBER,Cybersecurity Analyst,JavaScript,1.0
+CYBER,Cybersecurity Analyst,Git,1.0
+CYBER,Cybersecurity Analyst,AWS,2.1
+CYBER,Cybersecurity Analyst,Agile,2.7
+CYBER,Cybersecurity Analyst,Linux,2.1
+CYBER,Cybersecurity Analyst,Artificial Intelligence,2.1
+CYBER,Cybersecurity Analyst,HTML,1.6
+CYBER,Cybersecurity Analyst,PHP,1.0
+CYBER,Cybersecurity Analyst,Excel,2.7
+CYBER,Cybersecurity Analyst,Azure,3.3
+CYBER,Cybersecurity Analyst,Java,1.0
+CYBER,Cybersecurity Analyst,MySQL,1.0
+CYBER,Cybersecurity Analyst,Firewall,5.0
+CYBER,Cybersecurity Analyst,CSS,1.0
+CYBER,Cybersecurity Analyst,CI/CD,1.6
+CYBER,Cybersecurity Analyst,GCP,1.6
+CYBER,Cybersecurity Analyst,Go,2.1
+CYBER,Cybersecurity Analyst,REST API,1.0
+CYBER,Cybersecurity Analyst,React,1.0
+CYBER,Cybersecurity Analyst,Docker,1.0
+CYBER,Cybersecurity Analyst,Machine Learning,1.6
+CYBER,Cybersecurity Analyst,PostgreSQL,1.0
+CYBER,Cybersecurity Analyst,Kubernetes,1.6
+CYBER,Cybersecurity Analyst,VPN,1.6
+CYBER,Cybersecurity Analyst,SQL Server,1.0
+CYBER,Cybersecurity Analyst,Routing & Switching,1.0
+CYBER,Cybersecurity Analyst,TypeScript,1.0
+CYBER,Cybersecurity Analyst,DNS,1.6
+DAN,Data Analyst,SQL,4.3
+DAN,Data Analyst,Python,3.0
+DAN,Data Analyst,JavaScript,1.0
+DAN,Data Analyst,Git,1.0
+DAN,Data Analyst,AWS,1.3
+DAN,Data Analyst,Agile,1.0
+DAN,Data Analyst,Linux,1.0
+DAN,Data Analyst,Artificial Intelligence,1.7
+DAN,Data Analyst,HTML,1.0
+DAN,Data Analyst,PHP,1.0
+DAN,Data Analyst,Excel,5.0
+DAN,Data Analyst,Azure,1.0
+DAN,Data Analyst,Java,1.0
+DAN,Data Analyst,MySQL,1.0
+DAN,Data Analyst,Firewall,1.0
+DAN,Data Analyst,CSS,1.0
+DAN,Data Analyst,CI/CD,1.0
+DAN,Data Analyst,GCP,1.0
+DAN,Data Analyst,Go,1.3
+DAN,Data Analyst,REST API,1.0
+DAN,Data Analyst,React,1.0
+DAN,Data Analyst,Docker,1.0
+DAN,Data Analyst,Machine Learning,1.0
+DAN,Data Analyst,PostgreSQL,1.0
+DAN,Data Analyst,Kubernetes,1.0
+DAN,Data Analyst,VPN,1.0
+DAN,Data Analyst,SQL Server,1.0
+DAN,Data Analyst,Routing & Switching,1.0
+DAN,Data Analyst,TypeScript,1.0
+DAN,Data Analyst,DNS,1.0
+DBA,Database Administrator,SQL,4.6
+DBA,Database Administrator,Python,2.1
+DBA,Database Administrator,JavaScript,1.0
+DBA,Database Administrator,Git,2.1
+DBA,Database Administrator,AWS,3.2
+DBA,Database Administrator,Agile,1.0
+DBA,Database Administrator,Linux,4.6
+DBA,Database Administrator,Artificial Intelligence,1.0
+DBA,Database Administrator,HTML,1.0
+DBA,Database Administrator,PHP,1.4
+DBA,Database Administrator,Excel,1.7
+DBA,Database Administrator,Azure,2.8
+DBA,Database Administrator,Java,1.4
+DBA,Database Administrator,MySQL,5.0
+DBA,Database Administrator,Firewall,1.7
+DBA,Database Administrator,CSS,1.0
+DBA,Database Administrator,CI/CD,1.7
+DBA,Database Administrator,GCP,2.5
+DBA,Database Administrator,Go,1.0
+DBA,Database Administrator,REST API,1.0
+DBA,Database Administrator,React,1.0
+DBA,Database Administrator,Docker,1.4
+DBA,Database Administrator,Machine Learning,1.0
+DBA,Database Administrator,PostgreSQL,4.3
+DBA,Database Administrator,Kubernetes,1.7
+DBA,Database Administrator,VPN,1.4
+DBA,Database Administrator,SQL Server,3.5
+DBA,Database Administrator,Routing & Switching,2.1
+DBA,Database Administrator,TypeScript,1.0
+DBA,Database Administrator,DNS,2.1
+DENG,Data Engineer,SQL,5.0
+DENG,Data Engineer,Python,4.6
+DENG,Data Engineer,JavaScript,1.2
+DENG,Data Engineer,Git,2.3
+DENG,Data Engineer,AWS,2.5
+DENG,Data Engineer,Agile,2.5
+DENG,Data Engineer,Linux,1.6
+DENG,Data Engineer,Artificial Intelligence,2.7
+DENG,Data Engineer,HTML,1.0
+DENG,Data Engineer,PHP,1.2
+DENG,Data Engineer,Excel,1.8
+DENG,Data Engineer,Azure,2.7
+DENG,Data Engineer,Java,1.8
+DENG,Data Engineer,MySQL,1.4
+DENG,Data Engineer,Firewall,1.0
+DENG,Data Engineer,CSS,1.0
+DENG,Data Engineer,CI/CD,2.1
+DENG,Data Engineer,GCP,2.7
+DENG,Data Engineer,Go,1.2
+DENG,Data Engineer,REST API,1.2
+DENG,Data Engineer,React,1.0
+DENG,Data Engineer,Docker,1.2
+DENG,Data Engineer,Machine Learning,1.8
+DENG,Data Engineer,PostgreSQL,1.4
+DENG,Data Engineer,Kubernetes,1.4
+DENG,Data Engineer,VPN,1.0
+DENG,Data Engineer,SQL Server,2.3
+DENG,Data Engineer,Routing & Switching,1.0
+DENG,Data Engineer,TypeScript,1.0
+DENG,Data Engineer,DNS,1.0
+DEVOPS,DevOps Engineer,SQL,1.7
+DEVOPS,DevOps Engineer,Python,3.1
+DEVOPS,DevOps Engineer,JavaScript,1.5
+DEVOPS,DevOps Engineer,Git,3.4
+DEVOPS,DevOps Engineer,AWS,4.8
+DEVOPS,DevOps Engineer,Agile,1.7
+DEVOPS,DevOps Engineer,Linux,4.1
+DEVOPS,DevOps Engineer,Artificial Intelligence,1.5
+DEVOPS,DevOps Engineer,HTML,1.0
+DEVOPS,DevOps Engineer,PHP,1.7
+DEVOPS,DevOps Engineer,Excel,1.0
+DEVOPS,DevOps Engineer,Azure,2.2
+DEVOPS,DevOps Engineer,Java,1.7
+DEVOPS,DevOps Engineer,MySQL,2.2
+DEVOPS,DevOps Engineer,Firewall,2.2
+DEVOPS,DevOps Engineer,CSS,1.0
+DEVOPS,DevOps Engineer,CI/CD,4.3
+DEVOPS,DevOps Engineer,GCP,4.1
+DEVOPS,DevOps Engineer,Go,1.5
+DEVOPS,DevOps Engineer,REST API,1.2
+DEVOPS,DevOps Engineer,React,1.2
+DEVOPS,DevOps Engineer,Docker,4.5
+DEVOPS,DevOps Engineer,Machine Learning,1.2
+DEVOPS,DevOps Engineer,PostgreSQL,1.7
+DEVOPS,DevOps Engineer,Kubernetes,5.0
+DEVOPS,DevOps Engineer,VPN,1.5
+DEVOPS,DevOps Engineer,SQL Server,1.5
+DEVOPS,DevOps Engineer,Routing & Switching,1.2
+DEVOPS,DevOps Engineer,TypeScript,1.2
+DEVOPS,DevOps Engineer,DNS,1.7
+DSCI,Data Scientist,SQL,4.2
+DSCI,Data Scientist,Python,5.0
+DSCI,Data Scientist,JavaScript,1.0
+DSCI,Data Scientist,Git,1.4
+DSCI,Data Scientist,AWS,2.3
+DSCI,Data Scientist,Agile,1.4
+DSCI,Data Scientist,Linux,1.0
+DSCI,Data Scientist,Artificial Intelligence,2.9
+DSCI,Data Scientist,HTML,1.0
+DSCI,Data Scientist,PHP,1.0
+DSCI,Data Scientist,Excel,1.2
+DSCI,Data Scientist,Azure,1.8
+DSCI,Data Scientist,Java,1.0
+DSCI,Data Scientist,MySQL,1.4
+DSCI,Data Scientist,Firewall,1.0
+DSCI,Data Scientist,CSS,1.0
+DSCI,Data Scientist,CI/CD,1.4
+DSCI,Data Scientist,GCP,2.3
+DSCI,Data Scientist,Go,1.6
+DSCI,Data Scientist,REST API,1.2
+DSCI,Data Scientist,React,1.0
+DSCI,Data Scientist,Docker,1.6
+DSCI,Data Scientist,Machine Learning,4.6
+DSCI,Data Scientist,PostgreSQL,1.4
+DSCI,Data Scientist,Kubernetes,1.4
+DSCI,Data Scientist,VPN,1.0
+DSCI,Data Scientist,SQL Server,1.2
+DSCI,Data Scientist,Routing & Switching,1.0
+DSCI,Data Scientist,TypeScript,1.0
+DSCI,Data Scientist,DNS,1.0
+ITPM,IT Project Manager,SQL,1.0
+ITPM,IT Project Manager,Python,1.0
+ITPM,IT Project Manager,JavaScript,1.0
+ITPM,IT Project Manager,Git,1.0
+ITPM,IT Project Manager,AWS,1.0
+ITPM,IT Project Manager,Agile,5.0
+ITPM,IT Project Manager,Linux,1.0
+ITPM,IT Project Manager,Artificial Intelligence,2.7
+ITPM,IT Project Manager,HTML,1.0
+ITPM,IT Project Manager,PHP,1.0
+ITPM,IT Project Manager,Excel,1.0
+ITPM,IT Project Manager,Azure,2.1
+ITPM,IT Project Manager,Java,1.0
+ITPM,IT Project Manager,MySQL,1.0
+ITPM,IT Project Manager,Firewall,1.6
+ITPM,IT Project Manager,CSS,1.0
+ITPM,IT Project Manager,CI/CD,1.0
+ITPM,IT Project Manager,GCP,1.0
+ITPM,IT Project Manager,Go,1.0
+ITPM,IT Project Manager,REST API,1.0
+ITPM,IT Project Manager,React,1.0
+ITPM,IT Project Manager,Docker,1.0
+ITPM,IT Project Manager,Machine Learning,1.6
+ITPM,IT Project Manager,PostgreSQL,1.0
+ITPM,IT Project Manager,Kubernetes,1.0
+ITPM,IT Project Manager,VPN,1.0
+ITPM,IT Project Manager,SQL Server,1.0
+ITPM,IT Project Manager,Routing & Switching,1.0
+ITPM,IT Project Manager,TypeScript,1.0
+ITPM,IT Project Manager,DNS,1.0
+ITSUP,IT Support,SQL,1.7
+ITSUP,IT Support,Python,1.0
+ITSUP,IT Support,JavaScript,1.0
+ITSUP,IT Support,Git,1.0
+ITSUP,IT Support,AWS,1.0
+ITSUP,IT Support,Agile,1.0
+ITSUP,IT Support,Linux,4.3
+ITSUP,IT Support,Artificial Intelligence,1.0
+ITSUP,IT Support,HTML,1.0
+ITSUP,IT Support,PHP,1.0
+ITSUP,IT Support,Excel,1.7
+ITSUP,IT Support,Azure,1.7
+ITSUP,IT Support,Java,1.7
+ITSUP,IT Support,MySQL,1.0
+ITSUP,IT Support,Firewall,4.3
+ITSUP,IT Support,CSS,1.0
+ITSUP,IT Support,CI/CD,1.0
+ITSUP,IT Support,GCP,1.0
+ITSUP,IT Support,Go,1.7
+ITSUP,IT Support,REST API,1.0
+ITSUP,IT Support,React,1.7
+ITSUP,IT Support,Docker,1.0
+ITSUP,IT Support,Machine Learning,1.0
+ITSUP,IT Support,PostgreSQL,1.0
+ITSUP,IT Support,Kubernetes,1.0
+ITSUP,IT Support,VPN,4.3
+ITSUP,IT Support,SQL Server,1.7
+ITSUP,IT Support,Routing & Switching,1.0
+ITSUP,IT Support,TypeScript,1.0
+ITSUP,IT Support,DNS,5.0
+NETARCH,Network Architect,SQL,1.7
+NETARCH,Network Architect,Python,2.0
+NETARCH,Network Architect,JavaScript,1.3
+NETARCH,Network Architect,Git,1.3
+NETARCH,Network Architect,AWS,2.0
+NETARCH,Network Architect,Agile,1.7
+NETARCH,Network Architect,Linux,1.7
+NETARCH,Network Architect,Artificial Intelligence,2.7
+NETARCH,Network Architect,HTML,1.0
+NETARCH,Network Architect,PHP,1.0
+NETARCH,Network Architect,Excel,1.3
+NETARCH,Network Architect,Azure,1.3
+NETARCH,Network Architect,Java,1.3
+NETARCH,Network Architect,MySQL,1.0
+NETARCH,Network Architect,Firewall,3.7
+NETARCH,Network Architect,CSS,1.0
+NETARCH,Network Architect,CI/CD,1.3
+NETARCH,Network Architect,GCP,1.0
+NETARCH,Network Architect,Go,1.7
+NETARCH,Network Architect,REST API,1.7
+NETARCH,Network Architect,React,1.0
+NETARCH,Network Architect,Docker,1.0
+NETARCH,Network Architect,Machine Learning,1.7
+NETARCH,Network Architect,PostgreSQL,1.0
+NETARCH,Network Architect,Kubernetes,1.7
+NETARCH,Network Architect,VPN,3.0
+NETARCH,Network Architect,SQL Server,1.0
+NETARCH,Network Architect,Routing & Switching,5.0
+NETARCH,Network Architect,TypeScript,1.7
+NETARCH,Network Architect,DNS,2.0
+NETSUP,Network Support,SQL,2.3
+NETSUP,Network Support,Python,2.3
+NETSUP,Network Support,JavaScript,1.0
+NETSUP,Network Support,Git,1.0
+NETSUP,Network Support,AWS,3.7
+NETSUP,Network Support,Agile,1.0
+NETSUP,Network Support,Linux,5.0
+NETSUP,Network Support,Artificial Intelligence,2.3
+NETSUP,Network Support,HTML,1.0
+NETSUP,Network Support,PHP,1.0
+NETSUP,Network Support,Excel,5.0
+NETSUP,Network Support,Azure,2.3
+NETSUP,Network Support,Java,1.0
+NETSUP,Network Support,MySQL,1.0
+NETSUP,Network Support,Firewall,3.7
+NETSUP,Network Support,CSS,1.0
+NETSUP,Network Support,CI/CD,1.0
+NETSUP,Network Support,GCP,2.3
+NETSUP,Network Support,Go,1.0
+NETSUP,Network Support,REST API,1.0
+NETSUP,Network Support,React,1.0
+NETSUP,Network Support,Docker,1.0
+NETSUP,Network Support,Machine Learning,1.0
+NETSUP,Network Support,PostgreSQL,1.0
+NETSUP,Network Support,Kubernetes,1.0
+NETSUP,Network Support,VPN,5.0
+NETSUP,Network Support,SQL Server,1.0
+NETSUP,Network Support,Routing & Switching,3.7
+NETSUP,Network Support,TypeScript,1.0
+NETSUP,Network Support,DNS,3.7
+PROG,Programmer,SQL,2.3
+PROG,Programmer,Python,1.7
+PROG,Programmer,JavaScript,4.1
+PROG,Programmer,Git,2.3
+PROG,Programmer,AWS,1.2
+PROG,Programmer,Agile,1.0
+PROG,Programmer,Linux,1.2
+PROG,Programmer,Artificial Intelligence,1.2
+PROG,Programmer,HTML,3.7
+PROG,Programmer,PHP,5.0
+PROG,Programmer,Excel,1.2
+PROG,Programmer,Azure,1.0
+PROG,Programmer,Java,2.1
+PROG,Programmer,MySQL,2.6
+PROG,Programmer,Firewall,1.0
+PROG,Programmer,CSS,3.0
+PROG,Programmer,CI/CD,1.0
+PROG,Programmer,GCP,1.2
+PROG,Programmer,Go,1.4
+PROG,Programmer,REST API,1.4
+PROG,Programmer,React,1.7
+PROG,Programmer,Docker,1.9
+PROG,Programmer,Machine Learning,1.2
+PROG,Programmer,PostgreSQL,1.9
+PROG,Programmer,Kubernetes,1.0
+PROG,Programmer,VPN,1.2
+PROG,Programmer,SQL Server,1.2
+PROG,Programmer,Routing & Switching,1.0
+PROG,Programmer,TypeScript,1.7
+PROG,Programmer,DNS,1.0
+QA,QA Engineer,SQL,3.9
+QA,QA Engineer,Python,4.6
+QA,QA Engineer,JavaScript,3.9
+QA,QA Engineer,Git,4.3
+QA,QA Engineer,AWS,1.4
+QA,QA Engineer,Agile,5.0
+QA,QA Engineer,Linux,1.0
+QA,QA Engineer,Artificial Intelligence,2.1
+QA,QA Engineer,HTML,1.0
+QA,QA Engineer,PHP,1.4
+QA,QA Engineer,Excel,1.7
+QA,QA Engineer,Azure,1.4
+QA,QA Engineer,Java,4.3
+QA,QA Engineer,MySQL,1.7
+QA,QA Engineer,Firewall,1.0
+QA,QA Engineer,CSS,1.0
+QA,QA Engineer,CI/CD,4.3
+QA,QA Engineer,GCP,1.0
+QA,QA Engineer,Go,1.4
+QA,QA Engineer,REST API,2.8
+QA,QA Engineer,React,1.7
+QA,QA Engineer,Docker,1.7
+QA,QA Engineer,Machine Learning,1.0
+QA,QA Engineer,PostgreSQL,1.4
+QA,QA Engineer,Kubernetes,1.0
+QA,QA Engineer,VPN,1.0
+QA,QA Engineer,SQL Server,1.0
+QA,QA Engineer,Routing & Switching,1.0
+QA,QA Engineer,TypeScript,2.8
+QA,QA Engineer,DNS,1.0
+SECENG,Security Engineer,SQL,1.4
+SECENG,Security Engineer,Python,2.2
+SECENG,Security Engineer,JavaScript,1.0
+SECENG,Security Engineer,Git,1.0
+SECENG,Security Engineer,AWS,1.8
+SECENG,Security Engineer,Agile,1.0
+SECENG,Security Engineer,Linux,3.0
+SECENG,Security Engineer,Artificial Intelligence,1.0
+SECENG,Security Engineer,HTML,1.0
+SECENG,Security Engineer,PHP,1.0
+SECENG,Security Engineer,Excel,1.4
+SECENG,Security Engineer,Azure,2.2
+SECENG,Security Engineer,Java,1.8
+SECENG,Security Engineer,MySQL,1.0
+SECENG,Security Engineer,Firewall,5.0
+SECENG,Security Engineer,CSS,1.0
+SECENG,Security Engineer,CI/CD,1.4
+SECENG,Security Engineer,GCP,2.2
+SECENG,Security Engineer,Go,1.8
+SECENG,Security Engineer,REST API,1.0
+SECENG,Security Engineer,React,1.4
+SECENG,Security Engineer,Docker,1.0
+SECENG,Security Engineer,Machine Learning,1.0
+SECENG,Security Engineer,PostgreSQL,1.0
+SECENG,Security Engineer,Kubernetes,1.0
+SECENG,Security Engineer,VPN,2.2
+SECENG,Security Engineer,SQL Server,1.0
+SECENG,Security Engineer,Routing & Switching,1.8
+SECENG,Security Engineer,TypeScript,1.0
+SECENG,Security Engineer,DNS,1.4
+SWDEV,Software Developer,SQL,1.8
+SWDEV,Software Developer,Python,2.2
+SWDEV,Software Developer,JavaScript,5.0
+SWDEV,Software Developer,Git,2.8
+SWDEV,Software Developer,AWS,1.2
+SWDEV,Software Developer,Agile,2.4
+SWDEV,Software Developer,Linux,1.6
+SWDEV,Software Developer,Artificial Intelligence,1.2
+SWDEV,Software Developer,HTML,3.4
+SWDEV,Software Developer,PHP,2.8
+SWDEV,Software Developer,Excel,1.0
+SWDEV,Software Developer,Azure,1.0
+SWDEV,Software Developer,Java,2.8
+SWDEV,Software Developer,MySQL,2.2
+SWDEV,Software Developer,Firewall,1.0
+SWDEV,Software Developer,CSS,3.2
+SWDEV,Software Developer,CI/CD,1.8
+SWDEV,Software Developer,GCP,1.0
+SWDEV,Software Developer,Go,1.8
+SWDEV,Software Developer,REST API,2.4
+SWDEV,Software Developer,React,2.8
+SWDEV,Software Developer,Docker,1.6
+SWDEV,Software Developer,Machine Learning,1.0
+SWDEV,Software Developer,PostgreSQL,1.2
+SWDEV,Software Developer,Kubernetes,1.6
+SWDEV,Software Developer,VPN,1.0
+SWDEV,Software Developer,SQL Server,1.2
+SWDEV,Software Developer,Routing & Switching,1.0
+SWDEV,Software Developer,TypeScript,1.6
+SWDEV,Software Developer,DNS,1.0
+SYSADM,System Administrator,SQL,2.3
+SYSADM,System Administrator,Python,2.3
+SYSADM,System Administrator,JavaScript,1.9
+SYSADM,System Administrator,Git,1.4
+SYSADM,System Administrator,AWS,2.8
+SYSADM,System Administrator,Agile,2.3
+SYSADM,System Administrator,Linux,3.7
+SYSADM,System Administrator,Artificial Intelligence,1.0
+SYSADM,System Administrator,HTML,1.9
+SYSADM,System Administrator,PHP,1.4
+SYSADM,System Administrator,Excel,5.0
+SYSADM,System Administrator,Azure,3.7
+SYSADM,System Administrator,Java,1.0
+SYSADM,System Administrator,MySQL,1.0
+SYSADM,System Administrator,Firewall,2.3
+SYSADM,System Administrator,CSS,1.4
+SYSADM,System Administrator,CI/CD,1.0
+SYSADM,System Administrator,GCP,1.9
+SYSADM,System Administrator,Go,2.8
+SYSADM,System Administrator,REST API,1.0
+SYSADM,System Administrator,React,1.4
+SYSADM,System Administrator,Docker,1.4
+SYSADM,System Administrator,Machine Learning,1.0
+SYSADM,System Administrator,PostgreSQL,1.0
+SYSADM,System Administrator,Kubernetes,1.0
+SYSADM,System Administrator,VPN,2.3
+SYSADM,System Administrator,SQL Server,1.0
+SYSADM,System Administrator,Routing & Switching,1.4
+SYSADM,System Administrator,TypeScript,1.0
+SYSADM,System Administrator,DNS,2.3
+SYSAN,System Analyst,SQL,5.0
+SYSAN,System Analyst,Python,1.0
+SYSAN,System Analyst,JavaScript,1.9
+SYSAN,System Analyst,Git,1.0
+SYSAN,System Analyst,AWS,1.0
+SYSAN,System Analyst,Agile,1.9
+SYSAN,System Analyst,Linux,1.0
+SYSAN,System Analyst,Artificial Intelligence,1.0
+SYSAN,System Analyst,HTML,1.4
+SYSAN,System Analyst,PHP,2.3
+SYSAN,System Analyst,Excel,1.9
+SYSAN,System Analyst,Azure,1.0
+SYSAN,System Analyst,Java,1.9
+SYSAN,System Analyst,MySQL,1.4
+SYSAN,System Analyst,Firewall,1.0
+SYSAN,System Analyst,CSS,1.4
+SYSAN,System Analyst,CI/CD,1.0
+SYSAN,System Analyst,GCP,1.0
+SYSAN,System Analyst,Go,1.9
+SYSAN,System Analyst,REST API,1.9
+SYSAN,System Analyst,React,1.0
+SYSAN,System Analyst,Docker,1.0
+SYSAN,System Analyst,Machine Learning,1.0
+SYSAN,System Analyst,PostgreSQL,1.4
+SYSAN,System Analyst,Kubernetes,1.0
+SYSAN,System Analyst,VPN,1.0
+SYSAN,System Analyst,SQL Server,1.9
+SYSAN,System Analyst,Routing & Switching,1.4
+SYSAN,System Analyst,TypeScript,1.0
+SYSAN,System Analyst,DNS,1.0
+UIUX,UI/UX Designer,SQL,1.6
+UIUX,UI/UX Designer,Python,1.0
+UIUX,UI/UX Designer,JavaScript,5.0
+UIUX,UI/UX Designer,Git,1.6
+UIUX,UI/UX Designer,AWS,1.0
+UIUX,UI/UX Designer,Agile,2.7
+UIUX,UI/UX Designer,Linux,1.0
+UIUX,UI/UX Designer,Artificial Intelligence,1.6
+UIUX,UI/UX Designer,HTML,5.0
+UIUX,UI/UX Designer,PHP,1.0
+UIUX,UI/UX Designer,Excel,1.6
+UIUX,UI/UX Designer,Azure,1.0
+UIUX,UI/UX Designer,Java,1.6
+UIUX,UI/UX Designer,MySQL,1.0
+UIUX,UI/UX Designer,Firewall,1.0
+UIUX,UI/UX Designer,CSS,5.0
+UIUX,UI/UX Designer,CI/CD,1.0
+UIUX,UI/UX Designer,GCP,1.0
+UIUX,UI/UX Designer,Go,1.0
+UIUX,UI/UX Designer,REST API,1.6
+UIUX,UI/UX Designer,React,1.6
+UIUX,UI/UX Designer,Docker,1.0
+UIUX,UI/UX Designer,Machine Learning,1.0
+UIUX,UI/UX Designer,PostgreSQL,1.0
+UIUX,UI/UX Designer,Kubernetes,1.0
+UIUX,UI/UX Designer,VPN,1.0
+UIUX,UI/UX Designer,SQL Server,1.0
+UIUX,UI/UX Designer,Routing & Switching,1.0
+UIUX,UI/UX Designer,TypeScript,1.6
+UIUX,UI/UX Designer,DNS,1.0
+WEBDEV,Web Developer,SQL,2.1
+WEBDEV,Web Developer,Python,2.3
+WEBDEV,Web Developer,JavaScript,5.0
+WEBDEV,Web Developer,Git,2.9
+WEBDEV,Web Developer,AWS,1.5
+WEBDEV,Web Developer,Agile,1.8
+WEBDEV,Web Developer,Linux,1.3
+WEBDEV,Web Developer,Artificial Intelligence,2.3
+WEBDEV,Web Developer,HTML,5.0
+WEBDEV,Web Developer,PHP,4.2
+WEBDEV,Web Developer,Excel,1.0
+WEBDEV,Web Developer,Azure,1.3
+WEBDEV,Web Developer,Java,2.1
+WEBDEV,Web Developer,MySQL,2.9
+WEBDEV,Web Developer,Firewall,1.0
+WEBDEV,Web Developer,CSS,4.5
+WEBDEV,Web Developer,CI/CD,1.5
+WEBDEV,Web Developer,GCP,1.3
+WEBDEV,Web Developer,Go,1.5
+WEBDEV,Web Developer,REST API,3.4
+WEBDEV,Web Developer,React,3.9
+WEBDEV,Web Developer,Docker,1.3
+WEBDEV,Web Developer,Machine Learning,1.0
+WEBDEV,Web Developer,PostgreSQL,2.1
+WEBDEV,Web Developer,Kubernetes,1.0
+WEBDEV,Web Developer,VPN,1.0
+WEBDEV,Web Developer,SQL Server,1.5
+WEBDEV,Web Developer,Routing & Switching,1.0
+WEBDEV,Web Developer,TypeScript,1.8
+WEBDEV,Web Developer,DNS,1.0
