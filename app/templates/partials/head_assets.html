@@ -1,0 +1,78 @@
+{# Aset bersama: font, Tailwind, token desain, kelas komponen.
+   Dipakai base.html, base_dark.html, login.html, register.html. #}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Space Grotesk"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
+      colors: {
+        ink: '#0B1220',
+      },
+    },
+  },
+};
+</script>
+<style type="text/tailwindcss">
+@layer base {
+  body { @apply antialiased; }
+  ::selection { @apply bg-indigo-600 text-white; }
+}
+
+@layer components {
+  /* ---------- Komponen sisi light ---------- */
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2; }
+  .btn-secondary { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500; }
+  .btn-outline { @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500; }
+  .card { @apply rounded-xl border border-slate-200 bg-white shadow-sm; }
+  .label { @apply block text-sm font-medium text-slate-700 mb-1.5; }
+  .input { @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30; }
+  .field-error { @apply text-xs text-red-600 mt-1; }
+  .th { @apply px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500; }
+  .td { @apply px-4 py-3; }
+  .badge { @apply inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold; }
+  .badge-kustom { @apply badge bg-indigo-100 text-indigo-800; }
+  .badge-default { @apply badge bg-slate-100 text-slate-600; }
+  .nav-link { @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900; }
+  .nav-link svg { @apply h-5 w-5 shrink-0 text-slate-400 transition-colors; }
+  .nav-link:hover svg { @apply text-slate-600; }
+  .nav-link-active { @apply bg-indigo-50 font-medium text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700; }
+  .nav-link-active svg { @apply text-indigo-600; }
+  .nav-link-active:hover svg { @apply text-indigo-600; }
+
+  /* ---------- Komponen sisi dark (halaman hasil) ---------- */
+  .card-dark { @apply rounded-xl border border-slate-800 bg-slate-900; }
+  .input-dark { @apply block w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 shadow-sm transition focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500/30; }
+  .th-dark { @apply px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400; }
+  .td-dark { @apply px-4 py-3; }
+  .badge-kustom-dark { @apply badge bg-violet-500/15 text-violet-300 ring-1 ring-inset ring-violet-500/40; }
+  .badge-default-dark { @apply badge bg-slate-800 text-slate-300 ring-1 ring-inset ring-slate-700; }
+  .btn-outline-dark { @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-transparent px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400; }
+  .btn-secondary-dark { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-slate-100 transition-colors hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400; }
+  .nav-link-dark { @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-400 transition-colors hover:bg-slate-800/70 hover:text-slate-100; }
+  .nav-link-dark svg { @apply h-5 w-5 shrink-0 text-slate-500 transition-colors; }
+  .nav-link-dark:hover svg { @apply text-slate-300; }
+  .nav-link-dark-active { @apply bg-slate-800 font-medium text-white hover:bg-slate-800 hover:text-white; }
+  .nav-link-dark-active svg { @apply text-indigo-400; }
+  .nav-link-dark-active:hover svg { @apply text-indigo-400; }
+}
+
+/* Baris rating skill: zebra halus agar mudah dipindai */
+.skill-row:nth-child(odd) { background-color: rgb(248 250 252); }
+.skill-row { transition: background-color 120ms ease; }
+.skill-row:hover { background-color: rgb(238 242 255 / 0.55); }
+
+/* Bar skor halaman hasil: tumbuh dari kiri saat halaman dimuat */
+@keyframes fillbar { from { width: 0; } }
+.score-fill { animation: fillbar 900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .score-fill { animation: none; }
+}
+</style>
