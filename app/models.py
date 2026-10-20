@@ -79,12 +79,42 @@ class StudentProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     nama = db.Column(db.String(120), nullable=False)
-    skills = db.Column(db.Text, default="")  # skill dikuasai, dipisah koma
+    # Format: "Skill:nilai" dipisah koma, mis. "Python:4, SQL:3".
+    # Nilai = tingkat penguasaan yang dinilai sendiri oleh mahasiswa
+    # (skala 0-5; hanya skill bernilai > 0 yang disimpan). Entri lama
+    # tanpa ":nilai" (format checkbox biner) dianggap bernilai 3.0,
+    # konvensi yang sama seperti Career.skill_scores().
+    skills = db.Column(db.Text, default="")
     minat = db.Column(db.Text, default="")  # id karier diminati, dipisah koma
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def skill_list(self):
-        return [s.strip() for s in self.skills.split(",") if s.strip()]
+        """Nama skill saja (tanpa nilai), untuk tampilan."""
+        return [s.split(":")[0].strip() for s in self.skills.split(",") if s.strip()]
+
+    def skill_scores(self):
+        """Dict {nama_skill_lower: nilai float} untuk vektor CBF berbobot.
+
+        Entri tanpa ":nilai" (profil lama format biner) dianggap 3.0
+        agar data lama tetap dapat dihitung dan tidak crash.
+        """
+        hasil = {}
+        for bagian in self.skills.split(","):
+            bagian = bagian.strip()
+            if not bagian:
+                continue
+            if ":" in bagian:
+                nama, _, nilai_teks = bagian.rpartition(":")
+                try:
+                    nilai = float(nilai_teks.strip())
+                except ValueError:
+                    nilai = 3.0
+            else:
+                nama, nilai = bagian, 3.0
+            nama = nama.strip()
+            if nama:
+                hasil[nama.lower()] = nilai
+        return hasil
 
     def minat_ids(self):
         return [int(x) for x in self.minat.split(",") if x.strip().isdigit()]
