@@ -117,9 +117,10 @@ jabatan yang selama ini tertelan kategori umum ("Software Developer" / "Programm
   Frontend 45 (I:23, G:22, n_gaji 16, median Rp8,5 jt), Backend 46 (I:23, G:24, n_gaji 20,
   median Rp8,5 jt), Mobile 49 (I:25, G:24, n_gaji 12, median Rp6,0 jt).
 - **Normalisasi demand dihitung ulang**: demand skala 1–10 (min-max di `seed.py`) kini atas
-  22 jabatan. Rentang n tetap 39–55 sehingga pergeseran nilai ternormalisasi kecil, tetapi
-  nilai demand beberapa jabatan lama dapat bergeser 1 poin karena himpunan pembandingnya
-  berubah. Ini diperlakukan eksplisit sebagai perubahan metodologi, bukan koreksi data.
+  22 jabatan. Pada perluasan ini rentang n tidak berubah (tetap 39–55), sehingga nilai
+  ternormalisasi 19 jabatan lama faktanya tidak bergeser. Dicatat sebagai kaidah metodologi:
+  normalisasi selalu dihitung atas seluruh jabatan yang aktif, jadi pada perluasan berikutnya
+  nilai lama dapat bergeser bila rentang n berubah.
 
 ### 2. Ekstraksi skill (text mining)
 
