@@ -10,7 +10,7 @@
   {% if batch_kustom %}
   <span class="inline-block ml-2 bg-indigo-600 text-white text-xs rounded px-2 py-0.5">bobot kustom</span>
   {% else %}
-  <span class="inline-block ml-2 bg-slate-500 text-white text-xs rounded px-2 py-0.5">bobot default admin</span>
+  <span class="inline-block ml-2 bg-slate-500 text-white text-xs rounded px-2 py-0.5">bobot default</span>
   {% endif %}
   {% if detail.bobot_dinormalisasi %}
   <span class="block mt-1">Total bobot bukan 1, sehingga bobot dinormalisasi otomatis sebelum perhitungan.</span>
@@ -49,7 +49,7 @@
 
 <div class="bg-white rounded-lg shadow p-6 mb-6">
   <p class="font-semibold mb-2">Atur Bobot Kriteria</p>
-  <p class="text-sm text-slate-500 mb-4">Sesuaikan bobot tiap kriteria (0 sampai 1) lalu hitung ulang. Bobot ini hanya berlaku untuk sesi Anda dan tidak mengubah bobot master milik admin. Bila total bukan 1, bobot dinormalisasi otomatis.</p>
+  <p class="text-sm text-slate-500 mb-4">Sesuaikan bobot tiap kriteria (0 sampai 1) lalu hitung ulang. Bobot ini hanya berlaku untuk sesi Anda dan tidak mengubah bobot default. Bila total bukan 1, bobot dinormalisasi otomatis.</p>
   <form method="post" action="{{ url_for('spk.atur_bobot') }}">
     <div class="flex flex-wrap items-end gap-4 mb-4">
       {% for c in detail.criteria %}
