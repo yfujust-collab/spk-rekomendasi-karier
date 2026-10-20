@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}SPK Rekomendasi Karier{% endblock %}</title>
+  {% include "partials/head_assets.html" %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-ink font-sans text-slate-200">
+
+<!-- Bar atas khusus ponsel -->
+<div class="md:hidden bg-ink border-b border-slate-800 flex items-center justify-between px-4 py-3 sticky top-0 z-30">
+  <p class="font-display font-bold text-white">SPK Karier</p>
+  <button id="btnMenu" class="p-2 rounded-lg text-slate-300 hover:bg-slate-800" aria-label="Buka menu">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+</div>
+
+<div class="flex min-h-screen">
+
+  <!-- Lapisan gelap saat menu ponsel terbuka -->
+  <div id="overlay" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed md:static z-40 inset-y-0 left-0 w-64 -translate-x-full md:translate-x-0 transition-transform bg-ink border-r border-slate-800 flex flex-col shrink-0">
+    <div class="px-5 py-5 border-b border-slate-800 flex items-center gap-3">
+      <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 text-white shrink-0">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" stroke-linejoin="round"/></svg>
+      </span>
+      <span>
+        <span class="block font-display text-base font-bold leading-tight text-white">SPK Karier</span>
+        <span class="block text-xs text-slate-500">Rekomendasi Karier Informatika</span>
+      </span>
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1">
+      {% set ep = request.endpoint or '' %}
+      {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-link-dark {% if ep == 'admin.dashboard' %}nav-link-dark-active{% endif %}">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          Dasbor Admin
+        </a>
+        <a href="{{ url_for('admin.careers') }}" class="nav-link-dark {% if ep.startswith('admin.career') %}nav-link-dark-active{% endif %}">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Data Karier
+        </a>
+        <a href="{{ url_for('admin.criteria') }}" class="nav-link-dark {% if ep.startswith('admin.criteri') %}nav-link-dark-active{% endif %}">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="21" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><line x1="8" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><line x1="12" y1="20" x2="3" y2="20"/><line x1="14" y1="2" x2="14" y2="6"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="22"/></svg>
+          Kriteria dan Bobot
+        </a>
+      {% elif current_user.is_authenticated %}
+        <a href="{{ url_for('spk.index') }}" class="nav-link-dark {% if ep == 'spk.index' %}nav-link-dark-active{% endif %}">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          Dasbor
+        </a>
+        <a href="{{ url_for('spk.profil') }}" class="nav-link-dark {% if ep == 'spk.profil' %}nav-link-dark-active{% endif %}">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Isi Profil
+        </a>
+        <a href="{{ url_for('spk.hasil') }}" class="nav-link-dark {% if ep in ('spk.hasil', 'spk.hitung') %}nav-link-dark-active{% endif %}">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          Hasil Rekomendasi
+        </a>
+        <a href="{{ url_for('spk.riwayat') }}" class="nav-link-dark {% if ep == 'spk.riwayat' %}nav-link-dark-active{% endif %}">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+          Riwayat
+        </a>
+      {% endif %}
+    </nav>
+    <div class="px-5 py-4 border-t border-slate-800">
+      {% if current_user.is_authenticated %}
+        <p class="text-sm font-semibold text-slate-100">{{ current_user.nama or current_user.username }}</p>
+        <p class="text-xs capitalize text-slate-500">{{ current_user.role }}</p>
+        <a href="{{ url_for('auth.logout') }}" class="mt-3 inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Keluar
+        </a>
+      {% endif %}
+    </div>
+  </aside>
+
+  <!-- Konten -->
+  <main class="flex-1 p-4 md:p-8 min-w-0">
+    <div class="mx-auto w-full max-w-6xl">
+      <h1 class="font-display text-2xl font-semibold tracking-tight text-white mb-1">{% block heading %}{% endblock %}</h1>
+      <p class="text-sm text-slate-400 mb-6">{% block subheading %}{% endblock %}</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="space-y-2 mb-6">
+            {% for category, message in messages %}
+              <div class="px-4 py-3 rounded-lg border text-sm
+                {% if category == 'danger' %}bg-red-500/10 border-red-500/30 text-red-300
+                {% elif category == 'success' %}bg-emerald-500/10 border-emerald-500/30 text-emerald-300
+                {% elif category == 'warning' %}bg-amber-500/10 border-amber-500/30 text-amber-300
+                {% else %}bg-indigo-500/10 border-indigo-500/30 text-indigo-200{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+<script>
+// Menu geser untuk layar ponsel
+const sb = document.getElementById('sidebar');
+const ov = document.getElementById('overlay');
+const btn = document.getElementById('btnMenu');
+if (btn) {
+  btn.addEventListener('click', () => {
+    sb.classList.toggle('-translate-x-full');
+    ov.classList.toggle('hidden');
+  });
+  ov.addEventListener('click', () => {
+    sb.classList.add('-translate-x-full');
+    ov.classList.add('hidden');
+  });
+}
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
