@@ -18,3 +18,6 @@ DAN,Data Analyst,Menghasilkan intelijen bisnis dan pasar dengan mengolah reposit
 AIENG,AI Engineer,"Melakukan riset ilmu komputer dan informasi sebagai teoritisi, desainer, atau penemu; mengembangkan solusi untuk permasalahan di bidang perangkat keras dan perangkat lunak."
 DEVOPS,DevOps Engineer,"Merancang dan mengembangkan solusi untuk masalah aplikasi kompleks, administrasi sistem, atau jaringan; menjalankan fungsi manajemen dan integrasi sistem."
 NETSUP,Network Support,"Menganalisis, menguji, memecahkan masalah, dan mengevaluasi sistem jaringan yang ada (LAN, WAN, cloud, server); melakukan pemeliharaan jaringan."
+FEDEV,Frontend Developer,"Membangun sisi klien (antarmuka) aplikasi web; menerjemahkan desain UI/UX menjadi komponen interaktif yang responsif, cepat, dan mudah digunakan."
+BEDEV,Backend Developer,"Merancang dan membangun logika sisi server: API, basis data, dan layanan backend yang aman, andal, dan mampu diskalakan."
+MOBDEV,Mobile Developer,"Merancang, membangun, dan memelihara aplikasi mobile Android/iOS (native maupun lintas platform); mengurus performa, rilis, dan pembaruan aplikasi."
