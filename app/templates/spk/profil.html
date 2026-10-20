@@ -4,9 +4,9 @@
 {% block subheading %}Data ini menjadi dasar perhitungan rekomendasi karier.{% endblock %}
 {% block content %}
 <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
-  {# novalidate: validasi HTML5 browser dimatikan karena WTForms me-render
-     atribut "required" di tiap checkbox (browser menuntut semua dicentang).
-     Validasi tetap jalan di server dengan pesan Bahasa Indonesia. #}
+  {# novalidate: validasi HTML5 browser dimatikan; seluruh validasi
+     (termasuk rating skill 0-5 per baris) berjalan di server dengan
+     pesan Bahasa Indonesia. #}
   <form method="post" novalidate>
     {{ form.hidden_tag() }}
     <div class="mb-6 max-w-md">
@@ -17,13 +17,19 @@
       </div>
     </div>
 
-    <p class="text-sm font-medium mb-2">{{ form.skills.label.text }}</p>
-    {% if form.skills.errors %}<p class="text-sm text-red-600 mb-2">{{ form.skills.errors[0] }}</p>{% endif %}
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
-      {% for subfield in form.skills %}
-      <label class="flex items-center gap-2 text-sm border rounded px-3 py-2 hover:bg-slate-50">
-        {{ subfield }} <span>{{ subfield.label.text }}</span>
-      </label>
+    <p class="text-sm font-medium mb-1">Tingkat penguasaan skill</p>
+    <p class="text-sm text-slate-600 mb-2">Nilai penguasaan Anda untuk tiap skill: 0 (tidak menguasai), 1 (pemula), 2 (dasar), 3 (menengah), 4 (mahir), 5 (ahli). Minimal 3 skill dengan nilai lebih dari 0.</p>
+    {% if skill_error %}<p class="text-sm text-red-600 mb-2">{{ skill_error }}</p>{% endif %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+      {% for baris in skill_rows %}
+      <div class="flex items-center justify-between gap-3 border rounded px-3 py-2">
+        <label for="{{ baris.nama_input }}" class="text-sm">{{ baris.label }}</label>
+        <select id="{{ baris.nama_input }}" name="{{ baris.nama_input }}" class="border rounded px-2 py-1 text-sm shrink-0 bg-white">
+          {% for nilai, teks in skala %}
+          <option value="{{ nilai }}"{% if baris.nilai == nilai %} selected{% endif %}>{{ nilai }}: {{ teks }}</option>
+          {% endfor %}
+        </select>
+      </div>
       {% endfor %}
     </div>
 
