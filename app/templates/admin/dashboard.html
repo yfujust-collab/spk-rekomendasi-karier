@@ -4,25 +4,37 @@
 {% block subheading %}Ringkasan data utama sistem pendukung keputusan.{% endblock %}
 {% block content %}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-  <div class="bg-white rounded-lg shadow p-6">
-    <p class="text-sm text-slate-500">Jumlah Karier</p>
-    <p class="text-3xl font-bold text-indigo-600">{{ n_karier }}</p>
+  <div class="card p-6">
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Jumlah Karier</p>
+    <p class="font-display text-3xl font-bold text-slate-900">{{ n_karier }}</p>
+    <p class="text-sm text-slate-500 mt-1">Alternatif karier pada data master</p>
   </div>
-  <div class="bg-white rounded-lg shadow p-6">
-    <p class="text-sm text-slate-500">Jumlah Kriteria</p>
-    <p class="text-3xl font-bold text-indigo-600">{{ n_kriteria }}</p>
+  <div class="card p-6">
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Jumlah Kriteria</p>
+    <p class="font-display text-3xl font-bold text-slate-900">{{ n_kriteria }}</p>
+    <p class="text-sm text-slate-500 mt-1">Kriteria penilaian SAW (C1 sampai C4)</p>
   </div>
-  <div class="bg-white rounded-lg shadow p-6">
-    <p class="text-sm text-slate-500">Profil Mahasiswa</p>
-    <p class="text-3xl font-bold text-indigo-600">{{ n_profil }}</p>
+  <div class="card p-6">
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Profil Mahasiswa</p>
+    <p class="font-display text-3xl font-bold text-slate-900">{{ n_profil }}</p>
+    <p class="text-sm text-slate-500 mt-1">Profil skill yang sudah tersimpan</p>
   </div>
 </div>
-<div class="mt-6 bg-white rounded-lg shadow p-6">
-  <p class="font-semibold mb-2">Panduan singkat</p>
-  <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1">
-    <li>Kelola <a class="text-indigo-600" href="{{ url_for('admin.careers') }}">data karier</a>: nama, deskripsi, skill, gaji, dan demand pasar.</li>
-    <li>Atur <a class="text-indigo-600" href="{{ url_for('admin.criteria') }}">kriteria dan bobot</a> SAW. Pastikan total bobot sama dengan 1.</li>
-    <li>Mahasiswa mengisi profil, lalu sistem menghitung rekomendasi otomatis.</li>
+<div class="card mt-6 p-6 max-w-3xl">
+  <p class="font-display text-base font-semibold text-slate-900 mb-3">Panduan singkat</p>
+  <ol class="space-y-2.5">
+    <li class="flex gap-3 text-sm text-slate-600">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-mono text-xs font-semibold text-indigo-700">1</span>
+      <span>Kelola <a class="font-medium text-indigo-600 hover:text-indigo-800" href="{{ url_for('admin.careers') }}">data karier</a>: nama, deskripsi, skill, gaji, dan demand pasar.</span>
+    </li>
+    <li class="flex gap-3 text-sm text-slate-600">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-mono text-xs font-semibold text-indigo-700">2</span>
+      <span>Atur <a class="font-medium text-indigo-600 hover:text-indigo-800" href="{{ url_for('admin.criteria') }}">kriteria dan bobot</a> SAW. Pastikan total bobot sama dengan 1.</span>
+    </li>
+    <li class="flex gap-3 text-sm text-slate-600">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-mono text-xs font-semibold text-indigo-700">3</span>
+      <span>Mahasiswa mengisi profil, lalu sistem menghitung rekomendasi secara otomatis.</span>
+    </li>
   </ol>
 </div>
 {% endblock %}
