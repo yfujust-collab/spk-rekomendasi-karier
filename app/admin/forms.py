@@ -13,11 +13,13 @@ class CareerForm(FlaskForm):
     )
     deskripsi = TextAreaField("Deskripsi")
     skills = TextAreaField(
-        "Skill yang dibutuhkan (pisahkan dengan koma)",
+        "Skill dan bobot (format: Skill:skor, pisahkan dengan koma)",
         validators=[DataRequired(message="Skill karier wajib diisi.")],
+        description="Contoh: Python:4.6, SQL:3.8, Git:2.6. Skor 1-5; "
+        "entri tanpa skor dianggap berbobot 3.0.",
     )
     gaji_min = IntegerField(
-        "Estimasi gaji minimum (juta rupiah/bulan)",
+        "Gaji minimum (juta rupiah/bulan)",
         validators=[
             NumberRange(
                 min=0, message="Gaji minimum tidak boleh kurang dari 0."
@@ -26,7 +28,7 @@ class CareerForm(FlaskForm):
         default=0,
     )
     gaji_max = IntegerField(
-        "Estimasi gaji maksimum (juta rupiah/bulan)",
+        "Gaji maksimum (juta rupiah/bulan)",
         validators=[
             NumberRange(
                 min=0, message="Gaji maksimum tidak boleh kurang dari 0."
