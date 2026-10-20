@@ -26,6 +26,72 @@ def _vocabulary():
     return cbf.build_vocabulary(Career.query.all())
 
 
+# Skala tingkat penguasaan skill pada form profil (dinilai sendiri
+# oleh mahasiswa): 0 berarti tidak menguasai sama sekali.
+SKALA_SKILL = [
+    (0, "Tidak menguasai"),
+    (1, "Pemula"),
+    (2, "Dasar"),
+    (3, "Menengah"),
+    (4, "Mahir"),
+    (5, "Ahli"),
+]
+MIN_SKILL_TERISI = 3
+
+
+def _baris_skill(vocab, label, nilai_map):
+    """Baris input rating untuk template: satu dict per skill.
+
+    nilai_map: {kunci_lower: nilai} — nilai boleh float (dari
+    skill_scores) atau int (dari form); selalu ditampilkan sebagai
+    bilangan bulat 0-5, default 0 bila skill belum dinilai.
+    """
+    return [
+        {
+            "nama_input": f"skill_{i}",
+            "label": label.get(kunci, kunci),
+            "nilai": int(nilai_map.get(kunci, 0)),
+        }
+        for i, kunci in enumerate(vocab)
+    ]
+
+
+def _baca_rating_skill(vocab):
+    """Baca & validasi rating skill dari form HTML biasa.
+
+    Mengembalikan (nilai_map, pesan_error): nilai_map berisi
+    {kunci_lower: int 0-5} untuk skill yang berhasil dibaca;
+    pesan_error None bila seluruhnya sah. Aturan: tiap nilai harus
+    bilangan bulat 0-5 dan minimal MIN_SKILL_TERISI skill bernilai
+    lebih dari 0. Field yang tidak terkirim dianggap 0.
+    """
+    nilai_map = {}
+    for i, kunci in enumerate(vocab):
+        mentah = request.form.get(f"skill_{i}")
+        if mentah is None or mentah == "":
+            nilai_map[kunci] = 0
+            continue
+        try:
+            nilai = int(mentah)
+        except (TypeError, ValueError):
+            return nilai_map, (
+                "Nilai penguasaan tiap skill harus bilangan bulat "
+                "0 sampai 5."
+            )
+        if nilai < 0 or nilai > 5:
+            return nilai_map, (
+                "Nilai penguasaan tiap skill harus antara 0 sampai 5."
+            )
+        nilai_map[kunci] = nilai
+    terisi = sum(1 for v in nilai_map.values() if v > 0)
+    if terisi < MIN_SKILL_TERISI:
+        return nilai_map, (
+            "Isi tingkat penguasaan untuk minimal 3 skill "
+            "(nilai lebih dari 0)."
+        )
+    return nilai_map, None
+
+
 def _normalisasi_bobot(bobot):
     """Kembalikan (bobot_ternormalisasi, dinormalisasi).
 
@@ -124,10 +190,11 @@ def _compute(profile, bobot=None):
     if len(criteria) != 4:
         raise ValueError("Jumlah kriteria harus tepat 4 agar perhitungan SAW sah.")
     vocab = _vocabulary()
-    vec_mhs = cbf.vectorize(profile.skill_list(), vocab)
+    vec_mhs = cbf.vectorize(profile.skill_scores(), vocab)
 
     # Tahap 1: Content-Based Filtering -> skor kecocokan skill (C1).
-    # Vektor karier BERBOBOT (skor 1-5), vektor mahasiswa biner.
+    # Kedua vektor BERBOBOT dan simetris: karier memakai skor
+    # kepentingan 1-5, mahasiswa memakai tingkat penguasaan 0-5.
     skor_cbf = []
     for career in careers:
         vec_karier = cbf.career_vector(career, vocab)
@@ -180,29 +247,56 @@ def profil():
     vocab = _vocabulary()
     label = cbf.skill_labels(Career.query.all())
     form = ProfileForm()
-    # Label tampil memakai huruf asli ("CI/CD", bukan "Ci/Cd").
-    form.skills.choices = [(s, label.get(s, s)) for s in vocab]
     form.minat.choices = [(c.id, c.nama) for c in careers]
 
     profile = StudentProfile.query.filter_by(user_id=current_user.id).first()
     if form.validate_on_submit():
-        if not profile:
-            profile = StudentProfile(user_id=current_user.id)
-            db.session.add(profile)
-        profile.nama = form.nama.data.strip()
-        profile.skills = ", ".join(form.skills.data)
-        profile.minat = ", ".join(str(i) for i in form.minat.data)
-        # batch lama tidak dihapus; batch baru akan dibuat saat hitung ulang
-        # sehingga halaman Riwayat tetap menyimpan hasil-hasil terdahulu
-        db.session.commit()
-        flash("Profil tersimpan. Sistem menghitung rekomendasi.", "success")
-        return redirect(url_for("spk.hitung"))
+        nilai_map, galat = _baca_rating_skill(vocab)
+        if galat is None:
+            if not profile:
+                profile = StudentProfile(user_id=current_user.id)
+                db.session.add(profile)
+            profile.nama = form.nama.data.strip()
+            # Simpan hanya skill bernilai > 0, format "Skill:nilai"
+            # (konsisten dengan format Career.skills).
+            profile.skills = ", ".join(
+                f"{label.get(k, k)}:{nilai_map[k]}"
+                for k in vocab
+                if nilai_map.get(k, 0) > 0
+            )
+            profile.minat = ", ".join(str(i) for i in form.minat.data)
+            # batch lama tidak dihapus; batch baru akan dibuat saat hitung ulang
+            # sehingga halaman Riwayat tetap menyimpan hasil-hasil terdahulu
+            db.session.commit()
+            flash("Profil tersimpan. Sistem menghitung rekomendasi.", "success")
+            return redirect(url_for("spk.hitung"))
+        # Rating tidak sah: tampilkan form lagi dengan nilai yang
+        # sudah dikirim agar mahasiswa tidak mengisi dari nol.
+        return render_template(
+            "spk/profil.html",
+            form=form,
+            skill_rows=_baris_skill(vocab, label, nilai_map),
+            skala=SKALA_SKILL,
+            skill_error=galat,
+        )
 
     if profile and not form.is_submitted():
         form.nama.data = profile.nama
-        form.skills.data = profile.skill_list()
         form.minat.data = profile.minat_ids()
-    return render_template("spk/profil.html", form=form)
+        nilai_awal = profile.skill_scores()
+    elif form.is_submitted():
+        # POST tetapi form tidak lolos validasi (mis. nama kosong):
+        # pertahankan rating yang dikirim.
+        nilai_awal, _ = _baca_rating_skill(vocab)
+    else:
+        nilai_awal = {}
+    return render_template(
+        "spk/profil.html",
+        form=form,
+        skill_rows=_baris_skill(vocab, label, nilai_awal),
+        skala=SKALA_SKILL,
+        skill_error=None,
+    )
 
 
 @bp.route("/rekomendasi")
