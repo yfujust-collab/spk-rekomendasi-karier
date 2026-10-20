@@ -1,0 +1,20 @@
+kode_jabatan,nama_jabatan,deskripsi_id
+SWDEV,Software Developer,"Meneliti, merancang, dan mengembangkan aplikasi perangkat lunak atau sistem; menganalisis kebutuhan pengguna lalu membangun, menguji, dan memelihara solusinya."
+PROG,Programmer,"Menulis, menguji, dan memelihara kode program komputer berdasarkan spesifikasi; fokus pada implementasi logika sesuai rancangan perangkat lunak."
+WEBDEV,Web Developer,"Merancang, membangun, dan memelihara situs/aplikasi web; mengurus tampilan, fungsionalitas, dan performa web."
+UIUX,UI/UX Designer,"Merancang antarmuka web dan digital (UI/UX): tata letak, alur interaksi, dan pengalaman pengguna aplikasi maupun situs."
+QA,QA Engineer,Merancang skenario pengujian dan menjalankan tes perangkat lunak untuk menemukan bug; memastikan kualitas sebelum rilis.
+DSCI,Data Scientist,Mengolah data besar menjadi wawasan: membangun model statistik/machine learning untuk prediksi dan pengambilan keputusan.
+DENG,Data Engineer,"Merancang dan mengelola gudang data (data warehouse): alur ETL, skema, dan integrasi data dari berbagai sumber."
+DBA,Database Administrator,"Mengelola database: instalasi, keamanan, backup, dan optimasi performa basis data organisasi."
+CYBER,Cybersecurity Analyst,"Melindungi sistem dan jaringan organisasi dari serangan siber: memantau ancaman, menganalisis insiden, dan menerapkan pengamanan."
+SECENG,Security Engineer,"Merancang dan membangun sistem keamanan informasi: arsitektur pengamanan, enkripsi, dan pertahanan berlapis."
+NETARCH,Network Architect,"Merancang infrastruktur jaringan komputer: topologi, kapasitas, dan keamanan jaringan skala organisasi."
+SYSADM,System Administrator,"Menginstal, mengonfigurasi, dan memelihara jaringan serta sistem komputer harian organisasi."
+SYSAN,System Analyst,Menganalisis kebutuhan bisnis dan menerjemahkannya menjadi spesifikasi sistem informasi; jembatan antara user dan tim teknis.
+ITPM,IT Project Manager,"Merencanakan dan memimpin proyek TI: mengatur jadwal, anggaran, tim, dan memastikan proyek selesai tepat waktu."
+ITSUP,IT Support,"Memberikan bantuan teknis kepada pengguna komputer: menjawab pertanyaan atau menyelesaikan masalah komputer klien secara langsung, via telepon, atau elektronik."
+DAN,Data Analyst,Menghasilkan intelijen bisnis dan pasar dengan mengolah repositori data dan membuat laporan berkala; merancang metode untuk mengidentifikasi pola dan tren dari data.
+AIENG,AI Engineer,"Melakukan riset ilmu komputer dan informasi sebagai teoritisi, desainer, atau penemu; mengembangkan solusi untuk permasalahan di bidang perangkat keras dan perangkat lunak."
+DEVOPS,DevOps Engineer,"Merancang dan mengembangkan solusi untuk masalah aplikasi kompleks, administrasi sistem, atau jaringan; menjalankan fungsi manajemen dan integrasi sistem."
+NETSUP,Network Support,"Menganalisis, menguji, memecahkan masalah, dan mengevaluasi sistem jaringan yang ada (LAN, WAN, cloud, server); melakukan pemeliharaan jaringan."
