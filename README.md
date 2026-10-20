@@ -1,3 +1,8 @@
+> **Proyek ini pindah ke [senshiner/spk-karir](https://github.com/senshiner/spk-karir).**
+> Repo ini tidak lagi dikembangkan; kode, dataset, dan dokumentasi terbaru ada di repo baru.
+
+---
+
 <div align="center">
 
 # **Rancang Bangun Sistem Pendukung Keputusan Rekomendasi Karier Mahasiswa Informatika Berbasis Web Menggunakan Metode Content-Based Filtering dan Simple Additive Weighting (SAW)**
