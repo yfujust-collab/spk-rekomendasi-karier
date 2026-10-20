@@ -8,69 +8,90 @@ agar konteksnya sesuai pasar kerja Indonesia.
 
 | Aspek | Nilai |
 |---|---|
-| Jumlah lowongan (N) | 479 (unik, setelah dedup URL) |
-| Untuk text mining | 456 (deskripsi > 200 karakter) |
+| Jumlah lowongan (N) | 926 (unik, setelah dedup lintas sumber) |
+| Untuk text mining | 908 (deskripsi > 200 karakter) |
 | Jabatan | 19 (IT, istilah job loker) |
 | Skill final | 30 (hard skill teknis) |
-| Sumber | id.indeed.com |
-| Periode pengambilan | 19–20 Oktober 2026 (23:00 UTC – 01:30 UTC; 06:00–08:30 WIB 20 Okt 2026) |
-| Cakupan wilayah | Indonesia (filter lokasi "Indonesia") |
+| Sumber | id.indeed.com (479) + glints.com (475) |
+| Periode pengambilan | Indeed: 19–20 Okt 2026 · Glints: 20 Okt 2026 (03:00–05:00 UTC) |
+| Cakupan wilayah | Indonesia |
 
 ### Sebaran per jabatan
 
-| Jabatan | N lowongan | N untuk mining |
-|---|---|---|
-| Software Developer | 27 | 26 |
-| Programmer | 29 | 26 |
-| Web Developer | 24 | 21 |
-| UI/UX Designer | 28 | 27 |
-| QA Engineer | 30 | 29 |
-| Data Scientist | 25 | 24 |
-| Data Engineer | 29 | 29 |
-| Database Administrator | 28 | 27 |
-| Cybersecurity Analyst | 31 | 29 |
-| Security Engineer | 26 | 25 |
-| Network Architect | 30 | 30 |
-| System Administrator | 31 | 31 |
-| System Analyst | 23 | 14 |
-| IT Project Manager | 20 | 20 |
-| IT Support | 20 | 20 |
-| Data Analyst | 18 | 18 |
-| AI Engineer | 20 | 20 |
-| DevOps Engineer | 20 | 20 |
-| Network Support | 20 | 20 |
+| Jabatan | N lowongan | Indeed | Glints | N untuk mining |
+|---|---|---|---|---|
+| Software Developer | 49 | 26 | 23 | 49 |
+| Programmer | 52 | 27 | 25 | 51 |
+| Web Developer | 47 | 22 | 25 | 46 |
+| UI/UX Designer | 51 | 27 | 25 | 50 |
+| QA Engineer | 53 | 29 | 24 | 52 |
+| Data Scientist | 48 | 23 | 25 | 48 |
+| Data Engineer | 52 | 29 | 23 | 52 |
+| Database Administrator | 52 | 27 | 25 | 51 |
+| Cybersecurity Analyst | 54 | 30 | 24 | 53 |
+| Security Engineer | 51 | 26 | 25 | 50 |
+| Network Architect | 54 | 30 | 24 | 54 |
+| System Administrator | 55 | 31 | 24 | 54 |
+| System Analyst | 46 | 23 | 23 | 36 |
+| IT Project Manager | 45 | 20 | 25 | 45 |
+| IT Support | 45 | 20 | 25 | 45 |
+| Data Analyst | 39 | 18 | 21 | 39 |
+| AI Engineer | 45 | 20 | 25 | 45 |
+| DevOps Engineer | 43 | 19 | 25 | 43 |
+| Network Support | 45 | 20 | 25 | 45 |
 
 ## File
 
 - `skill_matrix.csv` — matriks 19 jabatan × 30 skill. Kolom: `kode_jabatan`, `nama_jabatan`,
   `skill`, `skor` (1–5, 1 desimal). 570 baris.
-- `demand_gaji.csv` — per jabatan: `n_lowongan` (demand), `n_gaji_mentah`, `n_gaji` (setelah
-  cleaning), `gaji_min_rp`, `gaji_max_rp`, `gaji_median_rp` (IDR/bulan).
-- `raw/` — data mentah hasil scraping (tidak untuk publikasi, lihat Keterbatasan).
-- `scrape.py`, `retry_scrape.py`, `build_dataset.py` — skrip reproduksibel.
+- `demand_gaji.csv` — per jabatan: `n_lowongan` (demand), `n_indeed`, `n_glints` (komposisi
+  sumber), `n_gaji` (setelah cleaning), `n_gaji_indeed`, `n_gaji_glints`,
+  `gaji_min_rp`, `gaji_max_rp`, `gaji_median_rp` (IDR/bulan).
+- `raw/`, `raw_glints/` — data mentah hasil scraping (tidak untuk publikasi, lihat Keterbatasan).
+- `scrape.py`, `retry_scrape.py`, `build_dataset.py`, `scrape_glints.py`, `build_merged.py` —
+  skrip reproduksibel (urutan: scraping per sumber → `build_merged.py` untuk merge).
 
 ## Metodologi
 
 ### 1. Pengumpulan data
 
-Lowongan dikumpulkan dari **id.indeed.com** (situs agregator lowongan, halaman HTML publik)
-dengan pencarian kata kunci per jabatan (contoh: `"software developer"`, `"data analyst"`;
-lihat `scrape.py` untuk daftar lengkap query primer + cadangan). Setiap lowongan diambil
-halaman detailnya untuk teks deskripsi/requirements lengkap.
+**Sumber 1 — id.indeed.com.** Lowongan dikumpulkan dari situs agregator lowongan (halaman
+HTML publik) dengan pencarian kata kunci per jabatan (contoh: `"software developer"`,
+`"data analyst"`; lihat `scrape.py` untuk daftar lengkap query primer + cadangan). Setiap
+lowongan diambil halaman detailnya untuk teks deskripsi/requirements lengkap.
 
 Pengambilan dilakukan sopan: delay 2–4 detik antar request (6–10 detik pada retry),
 user-agent browser wajar. Ketika Indeed mulai memutus koneksi (HTTP IncompleteRead) setelah
 ±350 request, pengambilan dihentikan dan 6 jabatan yang belum terisi dilengkapi keesokan
 harinya dengan delay lebih panjang (`retry_scrape.py`).
 
+**Sumber 2 — glints.com.** Lowongan dikumpulkan melalui API GraphQL internal Glints
+(`searchJobsV3`: judul, perusahaan, kota, gaji, tipe pekerjaan) memakai **akun pengguna
+sendiri dengan persetujuan eksplisit** (bukan dataset lama JobWorthPredictor — data itu
+sengaja tidak dipakai sama sekali atas permintaan pemilik data). Query yang sama dengan
+Indeed, target 25 lowongan per jabatan.
+
+Deskripsi tiap lowongan diambil dari halaman detail (`/id/opportunities/jobs/{id}`),
+teksnya diekstrak dari field `description` JSON-LD `JobPosting` (Schema.org). Delay 3–6
+detik antar halaman detail, 4–8 detik antar pencarian; UA browser wajar; proses berhenti
+sopan jika kena block berulang. Jaringan ke Glints sempat tidak stabil (TLS handshake
+timeout berulang) — skrip dibuat dapat di-*resume* (baris disimpan per jabatan, baris
+yang sudah lengkap dilewati), sehingga total waktu pengambilan ±2 jam.
+
 Sumber lain yang **diuji tetapi tidak dipakai** (dicatat agar transparan):
-- Glints — data lowongan di-render via GraphQL API privat (butuh header sesi internal);
-  tidak di-reverse-engineer lebih jauh.
 - JobStreet Indonesia — proteksi anti-bot (Cloudflare).
 - KarierHub (Kemnaker) — tidak dapat dijangkau dari jaringan penelitian.
 - Tech in Asia Jobs, LinkedIn — butuh JavaScript/login.
-- Data Glints milik peneliti (repo JobWorthPredictor) **sengaja tidak dipakai** atas
-  permintaan pemilik data (menghindari bias dataset ganda).
+
+### 1b. Dedup lintas sumber
+
+28 lowongan muncul di kedua portal (dihitung sekali): kunci dedup = judul + nama
+perusahaan yang dinormalisasi (lowercase, non-alfanumerik dibuang). Dari kelompok
+duplikat, disimpan record dengan deskripsi terpanjang; field gaji digabung dari semua
+duplikat (ambil yang non-kosong). Setelah dedup: **926 lowongan unik** (479 Indeed +
+475 Glints). Keterbatasan: variasi penulisan nama perusahaan yang jauh berbeda
+(mis. "PT X" vs "X Corp") bisa lolos dari dedup — jumlah duplikat aktual mungkin sedikit
+lebih besar.
 
 ### 2. Ekstraksi skill (text mining)
 
@@ -106,13 +127,17 @@ perbandingan antar-jabatan memakai peringkat, bukan angka mentah.
 
 ### 4. Demand dan gaji
 
-- **Demand** = jumlah lowongan per jabatan apa adanya (N per jabatan pada tabel di atas).
-- **Gaji**: diambil dari field gaji terstruktur Indeed (`salaryMin`/`salaryMax`) dan teks
-  gaji ("RpX – RpY"). Cleaning: (a) gaji "per tahun" dikonversi ke bulanan (÷12);
-  (b) nilai < Rp2 juta/bulan dibuang sebagai noise salah input; (c) lowongan magang/intern
-  dikecualikan dari statistik gaji (segmen pasar berbeda). `n_gaji_mentah` = sebelum
-  cleaning, `n_gaji` = sesudah. Hanya ±12% lowongan mencantumkan gaji — median dengan
-  n kecil dilaporkan apa adanya (kolom `n_gaji` menunjukkan keandalannya).
+- **Demand** = jumlah lowongan unik per jabatan (setelah dedup lintas sumber).
+- **Gaji**: diambil dari field gaji terstruktur tiap portal (Indeed: `salaryMin`/`salaryMax`
+  + teks gaji; Glints: `salaries.minAmount`/`maxAmount`). Cleaning: (a) gaji "per tahun"
+  dikonversi ke bulanan (÷12); (b) nilai < Rp2 juta/bulan dibuang sebagai noise salah input;
+  (c) lowongan magang/intern dikecualikan dari statistik gaji (segmen pasar berbeda).
+  Glints mencantumkan gaji jauh lebih sering dari Indeed, sehingga n_gaji per jabatan naik
+  dari 0–8 (Indeed saja) menjadi **16–26** per jabatan (gabungan). Median tetap harus dibaca
+  bersama kolom `n_gaji`/`n_gaji_indeed`/`n_gaji_glints` sebagai indikator keandalan.
+  Contoh efeknya: median QA Engineer berubah dari Rp25,0 jt (n=1, tidak stabil) menjadi
+  Rp5,1 jt (n=18); IT Support yang sebelumnya tanpa data gaji kini memiliki n_gaji=17
+  (semua dari Glints, median Rp5,0 jt).
 
 ### 5. Validasi silang: Indotask (World Bank, 2020)
 
@@ -130,38 +155,43 @@ yang mereplikasi modul O*NET untuk 51 okupasi Indonesia, termasuk *Software deve
 - Keterbatasan validasi: taksonomi skill berbeda (Indotask memakai 35 skill umum O*NET,
   dataset ini memakai 30 hard skill teknis), sehingga perbandingan hanya kualitatif.
 
-## 30 skill final (frekuensi dokumen)
+## 30 skill final (frekuensi dokumen, data gabungan 908 lowongan)
 
-SQL 104, Python 98, JavaScript 76, Git 59, AWS 55, Agile 55, Linux 54,
-Artificial Intelligence 53, PHP 50, HTML 50, Excel 44, Azure 44, Java 43, MySQL 43,
-Firewall 43, CSS 42, CI/CD 42, GCP 42, Go 35, REST API 34, React 33, Docker 33,
-Machine Learning 32, PostgreSQL 30, Kubernetes 29, VPN 25, SQL Server 24,
-Routing & Switching 24, TypeScript 22, DNS 22.
+SQL 230, Python 177, JavaScript 133, Git 133, Linux 116, MySQL 106, AWS 105,
+Agile 97, Excel 94, PostgreSQL 93, CI/CD 93, Artificial Intelligence 91, GCP 87,
+PHP 85, Azure 83, Docker 83, Firewall 83, HTML 74, Java 72, REST API 70, Go 69,
+SQL Server 69, CSS 68, Kubernetes 59, Machine Learning 57, React 56, TCP/IP 55,
+DNS 54, Laravel 47, Routing & Switching 47.
+
+(Catatan: dibanding versi Indeed saja, VPN dan TypeScript terdesak keluar oleh
+TCP/IP dan Laravel — wajar karena seleksi top-30 mengikuti frekuensi korpus gabungan.)
 
 ## Keterbatasan (jujur, untuk bab 3–5 skripsi)
 
-1. **Satu sumber** (id.indeed.com). Agregator ini menampung lintas industri, tetapi
-   bias platform tetap ada (mis. startup teknologi over-represented).
-2. **Ukuran sampel per jabatan kecil** (18–31). Cukup untuk peringkat relatif, belum
-   untuk inferensi populasi.
-3. **Bias query**: hasil pencarian Indeed memengaruhi komposisi sampel (mis. sampel
+1. **Dua sumber** (Indeed + Glints). Glints mencantumkan gaji lebih sering dan profil
+   lowongannya lebih lokal, sementara Indeed adalah agregator lintas industri — bias
+   platform tetap ada di masing-masing.
+2. **Ukuran sampel per jabatan sedang** (39–55 setelah merge, dari 18–31 sebelumnya).
+   Cukup untuk peringkat relatif, belum untuk inferensi populasi.
+3. **Bias query**: hasil pencarian portal memengaruhi komposisi sampel (mis. sampel
    "Software Developer" condong ke peran JavaScript/Node.js).
 4. **Ekstraksi = pencocokan kata kunci**, bukan NLP. Sinonim di luar kamus tidak
    tertangkap; konteks negasi ("tidak wajib menguasai X") tidak dibedakan.
 5. **Iklan berbahasa Inggris dominan**; lowongan berbahasa Indonesia penuh mungkin
    kurang terwakili karena kata kunci pencarian berbahasa Inggris.
-6. **Gaji jarang dicantumkan** (±12%); median gaji dengan n kecil tidak stabil —
-   gunakan kolom `n_gaji` sebagai indikator keandalan.
-7. **Snapshot waktu**: pasar kerja IT bergerak cepat; dataset ini potret Oktober 2026.
+6. **Dedup lintas sumber tidak sempurna** — varian nama perusahaan yang sangat berbeda
+   bisa lolos, sehingga N sedikit over-estimated.
+7. **Snapshot waktu**: pasar kerja IT bergerak cepat; dataset ini potret 19–20 Okt 2026.
 
 ## Sitasi yang disarankan
 
-> Dataset Lowongan IT Indonesia (2026). Dibangun melalui text mining 479 lowongan kerja
-> IT dari id.indeed.com (19 jabatan × 30 skill, skor 1–5 ternormalisasi per jabatan).
-> Skrip: `scrape.py`, `build_dataset.py`.
+> Dataset Lowongan IT Indonesia v2 (2026). Dibangun melalui text mining 926 lowongan
+> kerja IT unik dari id.indeed.com (479) dan glints.com (475), periode 19–20 Okt 2026:
+> 19 jabatan × 30 skill, skor 1–5 ternormalisasi per jabatan. Skrip:
+> `scrape.py`, `retry_scrape.py`, `scrape_glints.py`, `build_merged.py`.
 
 ## Lisensi data
 
-Data mentah (`raw/`) adalah cuplikan halaman publik untuk keperluan penelitian —
+Data mentah (`raw/` + `raw_glints/`) adalah cuplikan halaman publik untuk keperluan penelitian —
 **tidak dipublikasikan** dan tidak diunggah ke GitHub. Dataset bersih (agregat
 statistik) bebas dipakai untuk skripsi ini dengan mencantumkan metodologi di atas.
