@@ -1,13 +1,13 @@
 kode_jabatan,nama_jabatan,skill,skor
 AIENG,AI Engineer,SQL,2.8
 AIENG,AI Engineer,Python,2.9
-AIENG,AI Engineer,JavaScript,1.7
+AIENG,AI Engineer,JavaScript,1.5
 AIENG,AI Engineer,Git,2.2
 AIENG,AI Engineer,Linux,1.2
 AIENG,AI Engineer,MySQL,1.4
 AIENG,AI Engineer,AWS,1.5
 AIENG,AI Engineer,Agile,1.6
-AIENG,AI Engineer,Excel,1.1
+AIENG,AI Engineer,Excel,1.0
 AIENG,AI Engineer,PostgreSQL,1.8
 AIENG,AI Engineer,CI/CD,1.7
 AIENG,AI Engineer,Artificial Intelligence,5.0
@@ -19,7 +19,7 @@ AIENG,AI Engineer,Firewall,1.0
 AIENG,AI Engineer,HTML,1.0
 AIENG,AI Engineer,Java,1.2
 AIENG,AI Engineer,REST API,1.7
-AIENG,AI Engineer,Go,2.0
+AIENG,AI Engineer,Go,1.6
 AIENG,AI Engineer,SQL Server,1.4
 AIENG,AI Engineer,CSS,1.0
 AIENG,AI Engineer,Kubernetes,1.4
@@ -29,8 +29,38 @@ AIENG,AI Engineer,TCP/IP,1.0
 AIENG,AI Engineer,DNS,1.1
 AIENG,AI Engineer,Laravel,1.0
 AIENG,AI Engineer,Routing & Switching,1.4
+BEDEV,Backend Developer,SQL,2.8
+BEDEV,Backend Developer,Python,2.2
+BEDEV,Backend Developer,JavaScript,2.5
+BEDEV,Backend Developer,Git,4.7
+BEDEV,Backend Developer,Linux,1.2
+BEDEV,Backend Developer,MySQL,2.8
+BEDEV,Backend Developer,AWS,2.5
+BEDEV,Backend Developer,Agile,2.5
+BEDEV,Backend Developer,Excel,1.0
+BEDEV,Backend Developer,PostgreSQL,4.8
+BEDEV,Backend Developer,CI/CD,2.7
+BEDEV,Backend Developer,Artificial Intelligence,2.2
+BEDEV,Backend Developer,GCP,1.5
+BEDEV,Backend Developer,PHP,2.2
+BEDEV,Backend Developer,Azure,1.2
+BEDEV,Backend Developer,Docker,3.3
+BEDEV,Backend Developer,Firewall,1.0
+BEDEV,Backend Developer,HTML,1.3
+BEDEV,Backend Developer,Java,3.3
+BEDEV,Backend Developer,REST API,5.0
+BEDEV,Backend Developer,Go,4.5
+BEDEV,Backend Developer,SQL Server,1.3
+BEDEV,Backend Developer,CSS,1.3
+BEDEV,Backend Developer,Kubernetes,2.8
+BEDEV,Backend Developer,Machine Learning,1.3
+BEDEV,Backend Developer,React,1.7
+BEDEV,Backend Developer,TCP/IP,1.0
+BEDEV,Backend Developer,DNS,1.0
+BEDEV,Backend Developer,Laravel,1.7
+BEDEV,Backend Developer,Routing & Switching,1.3
 CYBER,Cybersecurity Analyst,SQL,3.3
-CYBER,Cybersecurity Analyst,Python,2.7
+CYBER,Cybersecurity Analyst,Python,2.3
 CYBER,Cybersecurity Analyst,JavaScript,1.7
 CYBER,Cybersecurity Analyst,Git,1.3
 CYBER,Cybersecurity Analyst,Linux,2.7
@@ -46,10 +76,10 @@ CYBER,Cybersecurity Analyst,PHP,1.7
 CYBER,Cybersecurity Analyst,Azure,3.3
 CYBER,Cybersecurity Analyst,Docker,1.0
 CYBER,Cybersecurity Analyst,Firewall,5.0
-CYBER,Cybersecurity Analyst,HTML,1.3
+CYBER,Cybersecurity Analyst,HTML,1.0
 CYBER,Cybersecurity Analyst,Java,1.3
 CYBER,Cybersecurity Analyst,REST API,2.0
-CYBER,Cybersecurity Analyst,Go,2.7
+CYBER,Cybersecurity Analyst,Go,1.7
 CYBER,Cybersecurity Analyst,SQL Server,1.7
 CYBER,Cybersecurity Analyst,CSS,1.0
 CYBER,Cybersecurity Analyst,Kubernetes,1.3
@@ -59,7 +89,7 @@ CYBER,Cybersecurity Analyst,TCP/IP,3.0
 CYBER,Cybersecurity Analyst,DNS,3.0
 CYBER,Cybersecurity Analyst,Laravel,1.0
 CYBER,Cybersecurity Analyst,Routing & Switching,1.7
-DAN,Data Analyst,SQL,4.0
+DAN,Data Analyst,SQL,3.9
 DAN,Data Analyst,Python,2.4
 DAN,Data Analyst,JavaScript,1.0
 DAN,Data Analyst,Git,1.0
@@ -79,7 +109,7 @@ DAN,Data Analyst,Firewall,1.0
 DAN,Data Analyst,HTML,1.0
 DAN,Data Analyst,Java,1.1
 DAN,Data Analyst,REST API,1.0
-DAN,Data Analyst,Go,1.1
+DAN,Data Analyst,Go,1.0
 DAN,Data Analyst,SQL Server,1.1
 DAN,Data Analyst,CSS,1.0
 DAN,Data Analyst,Kubernetes,1.0
@@ -97,11 +127,11 @@ DBA,Database Administrator,Linux,4.3
 DBA,Database Administrator,MySQL,5.0
 DBA,Database Administrator,AWS,2.4
 DBA,Database Administrator,Agile,1.2
-DBA,Database Administrator,Excel,3.4
+DBA,Database Administrator,Excel,3.1
 DBA,Database Administrator,PostgreSQL,4.5
 DBA,Database Administrator,CI/CD,1.5
 DBA,Database Administrator,Artificial Intelligence,1.0
-DBA,Database Administrator,GCP,2.2
+DBA,Database Administrator,GCP,1.9
 DBA,Database Administrator,PHP,1.2
 DBA,Database Administrator,Azure,2.2
 DBA,Database Administrator,Docker,1.2
@@ -110,7 +140,7 @@ DBA,Database Administrator,HTML,1.0
 DBA,Database Administrator,Java,1.2
 DBA,Database Administrator,REST API,1.0
 DBA,Database Administrator,Go,1.0
-DBA,Database Administrator,SQL Server,3.4
+DBA,Database Administrator,SQL Server,2.9
 DBA,Database Administrator,CSS,1.0
 DBA,Database Administrator,Kubernetes,1.5
 DBA,Database Administrator,Machine Learning,1.0
@@ -122,25 +152,25 @@ DBA,Database Administrator,Routing & Switching,1.9
 DENG,Data Engineer,SQL,5.0
 DENG,Data Engineer,Python,4.5
 DENG,Data Engineer,JavaScript,1.2
-DENG,Data Engineer,Git,2.5
+DENG,Data Engineer,Git,2.3
 DENG,Data Engineer,Linux,1.9
 DENG,Data Engineer,MySQL,2.2
 DENG,Data Engineer,AWS,2.7
 DENG,Data Engineer,Agile,1.8
 DENG,Data Engineer,Excel,1.4
-DENG,Data Engineer,PostgreSQL,2.8
+DENG,Data Engineer,PostgreSQL,2.9
 DENG,Data Engineer,CI/CD,2.0
 DENG,Data Engineer,Artificial Intelligence,2.0
 DENG,Data Engineer,GCP,2.5
 DENG,Data Engineer,PHP,1.1
-DENG,Data Engineer,Azure,2.4
+DENG,Data Engineer,Azure,2.3
 DENG,Data Engineer,Docker,1.3
 DENG,Data Engineer,Firewall,1.0
 DENG,Data Engineer,HTML,1.0
 DENG,Data Engineer,Java,1.9
 DENG,Data Engineer,REST API,1.1
-DENG,Data Engineer,Go,1.1
-DENG,Data Engineer,SQL Server,2.6
+DENG,Data Engineer,Go,1.0
+DENG,Data Engineer,SQL Server,2.5
 DENG,Data Engineer,CSS,1.0
 DENG,Data Engineer,Kubernetes,1.2
 DENG,Data Engineer,Machine Learning,1.5
@@ -150,8 +180,8 @@ DENG,Data Engineer,DNS,1.0
 DENG,Data Engineer,Laravel,1.0
 DENG,Data Engineer,Routing & Switching,1.2
 DEVOPS,DevOps Engineer,SQL,1.7
-DEVOPS,DevOps Engineer,Python,2.8
-DEVOPS,DevOps Engineer,JavaScript,1.6
+DEVOPS,DevOps Engineer,Python,2.7
+DEVOPS,DevOps Engineer,JavaScript,1.2
 DEVOPS,DevOps Engineer,Git,3.9
 DEVOPS,DevOps Engineer,Linux,4.1
 DEVOPS,DevOps Engineer,MySQL,1.8
@@ -169,7 +199,7 @@ DEVOPS,DevOps Engineer,Firewall,1.9
 DEVOPS,DevOps Engineer,HTML,1.0
 DEVOPS,DevOps Engineer,Java,1.6
 DEVOPS,DevOps Engineer,REST API,1.2
-DEVOPS,DevOps Engineer,Go,1.8
+DEVOPS,DevOps Engineer,Go,1.7
 DEVOPS,DevOps Engineer,SQL Server,1.3
 DEVOPS,DevOps Engineer,CSS,1.0
 DEVOPS,DevOps Engineer,Kubernetes,4.9
@@ -189,7 +219,7 @@ DSCI,Data Scientist,AWS,2.4
 DSCI,Data Scientist,Agile,1.3
 DSCI,Data Scientist,Excel,2.0
 DSCI,Data Scientist,PostgreSQL,1.8
-DSCI,Data Scientist,CI/CD,1.4
+DSCI,Data Scientist,CI/CD,1.3
 DSCI,Data Scientist,Artificial Intelligence,2.7
 DSCI,Data Scientist,GCP,2.4
 DSCI,Data Scientist,PHP,1.0
@@ -199,7 +229,7 @@ DSCI,Data Scientist,Firewall,1.0
 DSCI,Data Scientist,HTML,1.0
 DSCI,Data Scientist,Java,1.0
 DSCI,Data Scientist,REST API,1.3
-DSCI,Data Scientist,Go,1.4
+DSCI,Data Scientist,Go,1.1
 DSCI,Data Scientist,SQL Server,1.4
 DSCI,Data Scientist,CSS,1.0
 DSCI,Data Scientist,Kubernetes,1.3
@@ -209,6 +239,36 @@ DSCI,Data Scientist,TCP/IP,1.0
 DSCI,Data Scientist,DNS,1.0
 DSCI,Data Scientist,Laravel,1.0
 DSCI,Data Scientist,Routing & Switching,1.0
+FEDEV,Frontend Developer,SQL,1.5
+FEDEV,Frontend Developer,Python,1.5
+FEDEV,Frontend Developer,JavaScript,4.4
+FEDEV,Frontend Developer,Git,2.6
+FEDEV,Frontend Developer,Linux,1.1
+FEDEV,Frontend Developer,MySQL,1.3
+FEDEV,Frontend Developer,AWS,1.1
+FEDEV,Frontend Developer,Agile,2.7
+FEDEV,Frontend Developer,Excel,1.0
+FEDEV,Frontend Developer,PostgreSQL,1.3
+FEDEV,Frontend Developer,CI/CD,1.6
+FEDEV,Frontend Developer,Artificial Intelligence,1.3
+FEDEV,Frontend Developer,GCP,1.0
+FEDEV,Frontend Developer,PHP,1.6
+FEDEV,Frontend Developer,Azure,1.0
+FEDEV,Frontend Developer,Docker,1.5
+FEDEV,Frontend Developer,Firewall,1.0
+FEDEV,Frontend Developer,HTML,3.5
+FEDEV,Frontend Developer,Java,1.8
+FEDEV,Frontend Developer,REST API,2.9
+FEDEV,Frontend Developer,Go,1.3
+FEDEV,Frontend Developer,SQL Server,1.1
+FEDEV,Frontend Developer,CSS,3.7
+FEDEV,Frontend Developer,Kubernetes,1.3
+FEDEV,Frontend Developer,Machine Learning,1.2
+FEDEV,Frontend Developer,React,5.0
+FEDEV,Frontend Developer,TCP/IP,1.0
+FEDEV,Frontend Developer,DNS,1.0
+FEDEV,Frontend Developer,Laravel,1.3
+FEDEV,Frontend Developer,Routing & Switching,1.1
 ITPM,IT Project Manager,SQL,1.6
 ITPM,IT Project Manager,Python,1.0
 ITPM,IT Project Manager,JavaScript,1.3
@@ -229,7 +289,7 @@ ITPM,IT Project Manager,Firewall,1.3
 ITPM,IT Project Manager,HTML,1.0
 ITPM,IT Project Manager,Java,1.3
 ITPM,IT Project Manager,REST API,1.0
-ITPM,IT Project Manager,Go,1.6
+ITPM,IT Project Manager,Go,1.3
 ITPM,IT Project Manager,SQL Server,1.3
 ITPM,IT Project Manager,CSS,1.0
 ITPM,IT Project Manager,Kubernetes,1.0
@@ -242,7 +302,7 @@ ITPM,IT Project Manager,Routing & Switching,1.0
 ITSUP,IT Support,SQL,2.0
 ITSUP,IT Support,Python,1.0
 ITSUP,IT Support,JavaScript,2.0
-ITSUP,IT Support,Git,1.5
+ITSUP,IT Support,Git,1.0
 ITSUP,IT Support,Linux,4.0
 ITSUP,IT Support,MySQL,1.5
 ITSUP,IT Support,AWS,1.0
@@ -269,6 +329,36 @@ ITSUP,IT Support,TCP/IP,5.0
 ITSUP,IT Support,DNS,4.5
 ITSUP,IT Support,Laravel,1.5
 ITSUP,IT Support,Routing & Switching,1.0
+MOBDEV,Mobile Developer,SQL,2.0
+MOBDEV,Mobile Developer,Python,1.4
+MOBDEV,Mobile Developer,JavaScript,2.6
+MOBDEV,Mobile Developer,Git,5.0
+MOBDEV,Mobile Developer,Linux,1.0
+MOBDEV,Mobile Developer,MySQL,1.4
+MOBDEV,Mobile Developer,AWS,1.4
+MOBDEV,Mobile Developer,Agile,2.4
+MOBDEV,Mobile Developer,Excel,1.0
+MOBDEV,Mobile Developer,PostgreSQL,1.2
+MOBDEV,Mobile Developer,CI/CD,2.4
+MOBDEV,Mobile Developer,Artificial Intelligence,1.6
+MOBDEV,Mobile Developer,GCP,1.2
+MOBDEV,Mobile Developer,PHP,1.6
+MOBDEV,Mobile Developer,Azure,1.0
+MOBDEV,Mobile Developer,Docker,1.2
+MOBDEV,Mobile Developer,Firewall,1.0
+MOBDEV,Mobile Developer,HTML,1.8
+MOBDEV,Mobile Developer,Java,4.4
+MOBDEV,Mobile Developer,REST API,5.0
+MOBDEV,Mobile Developer,Go,1.4
+MOBDEV,Mobile Developer,SQL Server,1.2
+MOBDEV,Mobile Developer,CSS,1.6
+MOBDEV,Mobile Developer,Kubernetes,1.0
+MOBDEV,Mobile Developer,Machine Learning,1.2
+MOBDEV,Mobile Developer,React,4.2
+MOBDEV,Mobile Developer,TCP/IP,1.0
+MOBDEV,Mobile Developer,DNS,1.0
+MOBDEV,Mobile Developer,Laravel,1.2
+MOBDEV,Mobile Developer,Routing & Switching,1.0
 NETARCH,Network Architect,SQL,1.8
 NETARCH,Network Architect,Python,2.0
 NETARCH,Network Architect,JavaScript,1.5
@@ -277,7 +367,7 @@ NETARCH,Network Architect,Linux,2.0
 NETARCH,Network Architect,MySQL,1.2
 NETARCH,Network Architect,AWS,2.0
 NETARCH,Network Architect,Agile,1.8
-NETARCH,Network Architect,Excel,1.8
+NETARCH,Network Architect,Excel,1.5
 NETARCH,Network Architect,PostgreSQL,1.0
 NETARCH,Network Architect,CI/CD,1.2
 NETARCH,Network Architect,Artificial Intelligence,2.5
@@ -289,7 +379,7 @@ NETARCH,Network Architect,Firewall,4.8
 NETARCH,Network Architect,HTML,1.0
 NETARCH,Network Architect,Java,1.2
 NETARCH,Network Architect,REST API,1.5
-NETARCH,Network Architect,Go,1.5
+NETARCH,Network Architect,Go,1.0
 NETARCH,Network Architect,SQL Server,1.0
 NETARCH,Network Architect,CSS,1.0
 NETARCH,Network Architect,Kubernetes,1.8
@@ -331,7 +421,7 @@ NETSUP,Network Support,Laravel,1.4
 NETSUP,Network Support,Routing & Switching,3.8
 PROG,Programmer,SQL,4.3
 PROG,Programmer,Python,2.6
-PROG,Programmer,JavaScript,4.7
+PROG,Programmer,JavaScript,3.8
 PROG,Programmer,Git,2.7
 PROG,Programmer,Linux,1.5
 PROG,Programmer,MySQL,3.6
@@ -390,67 +480,67 @@ QA,QA Engineer,DNS,1.0
 QA,QA Engineer,Laravel,1.3
 QA,QA Engineer,Routing & Switching,1.3
 SECENG,Security Engineer,SQL,1.8
-SECENG,Security Engineer,Python,2.5
+SECENG,Security Engineer,Python,2.6
 SECENG,Security Engineer,JavaScript,1.0
 SECENG,Security Engineer,Git,1.6
-SECENG,Security Engineer,Linux,3.7
+SECENG,Security Engineer,Linux,3.8
 SECENG,Security Engineer,MySQL,1.0
-SECENG,Security Engineer,AWS,2.5
+SECENG,Security Engineer,AWS,2.6
 SECENG,Security Engineer,Agile,1.0
 SECENG,Security Engineer,Excel,1.2
 SECENG,Security Engineer,PostgreSQL,1.0
 SECENG,Security Engineer,CI/CD,2.0
 SECENG,Security Engineer,Artificial Intelligence,1.0
-SECENG,Security Engineer,GCP,2.7
+SECENG,Security Engineer,GCP,2.4
 SECENG,Security Engineer,PHP,1.2
-SECENG,Security Engineer,Azure,2.1
+SECENG,Security Engineer,Azure,2.2
 SECENG,Security Engineer,Docker,1.2
 SECENG,Security Engineer,Firewall,5.0
 SECENG,Security Engineer,HTML,1.0
 SECENG,Security Engineer,Java,1.6
 SECENG,Security Engineer,REST API,1.4
-SECENG,Security Engineer,Go,1.8
+SECENG,Security Engineer,Go,1.6
 SECENG,Security Engineer,SQL Server,1.0
 SECENG,Security Engineer,CSS,1.0
 SECENG,Security Engineer,Kubernetes,1.0
 SECENG,Security Engineer,Machine Learning,1.0
 SECENG,Security Engineer,React,1.2
-SECENG,Security Engineer,TCP/IP,3.1
-SECENG,Security Engineer,DNS,2.7
-SECENG,Security Engineer,Laravel,1.2
-SECENG,Security Engineer,Routing & Switching,2.1
-SWDEV,Software Developer,SQL,2.6
-SWDEV,Software Developer,Python,2.6
+SECENG,Security Engineer,TCP/IP,3.2
+SECENG,Security Engineer,DNS,2.8
+SECENG,Security Engineer,Laravel,1.0
+SECENG,Security Engineer,Routing & Switching,2.2
+SWDEV,Software Developer,SQL,2.8
+SWDEV,Software Developer,Python,2.8
 SWDEV,Software Developer,JavaScript,5.0
-SWDEV,Software Developer,Git,3.4
-SWDEV,Software Developer,Linux,1.7
-SWDEV,Software Developer,MySQL,2.7
+SWDEV,Software Developer,Git,3.6
+SWDEV,Software Developer,Linux,1.8
+SWDEV,Software Developer,MySQL,2.9
 SWDEV,Software Developer,AWS,1.5
-SWDEV,Software Developer,Agile,2.3
+SWDEV,Software Developer,Agile,2.2
 SWDEV,Software Developer,Excel,1.2
-SWDEV,Software Developer,PostgreSQL,2.1
-SWDEV,Software Developer,CI/CD,2.1
-SWDEV,Software Developer,Artificial Intelligence,1.5
-SWDEV,Software Developer,GCP,1.5
-SWDEV,Software Developer,PHP,2.7
+SWDEV,Software Developer,PostgreSQL,2.2
+SWDEV,Software Developer,CI/CD,2.2
+SWDEV,Software Developer,Artificial Intelligence,1.2
+SWDEV,Software Developer,GCP,1.4
+SWDEV,Software Developer,PHP,2.8
 SWDEV,Software Developer,Azure,1.2
-SWDEV,Software Developer,Docker,2.5
+SWDEV,Software Developer,Docker,2.6
 SWDEV,Software Developer,Firewall,1.0
-SWDEV,Software Developer,HTML,2.7
-SWDEV,Software Developer,Java,2.6
+SWDEV,Software Developer,HTML,2.9
+SWDEV,Software Developer,Java,2.8
 SWDEV,Software Developer,REST API,2.5
-SWDEV,Software Developer,Go,2.9
+SWDEV,Software Developer,Go,3.0
 SWDEV,Software Developer,SQL Server,1.6
-SWDEV,Software Developer,CSS,2.7
-SWDEV,Software Developer,Kubernetes,1.8
+SWDEV,Software Developer,CSS,2.9
+SWDEV,Software Developer,Kubernetes,1.9
 SWDEV,Software Developer,Machine Learning,1.0
-SWDEV,Software Developer,React,3.2
+SWDEV,Software Developer,React,3.4
 SWDEV,Software Developer,TCP/IP,1.0
 SWDEV,Software Developer,DNS,1.0
-SWDEV,Software Developer,Laravel,1.7
+SWDEV,Software Developer,Laravel,1.8
 SWDEV,Software Developer,Routing & Switching,1.0
 SYSADM,System Administrator,SQL,3.9
-SYSADM,System Administrator,Python,3.1
+SYSADM,System Administrator,Python,2.9
 SYSADM,System Administrator,JavaScript,1.8
 SYSADM,System Administrator,Git,2.3
 SYSADM,System Administrator,Linux,5.0
@@ -466,11 +556,11 @@ SYSADM,System Administrator,PHP,2.3
 SYSADM,System Administrator,Azure,2.6
 SYSADM,System Administrator,Docker,2.1
 SYSADM,System Administrator,Firewall,3.1
-SYSADM,System Administrator,HTML,1.5
+SYSADM,System Administrator,HTML,1.3
 SYSADM,System Administrator,Java,1.3
 SYSADM,System Administrator,REST API,1.8
-SYSADM,System Administrator,Go,2.3
-SYSADM,System Administrator,SQL Server,1.8
+SYSADM,System Administrator,Go,1.5
+SYSADM,System Administrator,SQL Server,1.5
 SYSADM,System Administrator,CSS,1.3
 SYSADM,System Administrator,Kubernetes,1.8
 SYSADM,System Administrator,Machine Learning,1.0
@@ -497,7 +587,7 @@ SYSAN,System Analyst,Azure,1.6
 SYSAN,System Analyst,Docker,1.0
 SYSAN,System Analyst,Firewall,1.0
 SYSAN,System Analyst,HTML,1.6
-SYSAN,System Analyst,Java,2.0
+SYSAN,System Analyst,Java,1.8
 SYSAN,System Analyst,REST API,2.0
 SYSAN,System Analyst,Go,1.8
 SYSAN,System Analyst,SQL Server,2.4
@@ -511,13 +601,13 @@ SYSAN,System Analyst,Laravel,1.0
 SYSAN,System Analyst,Routing & Switching,1.2
 UIUX,UI/UX Designer,SQL,1.4
 UIUX,UI/UX Designer,Python,1.0
-UIUX,UI/UX Designer,JavaScript,4.1
+UIUX,UI/UX Designer,JavaScript,3.2
 UIUX,UI/UX Designer,Git,1.4
 UIUX,UI/UX Designer,Linux,1.0
 UIUX,UI/UX Designer,MySQL,1.0
 UIUX,UI/UX Designer,AWS,1.0
 UIUX,UI/UX Designer,Agile,2.8
-UIUX,UI/UX Designer,Excel,1.4
+UIUX,UI/UX Designer,Excel,1.0
 UIUX,UI/UX Designer,PostgreSQL,1.0
 UIUX,UI/UX Designer,CI/CD,1.0
 UIUX,UI/UX Designer,Artificial Intelligence,2.3
@@ -540,122 +630,32 @@ UIUX,UI/UX Designer,DNS,1.0
 UIUX,UI/UX Designer,Laravel,1.0
 UIUX,UI/UX Designer,Routing & Switching,1.0
 WEBDEV,Web Developer,SQL,2.2
-WEBDEV,Web Developer,Python,2.0
+WEBDEV,Web Developer,Python,2.1
 WEBDEV,Web Developer,JavaScript,5.0
-WEBDEV,Web Developer,Git,3.2
+WEBDEV,Web Developer,Git,3.3
 WEBDEV,Web Developer,Linux,1.3
-WEBDEV,Web Developer,MySQL,3.3
+WEBDEV,Web Developer,MySQL,3.5
 WEBDEV,Web Developer,AWS,1.3
-WEBDEV,Web Developer,Agile,1.5
+WEBDEV,Web Developer,Agile,1.4
 WEBDEV,Web Developer,Excel,1.0
-WEBDEV,Web Developer,PostgreSQL,2.0
+WEBDEV,Web Developer,PostgreSQL,2.1
 WEBDEV,Web Developer,CI/CD,1.3
 WEBDEV,Web Developer,Artificial Intelligence,1.6
 WEBDEV,Web Developer,GCP,1.3
-WEBDEV,Web Developer,PHP,4.1
+WEBDEV,Web Developer,PHP,4.3
 WEBDEV,Web Developer,Azure,1.1
 WEBDEV,Web Developer,Docker,1.3
 WEBDEV,Web Developer,Firewall,1.0
-WEBDEV,Web Developer,HTML,4.4
+WEBDEV,Web Developer,HTML,4.6
 WEBDEV,Web Developer,Java,1.8
-WEBDEV,Web Developer,REST API,2.8
-WEBDEV,Web Developer,Go,1.4
-WEBDEV,Web Developer,SQL Server,1.5
-WEBDEV,Web Developer,CSS,4.2
+WEBDEV,Web Developer,REST API,2.7
+WEBDEV,Web Developer,Go,1.1
+WEBDEV,Web Developer,SQL Server,1.6
+WEBDEV,Web Developer,CSS,4.4
 WEBDEV,Web Developer,Kubernetes,1.0
 WEBDEV,Web Developer,Machine Learning,1.0
-WEBDEV,Web Developer,React,3.2
+WEBDEV,Web Developer,React,3.3
 WEBDEV,Web Developer,TCP/IP,1.0
 WEBDEV,Web Developer,DNS,1.0
-WEBDEV,Web Developer,Laravel,3.3
+WEBDEV,Web Developer,Laravel,3.5
 WEBDEV,Web Developer,Routing & Switching,1.0
-BEDEV,Backend Developer,SQL,2.8
-BEDEV,Backend Developer,Python,2.1
-BEDEV,Backend Developer,JavaScript,3.2
-BEDEV,Backend Developer,Git,4.5
-BEDEV,Backend Developer,Linux,1.2
-BEDEV,Backend Developer,MySQL,2.8
-BEDEV,Backend Developer,AWS,2.4
-BEDEV,Backend Developer,Agile,2.4
-BEDEV,Backend Developer,Excel,1.0
-BEDEV,Backend Developer,PostgreSQL,4.7
-BEDEV,Backend Developer,CI/CD,2.9
-BEDEV,Backend Developer,Artificial Intelligence,2.1
-BEDEV,Backend Developer,GCP,1.6
-BEDEV,Backend Developer,PHP,2.1
-BEDEV,Backend Developer,Azure,1.2
-BEDEV,Backend Developer,Docker,3.2
-BEDEV,Backend Developer,Firewall,1.0
-BEDEV,Backend Developer,HTML,1.3
-BEDEV,Backend Developer,Java,3.2
-BEDEV,Backend Developer,REST API,5.0
-BEDEV,Backend Developer,Go,4.5
-BEDEV,Backend Developer,SQL Server,1.3
-BEDEV,Backend Developer,CSS,1.3
-BEDEV,Backend Developer,Kubernetes,2.8
-BEDEV,Backend Developer,Machine Learning,1.3
-BEDEV,Backend Developer,React,1.6
-BEDEV,Backend Developer,TCP/IP,1.0
-BEDEV,Backend Developer,DNS,1.0
-BEDEV,Backend Developer,Laravel,1.6
-BEDEV,Backend Developer,Routing & Switching,1.3
-FEDEV,Frontend Developer,SQL,1.5
-FEDEV,Frontend Developer,Python,1.5
-FEDEV,Frontend Developer,JavaScript,4.8
-FEDEV,Frontend Developer,Git,2.7
-FEDEV,Frontend Developer,Linux,1.1
-FEDEV,Frontend Developer,MySQL,1.3
-FEDEV,Frontend Developer,AWS,1.1
-FEDEV,Frontend Developer,Agile,2.7
-FEDEV,Frontend Developer,Excel,1.0
-FEDEV,Frontend Developer,PostgreSQL,1.3
-FEDEV,Frontend Developer,CI/CD,1.6
-FEDEV,Frontend Developer,Artificial Intelligence,1.3
-FEDEV,Frontend Developer,GCP,1.0
-FEDEV,Frontend Developer,PHP,1.6
-FEDEV,Frontend Developer,Azure,1.0
-FEDEV,Frontend Developer,Docker,1.5
-FEDEV,Frontend Developer,Firewall,1.0
-FEDEV,Frontend Developer,HTML,3.5
-FEDEV,Frontend Developer,Java,1.8
-FEDEV,Frontend Developer,REST API,3.2
-FEDEV,Frontend Developer,Go,1.5
-FEDEV,Frontend Developer,SQL Server,1.1
-FEDEV,Frontend Developer,CSS,3.7
-FEDEV,Frontend Developer,Kubernetes,1.3
-FEDEV,Frontend Developer,Machine Learning,1.2
-FEDEV,Frontend Developer,React,5.0
-FEDEV,Frontend Developer,TCP/IP,1.0
-FEDEV,Frontend Developer,DNS,1.0
-FEDEV,Frontend Developer,Laravel,1.3
-FEDEV,Frontend Developer,Routing & Switching,1.1
-MOBDEV,Mobile Developer,SQL,1.9
-MOBDEV,Mobile Developer,Python,1.3
-MOBDEV,Mobile Developer,JavaScript,2.6
-MOBDEV,Mobile Developer,Git,4.5
-MOBDEV,Mobile Developer,Linux,1.0
-MOBDEV,Mobile Developer,MySQL,1.3
-MOBDEV,Mobile Developer,AWS,1.3
-MOBDEV,Mobile Developer,Agile,2.4
-MOBDEV,Mobile Developer,Excel,1.0
-MOBDEV,Mobile Developer,PostgreSQL,1.2
-MOBDEV,Mobile Developer,CI/CD,2.2
-MOBDEV,Mobile Developer,Artificial Intelligence,1.5
-MOBDEV,Mobile Developer,GCP,1.2
-MOBDEV,Mobile Developer,PHP,1.5
-MOBDEV,Mobile Developer,Azure,1.0
-MOBDEV,Mobile Developer,Docker,1.2
-MOBDEV,Mobile Developer,Firewall,1.0
-MOBDEV,Mobile Developer,HTML,1.7
-MOBDEV,Mobile Developer,Java,4.0
-MOBDEV,Mobile Developer,REST API,5.0
-MOBDEV,Mobile Developer,Go,1.9
-MOBDEV,Mobile Developer,SQL Server,1.2
-MOBDEV,Mobile Developer,CSS,1.5
-MOBDEV,Mobile Developer,Kubernetes,1.0
-MOBDEV,Mobile Developer,Machine Learning,1.2
-MOBDEV,Mobile Developer,React,3.8
-MOBDEV,Mobile Developer,TCP/IP,1.0
-MOBDEV,Mobile Developer,DNS,1.0
-MOBDEV,Mobile Developer,Laravel,1.2
-MOBDEV,Mobile Developer,Routing & Switching,1.0
