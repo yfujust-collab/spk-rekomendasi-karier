@@ -1,7 +1,7 @@
 """Seed database dari Dataset Lowongan IT Indonesia (bukan data hardcode).
 
 Skrip ini membaca dua file CSV dari folder dataset:
-  - skill_matrix.csv : 19 jabatan IT x 30 hard skill, skor 1-5
+  - skill_matrix.csv : 22 jabatan IT x 30 hard skill, skor 1-5
                        (kolom: kode_jabatan, nama_jabatan, skill, skor)
   - demand_gaji.csv  : demand & gaji per jabatan
                        (kolom: kode_jabatan, nama_jabatan, n_lowongan,
@@ -10,29 +10,28 @@ Skrip ini membaca dua file CSV dari folder dataset:
 DATASET LOWONGAN IT INDONESIA (bahan Bab Metodologi)
 ---------------------------------------------------
 Dataset primer yang dibangun khusus untuk penelitian ini melalui text
-mining 479 lowongan IT unik dari id.indeed.com (19-20 Oktober 2026,
-18-31 lowongan per jabatan). Metode: ekstraksi keyword hard skill dari
-bagian Requirements/deskripsi tiap lowongan, lalu frekuensi kemunculan
-per jabatan dinormalisasi ke skor 1-5 dengan rumus:
+mining 1.066 lowongan IT unik dari id.indeed.com dan glints.com
+(19-20 Oktober 2026, 39-55 lowongan per jabatan; 1.045 berdeskripsi
+substansial dipakai untuk mining skill). Metode: ekstraksi skill
+berbasis NLP (spaCy) — segmentasi seksi deskripsi, pencocokan frasa
+sadar lemma atas kamus 30 hard skill, dan deteksi negasi — lalu
+frekuensi kemunculan per jabatan dinormalisasi ke skor 1-5 dengan rumus:
 
     skor(o, s) = 1 + 4 * (pct(o, s) / max_pct(o))
 
 pct(o, s) = % lowongan jabatan o yang menyebut skill s (satu desimal).
 Demand (C3) = jumlah lowongan per jabatan (dinormalisasi min-max ke
 1-10 di bawah). Gaji (C2) = dari info gaji yang tercantum di lowongan
-(median per jabatan; hanya +-12% lowongan yang mencantumkan gaji).
+(median per jabatan; n_gaji 12-26 per jabatan, mayoritas dari Glints).
 
 Dataset ini MENGGANTIKAN PENUH dataset adaptasi O*NET yang dipakai
 sebelumnya. O*NET tidak lagi menjadi sumber data sistem ini.
 
 Keterbatasan yang dicatat jujur:
-  - Satu sumber (Indeed); sampel 18-31 per jabatan (kecil).
-  - Ekstraksi = keyword matching, bukan NLP.
-  - Data gaji tipis: n_gaji 0-8 per jabatan. IT Support (ITSUP)
-    tidak punya satu pun data gaji observasi (n_gaji=0), sehingga
-    gaji_min/med/max-nya DIIMPITASI dari median 18 jabatan lain.
-    Imputasi ini ditandai eksplisit di bawah dan di README —
-    bukan data observasi.
+  - Dua sumber (Indeed + Glints); sampel 39-55 per jabatan.
+  - Ekstraksi NLP tetap berbasis kamus 30 skill (sinonim di luar
+    kamus tidak tertangkap; aturan negasi bersifat lokal).
+  - Mayoritas iklan berbahasa Inggris; snapshot Oktober 2026.
 
 Deskripsi tiap jabatan (Bahasa Indonesia) ada di
 data-loker-id/deskripsi.csv (dipetakan via nama jabatan yang sama
