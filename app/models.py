@@ -97,6 +97,11 @@ class RecommendationResult(db.Model):
     perhitungan yang sama memakai batch_id yang sama. Batch lama tidak
     dihapus agar halaman Riwayat bisa menampilkan hasil-hasil terdahulu;
     tampilan Hasil dan Dasbor selalu memakai batch terbaru.
+
+    Kolom bobot menyimpan bobot SAW yang benar-benar dipakai pada
+    batch ini, sebagai JSON list 4 angka yang SUDAH dinormalisasi
+    (mis. "[0.35, 0.25, 0.2, 0.2]"). Sama di semua baris satu batch.
+    NULL untuk batch lama sebelum fitur bobot kustom ada.
     """
 
     id = db.Column(db.Integer, primary_key=True)
@@ -108,6 +113,7 @@ class RecommendationResult(db.Model):
     skor_saw = db.Column(db.Float, default=0.0)
     peringkat = db.Column(db.Integer, default=0)
     batch_id = db.Column(db.String(32), default="")
+    bobot = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     career = db.relationship("Career")
