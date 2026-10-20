@@ -11,6 +11,10 @@
       <p class="font-semibold">Perhitungan {{ b.waktu.strftime('%d-%m-%Y %H:%M') }}</p>
       <span class="text-xs text-slate-400">id {{ b.batch_id }}</span>
     </div>
+    <p class="text-xs text-slate-500 mb-3">
+      Bobot: C1 {{ '%.2f'|format(b.bobot[0]) }} &middot; C2 {{ '%.2f'|format(b.bobot[1]) }} &middot; C3 {{ '%.2f'|format(b.bobot[2]) }} &middot; C4 {{ '%.2f'|format(b.bobot[3]) }}
+      {% if b.kustom %}<span class="inline-block ml-1 bg-indigo-100 text-indigo-800 rounded px-2 py-0.5">bobot kustom</span>{% else %}<span class="inline-block ml-1 bg-slate-100 text-slate-600 rounded px-2 py-0.5">bobot default</span>{% endif %}
+    </p>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="bg-slate-50 text-left">
