@@ -3,17 +3,23 @@
 {% block heading %}Ubah Kriteria {{ criterion.kode }}{% endblock %}
 {% block subheading %}Perbarui nama atau bobot kriteria.{% endblock %}
 {% block content %}
-<div class="bg-white rounded-lg shadow p-6 max-w-xl">
+<div class="card p-6 md:p-8 max-w-xl">
   <form method="post">
     {{ form.hidden_tag() }}
-    <label class="block text-sm font-medium mb-1">{{ form.nama.label.text }}</label>
-    {{ form.nama(class="w-full border rounded px-3 py-2 mb-1") }}
-    {% if form.nama.errors %}<p class="text-sm text-red-600 mb-3">{{ form.nama.errors[0] }}</p>{% else %}<div class="mb-3"></div>{% endif %}
-    <label class="block text-sm font-medium mb-1">{{ form.bobot.label.text }}</label>
-    {{ form.bobot(class="w-full border rounded px-3 py-2 mb-1", step="0.01") }}
-    {% if form.bobot.errors %}<p class="text-sm text-red-600 mb-3">{{ form.bobot.errors[0] }}</p>{% else %}<div class="mb-5"></div>{% endif %}
-    {{ form.submit(class="bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
-    <a href="{{ url_for('admin.criteria') }}" class="ml-3 text-sm text-slate-500">Batal</a>
+    <div class="mb-4">
+      <label class="label" for="nama">{{ form.nama.label.text }}</label>
+      {{ form.nama(class="input") }}
+      {% if form.nama.errors %}<p class="field-error">{{ form.nama.errors[0] }}</p>{% endif %}
+    </div>
+    <div class="mb-8">
+      <label class="label" for="bobot">{{ form.bobot.label.text }}</label>
+      {{ form.bobot(class="input", step="0.01") }}
+      {% if form.bobot.errors %}<p class="field-error">{{ form.bobot.errors[0] }}</p>{% endif %}
+    </div>
+    <div class="flex items-center gap-4">
+      {{ form.submit(class="btn-primary") }}
+      <a href="{{ url_for('admin.criteria') }}" class="text-sm font-medium text-slate-500 hover:text-slate-800">Batal</a>
+    </div>
   </form>
 </div>
 {% endblock %}
