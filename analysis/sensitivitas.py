@@ -1,14 +1,19 @@
 """Analisis sensitivitas bobot SAW (bahan Bab 4 skripsi).
 
 Menjawab pertanyaan: seberapa stabil ranking rekomendasi bila bobot
+Menjawab pertanyaan: seberapa stabil ranking rekomendasi bila bobot
 kriteria berubah? Tiga profil contoh dievaluasi pada 7 skenario
 deterministik dan 200 skenario acak Dirichlet di sekitar bobot
 default. Metode perhitungan SAMA PERSIS dengan aplikasi
 (app/services/cbf.py dan app/services/saw.py dipakai ulang):
-cosine similarity vektor mahasiswa (biner) vs vektor karier
-(berbobot 1-5), lalu SAW dengan normalisasi benefit.
+cosine similarity vektor mahasiswa (berbobot: tingkat penguasaan
+0-5) vs vektor karier (berbobot 1-5), lalu SAW dengan normalisasi
+benefit.
 
 Asumsi (tercatat agar reprodusibel):
+- Rating profil contoh realistis (tidak semua 5): mahasiswa dinilai
+  paling kuat pada 1-2 skill inti (4), menengah pada pendukung (3),
+  dan dasar pada pelengkap (2).
 - C4 (minat): tiap profil diasumsikan meminati satu karier yang
   paling sesuai profilnya (1.0 untuk karier itu, 0.2 sisanya).
 - C2 = gaji_max (juta Rp/bulan), C3 = demand ternormalisasi min-max
@@ -43,17 +48,20 @@ DEFAULT = (0.35, 0.25, 0.20, 0.20)
 PROFIL = [
     {
         "nama": "Profil 1 (Backend/Data)",
-        "skills": ["Python", "SQL", "JavaScript", "Git", "Docker"],
+        # rating tingkat penguasaan 0-5 (realistis, tidak semua 5)
+        "ratings": {"Python": 4, "SQL": 4, "JavaScript": 3, "Git": 3,
+                    "Docker": 2},
         "minat": "Data Engineer",
     },
     {
         "nama": "Profil 2 (Jaringan)",
-        "skills": ["TCP/IP", "Firewall", "Routing & Switching", "Linux"],
+        "ratings": {"TCP/IP": 4, "Firewall": 3, "Routing & Switching": 4,
+                    "Linux": 3},
         "minat": "Network Architect",
     },
     {
         "nama": "Profil 3 (Frontend)",
-        "skills": ["HTML", "CSS", "JavaScript", "React"],
+        "ratings": {"HTML": 4, "CSS": 4, "JavaScript": 4, "React": 3},
         "minat": "Web Developer",
     },
 ]
@@ -115,9 +123,12 @@ def normalisasi_bobot(bobot):
     return list(bobot)
 
 
-def hitung_ranking(karier, vocab, skills_profil, minat_nama, bobot):
-    """Kembalikan daftar nama karier terurut peringkat (skor SAW menurun)."""
-    vec_mhs = cbf.vectorize(skills_profil, vocab)
+def hitung_ranking(karier, vocab, ratings_profil, minat_nama, bobot):
+    """Kembalikan daftar nama karier terurut peringkat (skor SAW menurun).
+
+    ratings_profil: dict {nama_skill: tingkat penguasaan 0-5}.
+    """
+    vec_mhs = cbf.vectorize(ratings_profil, vocab)
     cbf_skor = [cbf.cosine_sim(vec_mhs, cbf.career_vector(k, vocab))
                 for k in karier]
     matrix = [
@@ -149,7 +160,7 @@ def main():
     karier = baca_dataset()
     vocab = cbf.build_vocabulary(karier)
     for p in PROFIL:
-        hilang = {s for s in p["skills"] if s.lower() not in vocab}
+        hilang = {s for s in p["ratings"] if s.lower() not in vocab}
         assert not hilang, f"Skill tidak dikenal: {hilang}"
 
     deterministik = [
@@ -172,11 +183,12 @@ def main():
 
     for p in PROFIL:
         ranking_default = hitung_ranking(
-            karier, vocab, p["skills"], p["minat"], list(DEFAULT))
+            karier, vocab, p["ratings"], p["minat"], list(DEFAULT))
         hasil_md.append(f"## {p['nama']}\n")
         hasil_md.append(
-            f"Skill: {', '.join(p['skills'])}. Minat diasumsikan: "
-            f"{p['minat']}.\n")
+            "Skill dan tingkat penguasaan (0-5): "
+            + ", ".join(f"{s} {n}" for s, n in p["ratings"].items())
+            + f". Minat diasumsikan: {p['minat']}.\n")
         hasil_md.append("### Ranking default (bobot 0.35 / 0.25 / 0.20 / 0.20)")
         hasil_md.append("| Peringkat | Karier |")
         hasil_md.append("|---|---|")
@@ -194,7 +206,7 @@ def main():
         for nama_s, bobot in deterministik + acak:
             bn = normalisasi_bobot(bobot)
             ranking = hitung_ranking(
-                karier, vocab, p["skills"], p["minat"], bn)
+                karier, vocab, p["ratings"], p["minat"], bn)
             s1, ov3, geser = metrik(ranking, ranking_default)
             baris_csv.append({
                 "profil": p["nama"], "skenario": nama_s,
