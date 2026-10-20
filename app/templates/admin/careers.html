@@ -3,34 +3,34 @@
 {% block heading %}Data Karier{% endblock %}
 {% block subheading %}Daftar alternatif karier beserta skill, gaji, dan demand pasar.{% endblock %}
 {% block content %}
-<a href="{{ url_for('admin.career_add') }}" class="inline-block bg-indigo-600 text-white rounded px-4 py-2 text-sm hover:bg-indigo-700 mb-4">Tambah Karier</a>
-<div class="bg-white rounded-lg shadow overflow-x-auto">
+<a href="{{ url_for('admin.career_add') }}" class="btn-primary mb-4">Tambah Karier</a>
+<div class="card overflow-x-auto">
   <table class="w-full text-sm">
-    <thead class="bg-slate-50 text-left">
-      <tr>
-        <th class="px-4 py-3">Nama</th>
-        <th class="px-4 py-3">Skill</th>
-        <th class="px-4 py-3">Gaji (jt/bln)</th>
-        <th class="px-4 py-3">Demand</th>
-        <th class="px-4 py-3">Aksi</th>
+    <thead>
+      <tr class="border-b border-slate-200 bg-slate-50/60">
+        <th class="th">Nama</th>
+        <th class="th">Skill</th>
+        <th class="th">Gaji (jt/bln)</th>
+        <th class="th">Demand</th>
+        <th class="th">Aksi</th>
       </tr>
     </thead>
     <tbody>
       {% for c in careers %}
-      <tr class="border-t">
-        <td class="px-4 py-3 font-medium">{{ c.nama }}</td>
-        <td class="px-4 py-3 text-slate-500">{{ c.skills }}</td>
-        <td class="px-4 py-3">{{ c.gaji_min }}-{{ c.gaji_max }}</td>
-        <td class="px-4 py-3">{{ c.demand }}/10</td>
-        <td class="px-4 py-3 whitespace-nowrap">
-          <a class="text-indigo-600 mr-3" href="{{ url_for('admin.career_edit', cid=c.id) }}">Ubah</a>
+      <tr class="border-b border-slate-100 last:border-0 transition-colors hover:bg-slate-50">
+        <td class="td font-medium text-slate-900">{{ c.nama }}</td>
+        <td class="td text-slate-500">{{ c.skills }}</td>
+        <td class="td tabular-nums text-slate-600">{{ c.gaji_min }}-{{ c.gaji_max }}</td>
+        <td class="td tabular-nums text-slate-600">{{ c.demand }}/10</td>
+        <td class="td whitespace-nowrap">
+          <a class="font-medium text-indigo-600 hover:text-indigo-800 mr-3" href="{{ url_for('admin.career_edit', cid=c.id) }}">Ubah</a>
           <form class="inline" method="post" action="{{ url_for('admin.career_delete', cid=c.id) }}" onsubmit="return confirm('Hapus karier ini?')">
-            <button class="text-red-600" type="submit">Hapus</button>
+            <button class="font-medium text-red-600 hover:text-red-800" type="submit">Hapus</button>
           </form>
         </td>
       </tr>
       {% else %}
-      <tr><td colspan="5" class="px-4 py-6 text-center text-slate-400">Belum ada data karier.</td></tr>
+      <tr><td colspan="5" class="td py-8 text-center text-slate-400">Belum ada data karier.</td></tr>
       {% endfor %}
     </tbody>
   </table>
