@@ -4,28 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Masuk - SPK Rekomendasi Karier</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  {% include "partials/head_assets.html" %}
 </head>
-<body class="bg-slate-100 flex items-center justify-center min-h-screen">
-  <div class="bg-white rounded-lg shadow p-8 w-full max-w-md">
-    <h1 class="text-xl font-bold text-slate-900">SPK Rekomendasi Karier</h1>
-    <p class="text-sm text-slate-500 mb-6">Masuk untuk menggunakan sistem pendukung keputusan.</p>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="px-4 py-2 rounded text-sm mb-3 bg-red-100 text-red-800">{{ message }}</div>
-      {% endfor %}
-    {% endwith %}
-    <form method="post">
-      {{ form.hidden_tag() }}
-      <label class="block text-sm font-medium mb-1">{{ form.username.label.text }}</label>
-      {{ form.username(class="w-full border rounded px-3 py-2 mb-1") }}
-      {% if form.username.errors %}<p class="text-sm text-red-600 mb-3">{{ form.username.errors[0] }}</p>{% else %}<div class="mb-3"></div>{% endif %}
-      <label class="block text-sm font-medium mb-1">{{ form.password.label.text }}</label>
-      {{ form.password(class="w-full border rounded px-3 py-2 mb-1") }}
-      {% if form.password.errors %}<p class="text-sm text-red-600 mb-3">{{ form.password.errors[0] }}</p>{% else %}<div class="mb-5"></div>{% endif %}
-      {{ form.submit(class="w-full bg-indigo-600 text-white rounded px-4 py-2 hover:bg-indigo-700") }}
-    </form>
-    <p class="text-sm text-slate-500 mt-4">Belum punya akun? <a class="text-indigo-600" href="{{ url_for('auth.register') }}">Daftar di sini</a>.</p>
+<body class="bg-slate-100 font-sans text-slate-800 flex items-center justify-center min-h-screen p-4">
+  <div class="w-full max-w-md">
+    <div class="mb-6 flex items-center gap-3 px-1">
+      <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-white shrink-0">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" stroke-linejoin="round"/></svg>
+      </span>
+      <span>
+        <span class="block font-display text-lg font-bold leading-tight text-slate-900">SPK Rekomendasi Karier</span>
+        <span class="block text-sm text-slate-500">Sistem pendukung keputusan karier mahasiswa Informatika</span>
+      </span>
+    </div>
+    <div class="card overflow-hidden">
+      <div class="h-1 bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-400"></div>
+      <div class="p-8">
+        <h1 class="font-display text-xl font-semibold text-slate-900">Masuk</h1>
+        <p class="text-sm text-slate-500 mb-6">Gunakan akun yang sudah terdaftar untuk melanjutkan.</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="px-4 py-2.5 rounded-lg border text-sm mb-4 {% if category == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-800{% elif category == 'warning' %}bg-amber-50 border-amber-200 text-amber-800{% else %}bg-red-50 border-red-200 text-red-800{% endif %}">{{ message }}</div>
+          {% endfor %}
+        {% endwith %}
+        <form method="post">
+          {{ form.hidden_tag() }}
+          <div class="mb-4">
+            <label class="label" for="username">{{ form.username.label.text }}</label>
+            {{ form.username(class="input") }}
+            {% if form.username.errors %}<p class="field-error">{{ form.username.errors[0] }}</p>{% endif %}
+          </div>
+          <div class="mb-6">
+            <label class="label" for="password">{{ form.password.label.text }}</label>
+            {{ form.password(class="input") }}
+            {% if form.password.errors %}<p class="field-error">{{ form.password.errors[0] }}</p>{% endif %}
+          </div>
+          {{ form.submit(class="btn-primary w-full") }}
+        </form>
+        <p class="text-sm text-slate-500 mt-5">Belum punya akun? <a class="font-medium text-indigo-600 hover:text-indigo-800" href="{{ url_for('auth.register') }}">Daftar di sini</a>.</p>
+      </div>
+    </div>
   </div>
 </body>
 </html>
