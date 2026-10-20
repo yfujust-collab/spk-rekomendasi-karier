@@ -29,13 +29,38 @@ class Career(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(120), nullable=False)
     deskripsi = db.Column(db.Text)
-    skills = db.Column(db.Text, nullable=False, default="")  # dipisah koma
+    # Format: "Skill:skor" dipisah koma, mis. "Python:4.6, SQL:3.8".
+    # Skor = tingkat kepentingan skill untuk karier ini (skala 1-5,
+    # dari Dataset Lowongan IT Indonesia). Entri tanpa ":skor"
+    # (mis. input manual via panel admin) dianggap berbobot 3.0.
+    skills = db.Column(db.Text, nullable=False, default="")
     gaji_min = db.Column(db.Integer, default=0)  # juta rupiah per bulan
     gaji_max = db.Column(db.Integer, default=0)
     demand = db.Column(db.Integer, default=5)  # skala 1-10
 
     def skill_list(self):
-        return [s.strip() for s in self.skills.split(",") if s.strip()]
+        """Nama skill saja (tanpa skor), untuk tampilan & kosakata."""
+        return [s.split(":")[0].strip() for s in self.skills.split(",") if s.strip()]
+
+    def skill_scores(self):
+        """Dict {nama_skill_lower: skor float} untuk vektor CBF berbobot."""
+        hasil = {}
+        for bagian in self.skills.split(","):
+            bagian = bagian.strip()
+            if not bagian:
+                continue
+            if ":" in bagian:
+                nama, _, skor = bagian.rpartition(":")
+                try:
+                    nilai = float(skor.strip())
+                except ValueError:
+                    nilai = 3.0
+            else:
+                nama, nilai = bagian, 3.0
+            nama = nama.strip()
+            if nama:
+                hasil[nama.lower()] = nilai
+        return hasil
 
 
 class Criterion(db.Model):
