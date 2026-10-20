@@ -122,21 +122,77 @@ jabatan yang selama ini tertelan kategori umum ("Software Developer" / "Programm
   normalisasi selalu dihitung atas seluruh jabatan yang aktif, jadi pada perluasan berikutnya
   nilai lama dapat bergeser bila rentang n berubah.
 
-### 2. Ekstraksi skill (text mining)
+### 2. Ekstraksi skill (text mining berbasis NLP)
 
-Pendekatan: **pencocokan kamus (dictionary-based keyword matching)** terhadap gabungan
-teks judul + deskripsi lowongan (case-insensitive, word boundary).
+Sejak 20 Oktober 2026 ekstraksi skill memakai **pipeline NLP berbasis spaCy**
+(`en_core_web_sm`, skrip `nlp_extract.py`), menggantikan pencocokan kata kunci
+(keyword matching) fase awal. Kamus **30 skill dibakukan** (daftar di bawah) —
+yang berubah hanya cara mendeteksi penyebutan skill pada tiap lowongan.
+Demand dan gaji **tidak berubah**.
 
-- Kamus awal: ±80 pola regex mencakup bahasa pemrograman, framework, database, tools
-  DevOps/cloud, keamanan, jaringan, dan metode kerja. Normalisasi varian ejaan
-  ("JS"→JavaScript, "React.js"→React, "Golang"→Go, "K8s"→Kubernetes, dsb.).
-- Hanya **hard skill teknis**; soft skill generik ("komunikasi", "kerja sama") dikecualikan.
-- Kasus khusus: kata "AI" saja terbukti 65% kemunculannya adalah jargon deskripsi
-  perusahaan ("we are an AI company"), bukan syarat skill — sehingga pola "AI" mentah
-  dibuang dan diganti pola konteks-spesifik ("AI models", "AI algorithms", "generative AI",
-  "artificial intelligence", dsb.).
-- **Kriteria skill final**: 30 skill dengan frekuensi dokumen tertinggi di seluruh korpus
-  (rentang 22–104 lowongan per skill). Daftar lengkap + frekuensi: lihat tabel di bawah.
+Pipeline per lowongan (judul + deskripsi):
+
+1. **Normalisasi teks**: mojibake UTF-8 hasil scraping diperbaiki (apostrof
+   yang tersimpan sebagai karakter kontrol dikembalikan ke `'`), token lengket
+   dipisah ("HTML+CSS" → "HTML + CSS", "Rest&SOAP" → "Rest & SOAP",
+   "Git(version" → "Git (version").
+2. **Segmentasi seksi**: deskripsi dipecah berdasarkan penanda header
+   (Requirements, Qualifications, Responsibilities, Job Description,
+   What We're Looking For, Kualifikasi, Persyaratan, Tanggung Jawab, dst.).
+   Skill hanya dihitung bila muncul di seksi **relevan** (persyaratan,
+   kualifikasi, tanggung jawab, deskripsi pekerjaan); penyebutan yang hanya
+   ada di seksi profil perusahaan (About Us, Tentang Kami, Who We Are) atau
+   benefit **tidak dihitung**. Teks sebelum header pertama dianggap relevan
+   (umumnya ringkasan peran); deskripsi tanpa header memakai seluruh teks
+   (fallback). Judul lowongan selalu relevan.
+3. **Pencocokan frasa sadar lemma**: 30 skill dicocokkan sebagai urutan token
+   hasil tokenisasi spaCy dalam dua aliran kunci — lemma (menangkap variasi
+   morfologis: "firewalls" → firewall, "APIs" → api) dan bentuk permukaan
+   (jaring pengaman istilah teknis dan proper noun). Frasa multi-kata
+   (REST API, SQL Server, Machine Learning, Artificial Intelligence, CI/CD,
+   TCP/IP, Routing & Switching) dicocokkan sebagai satu frasa utuh. Aturan
+   sadar POS untuk kata ambigu: "Go" hanya dihitung sebagai PROPN/NOUN (bukan
+   kata kerja "go"), "Excel" gugur bila kata kerja ("excels at problem
+   solving"), "REST" tunggal hanya bila tertulis ALL-CAPS ("the rest of the
+   team" tidak dihitung). Untuk AI dipertahankan daftar frasa konteks
+   ("artificial intelligence", "generative AI", "AI models", dsb.) karena
+   kata "AI" mentah terbukti 65% kemunculannya adalah jargon profil
+   perusahaan, bukan syarat skill.
+4. **Deteksi negasi**: penyebutan dalam konteks negasi tidak dihitung —
+   dependency `neg` spaCy yang sub-tree-nya mencakup frasa ("Docker is not
+   required"; konstruksi "not limited to" dikecualikan), pola
+   "no experience/knowledge (in|with|of) X", "without X"/"tanpa X", penanda
+   yang menempel tepat sesudah frasa ("X is a plus", "X menjadi nilai
+   tambah", "X (not required)", "X tidak wajib"), serta "tidak wajib/
+   bukan syarat" tepat sebelum frasa. Skill dihitung bila ada ≥ 1 penyebutan
+   sah (seksi relevan dan tidak ternegasi).
+
+Hanya **hard skill teknis**; soft skill generik ("komunikasi", "kerja sama")
+dikecualikan dari kamus.
+
+**Validasi metode (keyword matching vs NLP).** Kedua metode dijalankan pada
+korpus yang sama (1.045 lowongan × 30 skill = 31.350 sel lowongan-skill):
+
+| Ukuran | Nilai |
+|---|---:|
+| Agreement rate | 99,68% (31.251 dari 31.350 sel sama) |
+| Terdeteksi kedua metode | 3.182 sel |
+| Hanya keyword matching | 98 sel (gugur oleh filter NLP) |
+| Hanya NLP | 1 sel ("Postgre" → PostgreSQL; varian yang lolos dari regex) |
+
+Rincian 98 sel yang gugur oleh NLP: **61 sel** bentuk ambigu regex yang bukan
+penyebutan skill (kata kerja "go" pada "go beyond"/"go all in", akhiran
+".js" pada "React.js"/"Next.js" yang tertangkap sebagai JavaScript,
+"the rest of the team" sebagai REST, ".html" pada URL sebagai HTML, header
+"WHERE YOU'LL GO"); **28 sel** konteks negasi/nilai tambah ("CI/CD is a
+plus", "familiarity with Golang is a plus"); **5 sel** hanya muncul di seksi
+tidak relevan; **4 sel** kata kerja "excel(s)". Profil top-3 skill per
+jabatan praktis stabil: 20 dari 22 jabatan identik, 2 jabatan (Mobile
+Developer, Programmer) hanya bertukar urutan internal dengan himpunan top-3
+yang sama. Skor berubah pada 106 dari 660 sel (maksimum |Δ| = 1,0). Matriks
+versi keyword matching diarsipkan lokal sebagai
+`skill_matrix_keyword_matching.csv` (tidak dipublikasikan); rincian per sel
+ada di `nlp_changes.csv` dan `nlp_vs_keyword.md`.
 
 ### 3. Rumus skor (1–5)
 
@@ -184,18 +240,19 @@ yang mereplikasi modul O*NET untuk 51 okupasi Indonesia, termasuk *Software deve
 - Keterbatasan validasi: taksonomi skill berbeda (Indotask memakai 35 skill umum O*NET,
   dataset ini memakai 30 hard skill teknis), sehingga perbandingan hanya kualitatif.
 
-## 30 skill final (frekuensi dokumen, data gabungan 1.045 lowongan)
+## 30 skill final (frekuensi dokumen hasil ekstraksi NLP, 1.045 lowongan)
 
-SQL 250, Python 190, Git 190, JavaScript 189, REST API 137, Agile 129, MySQL 122,
-PostgreSQL 120, Linux 118, AWS 117, CI/CD 117, React 111, Java 110,
-Artificial Intelligence 104, Docker 102, HTML 102, PHP 100, Go 100, CSS 97,
-Excel 94, GCP 92, Azure 84, Firewall 83, SQL Server 73, Kubernetes 73,
-Machine Learning 62, TCP/IP 55, Laravel 55, DNS 54, Routing & Switching 50.
+SQL 249, Python 187, Git 186, JavaScript 163, REST API 128, Agile 126, MySQL 122,
+PostgreSQL 121, Linux 118, AWS 117, CI/CD 114, React 111, Java 109, Docker 102,
+Artificial Intelligence 101, HTML 100, PHP 99, CSS 97, Excel 90, GCP 87,
+Azure 83, Firewall 82, Go 74, Kubernetes 73, SQL Server 69, Machine Learning 62,
+TCP/IP 55, DNS 54, Laravel 54, Routing & Switching 50.
 
-(Catatan: dibanding versi Indeed saja, VPN dan TypeScript terdesak keluar oleh
-TCP/IP dan Laravel pada fase multi-sumber. Pada perluasan Fase 4, kamus 30 skill ini
-dibakukan — bukan dipilih ulang dari korpus yang lebih besar — sehingga skor 19 jabatan
-lama tidak berubah.
+(Catatan: 30 skill ini awalnya dipilih sebagai frekuensi dokumen tertinggi pada
+fase keyword matching — dibanding versi Indeed saja, VPN dan TypeScript terdesak
+keluar oleh TCP/IP dan Laravel pada fase multi-sumber. Pada perluasan Fase 4
+kamus dibakukan, bukan dipilih ulang, sehingga skor 19 jabatan lama tidak
+berubah; pada peralihan ke ekstraksi NLP kamus yang sama dipertahankan.)
 
 ## Keterbatasan (jujur, untuk bab 3–5 skripsi)
 
@@ -206,8 +263,11 @@ lama tidak berubah.
    Cukup untuk peringkat relatif, belum untuk inferensi populasi.
 3. **Bias query**: hasil pencarian portal memengaruhi komposisi sampel (mis. sampel
    "Software Developer" condong ke peran JavaScript/Node.js).
-4. **Ekstraksi = pencocokan kata kunci**, bukan NLP. Sinonim di luar kamus tidak
-   tertangkap; konteks negasi ("tidak wajib menguasai X") tidak dibedakan.
+4. **Ekstraksi NLP tetap berbasis kamus** (spaCy + kamus 30 skill): sinonim dan
+   teknologi di luar kamus tidak tertangkap; aturan negasi bersifat lokal —
+   penanda "nilai tambah" pada daftar panjang (mis. "(AWS/GCP) is a plus")
+   hanya menggugurkan skill yang tepat mendahuluinya; model bahasa Inggris
+   dipakai juga untuk lowongan berbahasa Indonesia campuran.
 5. **Iklan berbahasa Inggris dominan**; lowongan berbahasa Indonesia penuh mungkin
    kurang terwakili karena kata kunci pencarian berbahasa Inggris.
 6. **Dedup lintas sumber tidak sempurna** — varian nama perusahaan yang sangat berbeda
@@ -221,7 +281,7 @@ lama tidak berubah.
 > kerja IT unik dari id.indeed.com (554) dan glints.com (550, jumlah mentah sebelum dedup),
 > periode 19–20 Okt 2026: 22 jabatan × 30 skill, skor 1–5 ternormalisasi per jabatan. Skrip:
 > `scrape.py`, `retry_scrape.py`, `scrape_glints.py`, `build_merged.py`,
-> `scrape_indeed_new.py`, `scrape_glints_new.py`, `build_expand.py`.
+> `scrape_indeed_new.py`, `scrape_glints_new.py`, `build_expand.py`, `nlp_extract.py`.
 
 ## Lisensi data
 
