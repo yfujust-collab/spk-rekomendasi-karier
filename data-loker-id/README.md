@@ -8,12 +8,12 @@ agar konteksnya sesuai pasar kerja Indonesia.
 
 | Aspek | Nilai |
 |---|---|
-| Jumlah lowongan (N) | 926 (unik, setelah dedup lintas sumber) |
-| Untuk text mining | 908 (deskripsi > 200 karakter) |
-| Jabatan | 19 (IT, istilah job loker) |
+| Jumlah lowongan (N) | 1.066 (unik, setelah dedup lintas sumber) |
+| Untuk text mining | 1.045 (deskripsi > 200 karakter) |
+| Jabatan | 22 (IT, istilah job loker) |
 | Skill final | 30 (hard skill teknis) |
-| Sumber | id.indeed.com (479) + glints.com (475) |
-| Periode pengambilan | Indeed: 19–20 Okt 2026 · Glints: 20 Okt 2026 (03:00–05:00 UTC) |
+| Sumber | id.indeed.com (554) + glints.com (550) — jumlah mentah sebelum dedup |
+| Periode pengambilan | 19 jabatan awal: Indeed 19–20 Okt 2026, Glints 20 Okt 2026 (03:00–05:00 UTC) · perluasan 3 jabatan: 20 Okt 2026 |
 | Cakupan wilayah | Indonesia |
 
 ### Sebaran per jabatan
@@ -39,17 +39,22 @@ agar konteksnya sesuai pasar kerja Indonesia.
 | AI Engineer | 45 | 20 | 25 | 45 |
 | DevOps Engineer | 43 | 19 | 25 | 43 |
 | Network Support | 45 | 20 | 25 | 45 |
+| Frontend Developer | 45 | 23 | 22 | 45 |
+| Backend Developer | 46 | 23 | 24 | 45 |
+| Mobile Developer | 49 | 25 | 24 | 47 |
 
 ## File
 
-- `skill_matrix.csv` — matriks 19 jabatan × 30 skill. Kolom: `kode_jabatan`, `nama_jabatan`,
-  `skill`, `skor` (1–5, 1 desimal). 570 baris.
+- `skill_matrix.csv` — matriks 22 jabatan × 30 skill. Kolom: `kode_jabatan`, `nama_jabatan`,
+  `skill`, `skor` (1–5, 1 desimal). 660 baris.
 - `demand_gaji.csv` — per jabatan: `n_lowongan` (demand), `n_indeed`, `n_glints` (komposisi
   sumber), `n_gaji` (setelah cleaning), `n_gaji_indeed`, `n_gaji_glints`,
   `gaji_min_rp`, `gaji_max_rp`, `gaji_median_rp` (IDR/bulan).
 - `raw/`, `raw_glints/` — data mentah hasil scraping (tidak untuk publikasi, lihat Keterbatasan).
-- `scrape.py`, `retry_scrape.py`, `build_dataset.py`, `scrape_glints.py`, `build_merged.py` —
-  skrip reproduksibel (urutan: scraping per sumber → `build_merged.py` untuk merge).
+- `scrape.py`, `retry_scrape.py`, `build_dataset.py`, `scrape_glints.py`, `build_merged.py`,
+  `scrape_indeed_new.py`, `scrape_glints_new.py`, `build_expand.py` — skrip reproduksibel
+  (urutan: scraping per sumber → merge dengan `build_merged.py`; perluasan jabatan baru
+  dengan `scrape_*_new.py` → `build_expand.py`).
 
 ## Metodologi
 
@@ -89,9 +94,32 @@ Sumber lain yang **diuji tetapi tidak dipakai** (dicatat agar transparan):
 perusahaan yang dinormalisasi (lowercase, non-alfanumerik dibuang). Dari kelompok
 duplikat, disimpan record dengan deskripsi terpanjang; field gaji digabung dari semua
 duplikat (ambil yang non-kosong). Setelah dedup: **926 lowongan unik** (479 Indeed +
-475 Glints). Keterbatasan: variasi penulisan nama perusahaan yang jauh berbeda
+475 Glints) — angka korpus sebelum perluasan Fase 4 (lihat sub-bab 1c).
+Keterbatasan: variasi penulisan nama perusahaan yang jauh berbeda
 (mis. "PT X" vs "X Corp") bisa lolos dari dedup — jumlah duplikat aktual mungkin sedikit
 lebih besar.
+
+### 1c. Perluasan cakupan (Fase 4 dataset)
+
+20 Oktober 2026: cakupan diperluas dari 19 menjadi **22 jabatan** dengan menambah tiga
+jabatan yang selama ini tertelan kategori umum ("Software Developer" / "Programmer"):
+**Frontend Developer** (FEDEV), **Backend Developer** (BEDEV), dan **Mobile Developer**
+(MOBDEV).
+
+- Scraping fresh dari kedua sumber dengan metode dan query yang sama persis dengan fase
+  sebelumnya: Indeed 75 lowongan (25 per jabatan), Glints 75 lowongan (25 per jabatan);
+  setelah dedup lintas sumber: **140 lowongan unik** (10 duplikat dibuang), 137 di antaranya
+  berdeskripsi substansial dan dipakai untuk mining.
+- **Kamus 30 skill dibakukan, tidak dipilih ulang**: ketiga jabatan baru diskor terhadap
+  kamus yang sama, sehingga skor 19 jabatan lama **tidak berubah sama sekali** (terverifikasi
+  dengan diff sebelum/sesudah — 570 baris identik).
+- Total korpus kini **1.066 lowongan unik** (1.045 untuk mining). Per jabatan baru:
+  Frontend 45 (I:23, G:22, n_gaji 16, median Rp8,5 jt), Backend 46 (I:23, G:24, n_gaji 20,
+  median Rp8,5 jt), Mobile 49 (I:25, G:24, n_gaji 12, median Rp6,0 jt).
+- **Normalisasi demand dihitung ulang**: demand skala 1–10 (min-max di `seed.py`) kini atas
+  22 jabatan. Rentang n tetap 39–55 sehingga pergeseran nilai ternormalisasi kecil, tetapi
+  nilai demand beberapa jabatan lama dapat bergeser 1 poin karena himpunan pembandingnya
+  berubah. Ini diperlakukan eksplisit sebagai perubahan metodologi, bukan koreksi data.
 
 ### 2. Ekstraksi skill (text mining)
 
@@ -155,23 +183,25 @@ yang mereplikasi modul O*NET untuk 51 okupasi Indonesia, termasuk *Software deve
 - Keterbatasan validasi: taksonomi skill berbeda (Indotask memakai 35 skill umum O*NET,
   dataset ini memakai 30 hard skill teknis), sehingga perbandingan hanya kualitatif.
 
-## 30 skill final (frekuensi dokumen, data gabungan 908 lowongan)
+## 30 skill final (frekuensi dokumen, data gabungan 1.045 lowongan)
 
-SQL 230, Python 177, JavaScript 133, Git 133, Linux 116, MySQL 106, AWS 105,
-Agile 97, Excel 94, PostgreSQL 93, CI/CD 93, Artificial Intelligence 91, GCP 87,
-PHP 85, Azure 83, Docker 83, Firewall 83, HTML 74, Java 72, REST API 70, Go 69,
-SQL Server 69, CSS 68, Kubernetes 59, Machine Learning 57, React 56, TCP/IP 55,
-DNS 54, Laravel 47, Routing & Switching 47.
+SQL 250, Python 190, Git 190, JavaScript 189, REST API 137, Agile 129, MySQL 122,
+PostgreSQL 120, Linux 118, AWS 117, CI/CD 117, React 111, Java 110,
+Artificial Intelligence 104, Docker 102, HTML 102, PHP 100, Go 100, CSS 97,
+Excel 94, GCP 92, Azure 84, Firewall 83, SQL Server 73, Kubernetes 73,
+Machine Learning 62, TCP/IP 55, Laravel 55, DNS 54, Routing & Switching 50.
 
 (Catatan: dibanding versi Indeed saja, VPN dan TypeScript terdesak keluar oleh
-TCP/IP dan Laravel — wajar karena seleksi top-30 mengikuti frekuensi korpus gabungan.)
+TCP/IP dan Laravel pada fase multi-sumber. Pada perluasan Fase 4, kamus 30 skill ini
+dibakukan — bukan dipilih ulang dari korpus yang lebih besar — sehingga skor 19 jabatan
+lama tidak berubah.
 
 ## Keterbatasan (jujur, untuk bab 3–5 skripsi)
 
 1. **Dua sumber** (Indeed + Glints). Glints mencantumkan gaji lebih sering dan profil
    lowongannya lebih lokal, sementara Indeed adalah agregator lintas industri — bias
    platform tetap ada di masing-masing.
-2. **Ukuran sampel per jabatan sedang** (39–55 setelah merge, dari 18–31 sebelumnya).
+2. **Ukuran sampel per jabatan sedang** (39–55; tiga jabatan hasil perluasan 45–49).
    Cukup untuk peringkat relatif, belum untuk inferensi populasi.
 3. **Bias query**: hasil pencarian portal memengaruhi komposisi sampel (mis. sampel
    "Software Developer" condong ke peran JavaScript/Node.js).
@@ -181,14 +211,16 @@ TCP/IP dan Laravel — wajar karena seleksi top-30 mengikuti frekuensi korpus ga
    kurang terwakili karena kata kunci pencarian berbahasa Inggris.
 6. **Dedup lintas sumber tidak sempurna** — varian nama perusahaan yang sangat berbeda
    bisa lolos, sehingga N sedikit over-estimated.
-7. **Snapshot waktu**: pasar kerja IT bergerak cepat; dataset ini potret 19–20 Okt 2026.
+7. **Snapshot waktu**: pasar kerja IT bergerak cepat; dataset ini potret 19–20 Okt 2026
+   (termasuk perluasan 3 jabatan pada 20 Okt 2026).
 
 ## Sitasi yang disarankan
 
-> Dataset Lowongan IT Indonesia v2 (2026). Dibangun melalui text mining 926 lowongan
-> kerja IT unik dari id.indeed.com (479) dan glints.com (475), periode 19–20 Okt 2026:
-> 19 jabatan × 30 skill, skor 1–5 ternormalisasi per jabatan. Skrip:
-> `scrape.py`, `retry_scrape.py`, `scrape_glints.py`, `build_merged.py`.
+> Dataset Lowongan IT Indonesia v3 (2026). Dibangun melalui text mining 1.066 lowongan
+> kerja IT unik dari id.indeed.com (554) dan glints.com (550, jumlah mentah sebelum dedup),
+> periode 19–20 Okt 2026: 22 jabatan × 30 skill, skor 1–5 ternormalisasi per jabatan. Skrip:
+> `scrape.py`, `retry_scrape.py`, `scrape_glints.py`, `build_merged.py`,
+> `scrape_indeed_new.py`, `scrape_glints_new.py`, `build_expand.py`.
 
 ## Lisensi data
 
