@@ -26,7 +26,7 @@
 - **Perhitungan dua tahap**: CBF untuk skor kecocokan skill, SAW untuk peringkat akhir.
 - **Transparansi penuh**: halaman hasil menampilkan matriks keputusan, matriks ternormalisasi, dan skor preferensi tiap karier, plus grafik Chart.js.
 - **Riwayat perhitungan**: setiap perhitungan disimpan sebagai batch tersendiri; hasil lama bisa dibuka ulang tanpa tertimpa.
-- **Bobot SAW kustom per pengguna**: mahasiswa dapat mengatur bobot C1 sampai C4 sendiri di halaman hasil; bobot kustom tersimpan di sesi (tidak mengubah bobot master admin) dan bobot yang dipakai tercatat pada tiap batch, halaman riwayat, dan ekspor CSV.
+- **Bobot SAW kustom per pengguna**: mahasiswa dapat mengatur bobot C1 sampai C4 sendiri di halaman hasil; bobot kustom tersimpan di sesi (tidak mengubah bobot default) dan bobot yang dipakai tercatat pada tiap batch, halaman riwayat, dan ekspor CSV.
 - **Export CSV**: unduh hasil rekomendasi batch terbaru sebagai berkas CSV.
 - **Panel admin**: kelola data karier (skill, gaji, demand) serta kriteria dan bobot SAW.
 
@@ -74,7 +74,7 @@ Sistem ini memakai satu dataset primer, yaitu Dataset Lowongan IT Indonesia: mat
 ### Cara dataset dibangun (bahan Bab Metodologi)
 
 1. **Pengumpulan**: scraping halaman lowongan IT Indonesia (judul, deskripsi/requirements, info gaji). Sumber lain yang diuji namun gagal diakses dicatat di `data-loker-id/README.md`.
-2. **Ekstraksi skill**: *keyword matching* 30 hard skill teknis (SQL, Python, JavaScript, Git, AWS, Agile, Linux, dst.) terhadap teks Requirements tiap lowongan; normalisasi varian penulisan.
+2. **Ekstraksi skill**: pipeline NLP berbasis spaCy (`en_core_web_sm`) atas 30 hard skill teknis (SQL, Python, JavaScript, Git, AWS, Agile, Linux, dst.): segmentasi seksi deskripsi (hanya seksi persyaratan/kualifikasi/tanggung jawab yang dihitung, bukan profil perusahaan/benefit), pencocokan frasa sadar lemma, dan deteksi negasi ("X is a plus" / "tidak wajib" tidak dihitung). Validasi terhadap metode lama (*keyword matching*): agreement 99,68% pada 31.350 sel lowongan-skill; detail di `data-loker-id/README.md`.
 3. **Skor 1–5**: untuk tiap jabatan *o* dan skill *s*, `skor(o,s) = 1 + 4 × (pct(o,s) / max_pct(o))` dengan `pct` = % lowongan jabatan *o* yang menyebut skill *s* (satu desimal, relatif per jabatan).
 4. **Demand (C3)**: jumlah lowongan per jabatan, dinormalisasi min-max ke skala 1–10.
 5. **Gaji (C2)**: dari info gaji yang tercantum di lowongan (median/min/max per jabatan, dalam juta Rp/bulan).
@@ -112,7 +112,7 @@ Demand adalah normalisasi min-max (skala 1-10) dari jumlah lowongan per jabatan 
 ### Keterbatasan dataset (bahan Bab Metodologi, ditulis jujur)
 
 - Dua sumber (Indeed + Glints); sampel 39–55 lowongan per jabatan.
-- Ekstraksi skill = *keyword matching*, bukan NLP.
+- Ekstraksi skill memakai NLP (spaCy) dengan segmentasi seksi dan deteksi negasi, tetapi tetap berbasis kamus 30 skill: sinonim/teknologi di luar kamus tidak tertangkap dan aturan negasi bersifat lokal.
 - Mayoritas iklan berbahasa Inggris; data gaji tersedia untuk 12–26 lowongan per jabatan (mayoritas dari Glints, karena portal itu lebih sering mencantumkan gaji).
 - *Snapshot* Oktober 2026. Pasar kerja berubah seiring waktu, jadi *re-scraping* berkala disarankan.
 - Validasi silang dengan Indotask (World Bank 2020) hanya kualitatif karena taksonomi skill berbeda; detailnya di `data-loker-id/README.md`.
@@ -121,7 +121,7 @@ Jalankan seed ulang kapan saja: `python seed.py` (idempoten: data master lama di
 
 ## Analisis Sensitivitas
 
-Halaman hasil menyediakan panel **Atur Bobot Kriteria**: mahasiswa mengisi bobot C1 sampai C4 (masing-masing 0 sampai 1) lalu menekan Hitung Ulang. Bobot kustom disimpan di sesi pengguna, bukan di data master, jadi bobot admin tetap menjadi nilai default untuk semua pengguna. Bila total bobot kustom bukan 1, sistem menormalisasikannya otomatis dan mencatatnya. Bobot yang benar-benar dipakai pada suatu perhitungan (setelah normalisasi) disimpan pada batch hasil, ditampilkan di halaman riwayat, dan disertakan sebagai baris metadata pada ekspor CSV, sehingga setiap hasil dapat ditelusuri bobotnya.
+Halaman hasil menyediakan panel **Atur Bobot Kriteria**: mahasiswa mengisi bobot C1 sampai C4 (masing-masing 0 sampai 1) lalu menekan Hitung Ulang. Bobot kustom disimpan di sesi pengguna dan tidak mengubah bobot default, sehingga bobot default tetap menjadi nilai acuan untuk semua pengguna. Bila total bobot kustom bukan 1, sistem menormalisasikannya otomatis dan mencatatnya. Bobot yang benar-benar dipakai pada suatu perhitungan (setelah normalisasi) disimpan pada batch hasil, ditampilkan di halaman riwayat, dan disertakan sebagai baris metadata pada ekspor CSV, sehingga setiap hasil dapat ditelusuri bobotnya.
 
 Untuk menguji seberapa stabil ranking terhadap perubahan bobot, jalankan:
 
