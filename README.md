@@ -15,7 +15,7 @@
 | Content-Based Filtering | Mengukur kecocokan skill (cosine similarity) |
 | Simple Additive Weighting | Memberi peringkat akhir dari 4 kriteria berbobot |
 
-[Fitur](#fitur) · [Cara Jalan](#cara-jalan) · [Deploy](#deploy) · [Struktur](#struktur) · [Dataset](#dataset)
+[Fitur](#fitur) · [Cara Jalan](#cara-jalan) · [Deploy](#deploy) · [Struktur](#struktur) · [Dataset](#dataset) · [Analisis Sensitivitas](#analisis-sensitivitas)
 
 </div>
 
@@ -26,6 +26,7 @@
 - **Perhitungan dua tahap**: CBF untuk skor kecocokan skill, SAW untuk peringkat akhir.
 - **Transparansi penuh**: halaman hasil menampilkan matriks keputusan, matriks ternormalisasi, dan skor preferensi tiap karier, plus grafik Chart.js.
 - **Riwayat perhitungan**: setiap perhitungan disimpan sebagai batch tersendiri; hasil lama bisa dibuka ulang tanpa tertimpa.
+- **Bobot SAW kustom per pengguna**: mahasiswa dapat mengatur bobot C1 sampai C4 sendiri di halaman hasil; bobot kustom tersimpan di sesi (tidak mengubah bobot master admin) dan bobot yang dipakai tercatat pada tiap batch, halaman riwayat, dan ekspor CSV.
 - **Export CSV**: unduh hasil rekomendasi batch terbaru sebagai berkas CSV.
 - **Panel admin**: kelola data karier (skill, gaji, demand) serta kriteria dan bobot SAW.
 
@@ -59,6 +60,7 @@ app/
 ├── services/    cbf.py (cosine similarity), saw.py (normalisasi + skor)
 ├── models.py    User, Career, Criterion, StudentProfile, RecommendationResult
 └── templates/   Jinja2 + Tailwind + Chart.js
+analysis/        analisis sensitivitas bobot (Bab 4)
 ```
 
 ## Diagram Perancangan
@@ -113,3 +115,15 @@ Sistem ini memakai satu dataset primer, yaitu Dataset Lowongan IT Indonesia: mat
 - Validasi silang dengan Indotask (World Bank 2020) hanya kualitatif karena taksonomi skill berbeda; detailnya di `data-loker-id/README.md`.
 
 Jalankan seed ulang kapan saja: `python seed.py` (idempoten: data master lama dihapus lalu diisi ulang dari CSV). Lihat docstring `seed.py` untuk dokumentasi lengkap.
+
+## Analisis Sensitivitas
+
+Halaman hasil menyediakan panel **Atur Bobot Kriteria**: mahasiswa mengisi bobot C1 sampai C4 (masing-masing 0 sampai 1) lalu menekan Hitung Ulang. Bobot kustom disimpan di sesi pengguna, bukan di data master, jadi bobot admin tetap menjadi nilai default untuk semua pengguna. Bila total bobot kustom bukan 1, sistem menormalisasikannya otomatis dan mencatatnya. Bobot yang benar-benar dipakai pada suatu perhitungan (setelah normalisasi) disimpan pada batch hasil, ditampilkan di halaman riwayat, dan disertakan sebagai baris metadata pada ekspor CSV, sehingga setiap hasil dapat ditelusuri bobotnya.
+
+Untuk menguji seberapa stabil ranking terhadap perubahan bobot, jalankan:
+
+```bash
+python analysis/sensitivitas.py
+```
+
+Skrip ini mengevaluasi tiga profil contoh (Backend/Data, Jaringan, Frontend) pada 6 skenario deterministik (dominasi tunggal tiap kriteria dan perturbasi C1 sebesar ±0,10) serta 200 sampel acak Dirichlet di sekitar bobot default (seed 42), memakai fungsi CBF dan SAW yang sama persis dengan aplikasi. Hasil ditulis ke `analysis/hasil_sensitivitas.md` (tabel dan kesimpulan, siap dikutip untuk Bab 4) dan `analysis/hasil_sensitivitas.csv`. Ringkasan hasil: peringkat pertama bertahan pada 91,1% skenario dan himpunan 3 besar utuh pada 81,7% skenario; perubahan terbesar terjadi pada skenario dominasi tunggal.
