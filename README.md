@@ -67,46 +67,49 @@ Diagram use case, flowchart, activity, sequence, class, DFD, dan ERD tersedia se
 
 ## Dataset
 
-Data karier (19 profesi IT beserta skill, estimasi gaji, dan demand) diadaptasi dari **O*NET Database 31.0** milik U.S. Department of Labor, Employment and Training Administration (USDOL/ETA), lisensi **CC BY 4.0**. Ganti atau tambah data lewat panel admin sesuai kebutuhan penelitian, atau lewat `seed.py` (membaca langsung file CSV dataset).
+Sistem ini memakai satu dataset primer, yaitu Dataset Lowongan IT Indonesia: matriks kebutuhan skill 19 jabatan IT × 30 hard skill yang dibangun sendiri melalui *text mining* 479 lowongan IT unik dari id.indeed.com (19–20 Oktober 2026, 18–31 lowongan per jabatan). File dataset ada di folder `data-loker-id/` (`skill_matrix.csv`, `demand_gaji.csv`, `README.md` berisi metodologi lengkap).
 
-### Atribusi (wajib dicantumkan, mis. di skripsi)
+### Cara dataset dibangun (bahan Bab Metodologi)
 
-> Data karier diadaptasi dari O*NET 31.0 Database oleh U.S. Department of Labor, Employment and Training Administration (USDOL/ETA), digunakan di bawah lisensi CC BY 4.0. USDOL/ETA tidak menyetujui, mendukung, atau menguji modifikasi ini.
+1. **Pengumpulan**: scraping halaman lowongan IT Indonesia (judul, deskripsi/requirements, info gaji). Sumber lain yang diuji namun gagal diakses dicatat di `data-loker-id/README.md`.
+2. **Ekstraksi skill**: *keyword matching* 30 hard skill teknis (SQL, Python, JavaScript, Git, AWS, Agile, Linux, dst.) terhadap teks Requirements tiap lowongan; normalisasi varian penulisan.
+3. **Skor 1–5**: untuk tiap jabatan *o* dan skill *s*, `skor(o,s) = 1 + 4 × (pct(o,s) / max_pct(o))` dengan `pct` = % lowongan jabatan *o* yang menyebut skill *s* (satu desimal, relatif per jabatan).
+4. **Demand (C3)**: jumlah lowongan per jabatan, dinormalisasi min-max ke skala 1–10.
+5. **Gaji (C2)**: dari info gaji yang tercantum di lowongan (median/min/max per jabatan, dalam juta Rp/bulan).
+6. **Vektor CBF berbobot**: skor 1–5 dipakai langsung sebagai entri vektor karier (tanpa threshold biner), sehingga nuansa tingkat kepentingan lestari. Ini perbaikan atas model biner sebelumnya yang menyamakan skill berskor 4.75 dan 3.50.
 
-### Ringkasan adaptasi (bahan Bab Metodologi)
+### Tabel demand & gaji per jabatan (dari dataset)
 
-Data mentah O*NET berbahasa Inggris dan berkonteks pasar kerja Amerika Serikat, sehingga dilakukan adaptasi:
+| Karier | Demand (1-10) | Gaji (jt Rp/bln) | n lowongan | n gaji |
+|--------|---------------|------------------|------------|--------|
+| AI Engineer | 2 | 7-15 | 20 | 1 |
+| Cybersecurity Analyst | 10 | 5-10 | 31 | 3 |
+| Data Analyst | 1 | 6-6 | 18 | 1 |
+| Database Administrator | 8 | 3-23 | 28 | 3 |
+| Data Engineer | 9 | 5-6 | 29 | 1 |
+| DevOps Engineer | 2 | 6-15 | 20 | 3 |
+| Data Scientist | 6 | 11-15 | 25 | 1 |
+| IT Project Manager | 2 | 5-12 | 20 | 2 |
+| IT Support | 2 | 5-15* | 20 | 0 |
+| Network Architect | 9 | 6-17 | 30 | 4 |
+| Network Support | 2 | 5-10 | 20 | 8 |
+| Programmer | 9 | 2-13 | 29 | 6 |
+| QA Engineer | 9 | 15-25 | 30 | 1 |
+| Security Engineer | 7 | 6-15 | 26 | 5 |
+| Software Developer | 7 | 6-7 | 27 | 1 |
+| System Administrator | 10 | 4-16 | 31 | 4 |
+| System Analyst | 4 | 6-15 | 23 | 2 |
+| UI/UX Designer | 8 | 5-12 | 28 | 7 |
+| Web Developer | 5 | 4-40 | 24 | 4 |
 
-1. **Subset**: 19 okupasi bidang Informatika yang relevan bagi mahasiswa (dari 1.016 okupasi O*NET): 14 awal + 5 tambahan yang populer di loker Indonesia (IT Support, Data Analyst, AI Engineer, DevOps Engineer, Network Support).
-2. **Nama tampil**: kolom `judul_id` memakai nama Inggris gaya job loker (mis. "Software Developer", "Data Analyst") karena itu sebutan yang dikenal mahasiswa; kolom `judul_en` menyimpan nama resmi O*NET sebagai referensi. Deskripsi dan nama skill diterjemahkan ke Bahasa Indonesia yang natural. Istilah teknologi yang merupakan nama proper (Python, SQL, Git, Docker, dsb.) dipertahankan karena bersifat universal.
-3. **Kurasi skill Informatika untuk CBF**: dari 35 skill O*NET, dipilih 12 skill yang relevan dengan Jurusan Informatika (Pemrograman, Analisis Sistem, Evaluasi Sistem, Perancangan Teknologi, Pemecahan Masalah Kompleks, Berpikir Kritis, Matematika, Pemecahan Masalah Teknis, Analisis Operasional, Analisis Kendali Mutu, Pembelajaran Aktif, Penilaian & Pengambilan Keputusan). Skill teknisi/non-IT (mis. Pemilihan Peralatan, Instalasi, Perawatan Peralatan, Perbaikan) sengaja dikecualikan agar vektor CBF mencerminkan kompetensi Informatika. Memakai 35 skill sekaligus memberi cosine similarity 0.97-0.99 antar-karier IT (hampir identik, tidak bisa membedakan), sehingga kurasi ini juga berfungsi sebagai seleksi fitur.
-4. **Threshold biner**: kolom `skills` di aplikasi ini berupa teks dipisah koma (vektor biner), sehingga bobot importance O*NET (skala 1-5) tidak bisa disimpan langsung. Skill dengan importance >= 3.0 (kategori "penting" ke atas) dicantumkan sebagai ciri khas karier; yang di bawahnya tidak. Ambang ini dipilih empiris: ambang 2.0 membuat 11 dari 14 karier bervektor identik, sedangkan 3.0 menghasilkan 18 vektor unik dari 19 karier (sebaran cosine 0.62-1.00). Satu-satunya pasangan identik adalah Programmer vs DevOps Engineer: nilai importance aslinya berbeda (mis. Pemrograman 4.75 vs 3.50) tetapi ambang biner menyamakan keduanya — keterbatasan model biner yang dicatat jujur di sini.
-5. **Demand (C3)**: jumlah hot technology per karier dinormalisasi min-max ke skala 1-10.
+\* **Imputasi, bukan observasi**: tidak satu pun lowongan IT Support mencantumkan gaji (n_gaji=0), sehingga rentang 5–15 jt diisi dari median 18 jabatan lain. Ditandai eksplisit di `seed.py` dan di sini.
 
-### Catatan jujur tentang gaji (bahan Bab Metodologi)
+### Keterbatasan dataset (bahan Bab Metodologi, ditulis jujur)
 
-O*NET tidak menyediakan data gaji; kolom estimasi gaji di `karier.csv` memang dikosongkan oleh pembangun dataset. Angka gaji pada tabel di bawah adalah estimasi pasar kerja Indonesia dalam juta rupiah per bulan (pola entry 4-7, mid 7-12, senior/spesialis 10-18, disesuaikan per peran), di-hardcode di `seed.py` dan diberi komentar eksplisit. Ganti dengan data survei gaji bila tersedia (mis. dataset Kaggle *AI-Powered Job Recommendations*). Bobot importance skill O*NET juga mencerminkan pasar Amerika Serikat, bukan Indonesia.
+- Satu sumber (Indeed); sampel 18–31 lowongan per jabatan (kecil).
+- Ekstraksi skill = *keyword matching*, bukan NLP.
+- Mayoritas iklan berbahasa Inggris; hanya ±12% lowongan yang mencantumkan gaji.
+- *Snapshot* Oktober 2026. Pasar kerja berubah seiring waktu, jadi *re-scraping* berkala disarankan.
+- Validasi silang dengan Indotask (World Bank 2020) hanya kualitatif karena taksonomi skill berbeda; detailnya di `data-loker-id/README.md`.
 
-| # | Karier | Demand (1-10) | Estimasi gaji (jt Rp/bln) |
-|---|--------|---------------|---------------------------|
-| 1 | Software Developer | 10 | 5-12 |
-| 2 | Programmer | 6 | 4-10 |
-| 3 | Web Developer | 8 | 4-10 |
-| 4 | UI/UX Designer | 7 | 4-10 |
-| 5 | QA Engineer | 8 | 4-10 |
-| 6 | Data Scientist | 3 | 6-14 |
-| 7 | Data Engineer | 3 | 5-12 |
-| 8 | Database Administrator | 7 | 5-10 |
-| 9 | Cybersecurity Analyst | 6 | 5-13 |
-| 10 | Security Engineer | 3 | 6-15 |
-| 11 | Network Architect | 6 | 5-13 |
-| 12 | System Administrator | 6 | 4-10 |
-| 13 | System Analyst | 7 | 4-10 |
-| 14 | IT Project Manager | 8 | 6-16 |
-| 15 | IT Support | 7 | 4-8 |
-| 16 | Data Analyst | 6 | 5-12 |
-| 17 | AI Engineer | 4 | 7-18 |
-| 18 | DevOps Engineer | 8 | 6-16 |
-| 19 | Network Support | 1 | 4-10 |
-
-Jalankan seed ulang kapan saja: `python seed.py` (idempoten: data master lama dihapus lalu diisi ulang dari CSV). Lihat docstring `seed.py` untuk dokumentasi adaptasi lengkap.
+Jalankan seed ulang kapan saja: `python seed.py` (idempoten: data master lama dihapus lalu diisi ulang dari CSV). Lihat docstring `seed.py` untuk dokumentasi lengkap.
