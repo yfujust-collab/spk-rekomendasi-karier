@@ -69,7 +69,7 @@ Diagram use case, flowchart, activity, sequence, class, DFD, dan ERD tersedia se
 
 ## Dataset
 
-Sistem ini memakai satu dataset primer, yaitu Dataset Lowongan IT Indonesia: matriks kebutuhan skill 19 jabatan IT × 30 hard skill yang dibangun sendiri melalui *text mining* 479 lowongan IT unik dari id.indeed.com (19–20 Oktober 2026, 18–31 lowongan per jabatan). File dataset ada di folder `data-loker-id/` (`skill_matrix.csv`, `demand_gaji.csv`, `README.md` berisi metodologi lengkap).
+Sistem ini memakai satu dataset primer, yaitu Dataset Lowongan IT Indonesia: matriks kebutuhan skill 22 jabatan IT × 30 hard skill yang dibangun sendiri melalui *text mining* 1.066 lowongan IT unik dari id.indeed.com dan glints.com (19–20 Oktober 2026, 39–55 lowongan per jabatan). File dataset ada di folder `data-loker-id/` (`skill_matrix.csv`, `demand_gaji.csv`, `deskripsi.csv`, `README.md` berisi metodologi lengkap).
 
 ### Cara dataset dibangun (bahan Bab Metodologi)
 
@@ -84,33 +84,36 @@ Sistem ini memakai satu dataset primer, yaitu Dataset Lowongan IT Indonesia: mat
 
 | Karier | Demand (1-10) | Gaji (jt Rp/bln) | n lowongan | n gaji |
 |--------|---------------|------------------|------------|--------|
-| AI Engineer | 2 | 7-15 | 20 | 1 |
-| Cybersecurity Analyst | 10 | 5-10 | 31 | 3 |
-| Data Analyst | 1 | 6-6 | 18 | 1 |
-| Database Administrator | 8 | 3-23 | 28 | 3 |
-| Data Engineer | 9 | 5-6 | 29 | 1 |
-| DevOps Engineer | 2 | 6-15 | 20 | 3 |
-| Data Scientist | 6 | 11-15 | 25 | 1 |
-| IT Project Manager | 2 | 5-12 | 20 | 2 |
-| IT Support | 2 | 5-15* | 20 | 0 |
-| Network Architect | 9 | 6-17 | 30 | 4 |
-| Network Support | 2 | 5-10 | 20 | 8 |
-| Programmer | 9 | 2-13 | 29 | 6 |
-| QA Engineer | 9 | 15-25 | 30 | 1 |
-| Security Engineer | 7 | 6-15 | 26 | 5 |
-| Software Developer | 7 | 6-7 | 27 | 1 |
-| System Administrator | 10 | 4-16 | 31 | 4 |
-| System Analyst | 4 | 6-15 | 23 | 2 |
-| UI/UX Designer | 8 | 5-12 | 28 | 7 |
-| Web Developer | 5 | 4-40 | 24 | 4 |
+| AI Engineer | 4 | 2-16 | 45 | 23 |
+| Backend Developer | 5 | 3-20 | 46 | 20 |
+| Cybersecurity Analyst | 9 | 3-28 | 54 | 19 |
+| Data Analyst | 1 | 2-12 | 39 | 16 |
+| Database Administrator | 8 | 2-23 | 52 | 24 |
+| Data Engineer | 8 | 5-15 | 52 | 16 |
+| DevOps Engineer | 3 | 4-20 | 43 | 18 |
+| Data Scientist | 6 | 3-50 | 48 | 17 |
+| Frontend Developer | 4 | 3-15 | 45 | 16 |
+| IT Project Manager | 4 | 3-26 | 45 | 20 |
+| IT Support | 4 | 3-9 | 45 | 17 |
+| Mobile Developer | 7 | 2-11 | 49 | 12 |
+| Network Architect | 9 | 2-17 | 54 | 22 |
+| Network Support | 4 | 2-13 | 45 | 26 |
+| Programmer | 8 | 2-15 | 52 | 20 |
+| QA Engineer | 9 | 2-25 | 53 | 18 |
+| Security Engineer | 8 | 5-18 | 51 | 20 |
+| Software Developer | 7 | 4-16 | 49 | 17 |
+| System Administrator | 10 | 2-16 | 55 | 19 |
+| System Analyst | 5 | 2-20 | 46 | 19 |
+| UI/UX Designer | 8 | 3-11 | 51 | 16 |
+| Web Developer | 6 | 2-40 | 47 | 19 |
 
-\* **Imputasi, bukan observasi**: tidak satu pun lowongan IT Support mencantumkan gaji (n_gaji=0), sehingga rentang 5–15 jt diisi dari median 18 jabatan lain. Ditandai eksplisit di `seed.py` dan di sini.
+Demand adalah normalisasi min-max (skala 1-10) dari jumlah lowongan per jabatan atas 22 jabatan; gaji adalah rentang min-max observasi dengan median per jabatan tersimpan di `demand_gaji.csv`.
 
 ### Keterbatasan dataset (bahan Bab Metodologi, ditulis jujur)
 
-- Satu sumber (Indeed); sampel 18–31 lowongan per jabatan (kecil).
+- Dua sumber (Indeed + Glints); sampel 39–55 lowongan per jabatan.
 - Ekstraksi skill = *keyword matching*, bukan NLP.
-- Mayoritas iklan berbahasa Inggris; hanya ±12% lowongan yang mencantumkan gaji.
+- Mayoritas iklan berbahasa Inggris; data gaji tersedia untuk 12–26 lowongan per jabatan (mayoritas dari Glints, karena portal itu lebih sering mencantumkan gaji).
 - *Snapshot* Oktober 2026. Pasar kerja berubah seiring waktu, jadi *re-scraping* berkala disarankan.
 - Validasi silang dengan Indotask (World Bank 2020) hanya kualitatif karena taksonomi skill berbeda; detailnya di `data-loker-id/README.md`.
 
